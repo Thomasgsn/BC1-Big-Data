@@ -1,0 +1,25 @@
+{
+  "created_at_utc": "2026-11-17T18:04:49.805794+00:00",
+  "status": "top_level_jars_downloaded_and_hashed_not_executed",
+  "artifacts": [
+    {
+      "coordinate": "org.apache.spark:spark-sql-kafka-0-10_2.12:3.5.8",
+      "bytes": 432672,
+      "sha256": "d2b7068eabce2a1267103625e58efae32f7ee384db1cbc22424532ad2ed95fb4",
+      "source": "https://repo.maven.apache.org/maven2/"
+    },
+    {
+      "coordinate": "org.mongodb.spark:mongo-spark-connector_2.12:10.7.0",
+      "bytes": 221672,
+      "sha256": "1b0908775a41d72621944a43e36ed83df4dbaff5bf8581811f0b5e9eabeb7cbe",
+      "source": "https://repo.maven.apache.org/maven2/"
+    },
+    {
+      "coordinate": "org.postgresql:postgresql:42.7.14",
+      "bytes": 1221004,
+      "sha256": "73914527305a40cce504b0d3d90b23caf565136912d607ae8ae7c5895512332c",
+      "source": "https://repo.maven.apache.org/maven2/"
+    }
+  ],
+  "limitations": "Signatures non vérifiées ; dépendances transitives résolues au runtime par Spark Ivy, non encore inventoriées."
+}

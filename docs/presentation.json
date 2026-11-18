@@ -1,0 +1,106 @@
+[
+  {
+    "title": "Détection de fraude et réseaux financiers",
+    "paragraphs": [
+      "Thomas Gassmann, réalisation individuelle",
+      "Architecture Big Data, modèles MLlib et brouillons explicatifs par IA générative",
+      "Démonstrateur sur transactions synthétiques PaySim"
+    ],
+    "source": "Sujet BC1 fourni, rapport technique, novembre 2026"
+  },
+  {
+    "title": "Besoin et données",
+    "paragraphs": [
+      "Conserver la provenance des transactions et rendre les alertes consultables.",
+      "PaySim intégral : 6 362 620 transactions, 8 213 fraudes simulées.",
+      "Aucune devise ou donnée client réelle ajoutée. Les labels servent à évaluer les modèles."
+    ],
+    "source": "docs/dataset.md et evidence/p1/paysim-profile.json"
+  },
+  {
+    "title": "Architecture du démonstrateur",
+    "paragraphs": [
+      "Kafka avec ZooKeeper alimente Spark Structured Streaming et le lac HDFS Parquet.",
+      "MongoDB expose agrégats, graphe et scores. PostgreSQL conserve dossiers, décisions et audit.",
+      "MLlib lit HDFS. Gephi analyse le réseau. FastAPI appelle Ollama pour produire un brouillon à relire."
+    ],
+    "source": "docs/architecture.md, diagrammes Mermaid modifiables"
+  },
+  {
+    "title": "Intégrité du flux",
+    "paragraphs": [
+      "Essai permanent : 2 003 messages bruts, 1 000 transactions uniques et trois rejets contrôlés.",
+      "Les identifiants et sommes décimales correspondent au CSV. Le rejeu supprime 1 000 doublons.",
+      "p95 logique 8,28 s, hors commit et visibilité. Essai court sur un seul hôte."
+    ],
+    "source": "evidence/p3/live-verification.json"
+  },
+  {
+    "title": "Analyse du graphe dans Gephi",
+    "image": "docs/evidence/p5/gephi-desktop-preview.png",
+    "source": "Capture réelle du client Gephi 0.11.4, cinq composantes filtrées"
+  },
+  {
+    "title": "Interprétation du réseau",
+    "paragraphs": [
+      "Graphe complet : 1 597 comptes et 1 000 arêtes orientées.",
+      "Modularité 0,995408, avec 597 composantes faibles. La fragmentation explique cette valeur élevée.",
+      "Le plus grand degré entrant vaut 23. Aucun label réseau ne permet de conclure à un blanchiment."
+    ],
+    "source": "docs/gephi.md et evidence/p5/desktop-manifest.json"
+  },
+  {
+    "title": "Comparaison des modèles",
+    "paragraphs": [
+      "Échantillon déterministe : 98 813 lignes. Découpage temporel, prétraitement appris sur train seul.",
+      "Régression logistique retenue sur validation face à Random Forest. Seuil 0,7.",
+      "Test réservé : rappel 55,22 %, précision 3,80 %, PR-AUC 0,09164. Les nombreuses fausses alertes limitent l'usage."
+    ],
+    "source": "evidence/p6/model-comparison.json, test 19 385 lignes dont 67 fraudes"
+  },
+  {
+    "title": "Explication et brouillon client",
+    "paragraphs": [
+      "Qwen 2.5 3B local produit deux réponses réelles : conseiller et client.",
+      "Les faits viennent de l'alerte persistée. La contribution du modèle reste une explication algébrique sans causalité.",
+      "Sorties rejetées conservées, vérifications factuelles et relecture humaine nécessaires. Aucun email envoyé."
+    ],
+    "source": "evidence/p7/ et evidence/p9/generated-draft.json, licence recherche Qwen"
+  },
+  {
+    "title": "Sécurité et résilience observées",
+    "paragraphs": [
+      "API : rôles, quotas, révocation, idempotence et refus de permissions testés.",
+      "Profils isolés : HDFS Kerberos et HTTPS, Kafka mTLS et ACL. Le principal reste un laboratoire distinct.",
+      "HDFS : deux bascules de processus, 80 fichiers exacts par essai. Kafka RF3 : 220 messages sans perte observée."
+    ],
+    "source": "evidence/p8/secure-hdfs/, secure-kafka/, hdfs-ha/, kafka-leader-failure.json"
+  },
+  {
+    "title": "Parcours de démonstration",
+    "paragraphs": [
+      "Parcours réellement exécuté : 1 000 transactions nouvelles, HDFS exact, graphe Mongo et scoring avec le modèle sauvegardé.",
+      "L’API a persisté l’explication et le brouillon Qwen après un premier timeout de chargement. Deux appels réussis, 88,03 s côté modèle.",
+      "Le journal conserve les pauses et l’échec. La répétition orale chronométrée reste à faire par le candidat."
+    ],
+    "source": "evidence/p9/demonstration.json et demonstration-draft.json"
+  },
+  {
+    "title": "Limites et décisions à défendre",
+    "paragraphs": [
+      "Un seul hôte, profils de sécurité et HA séparés. Aucune garantie après perte physique du poste.",
+      "Audit des sept images principales terminé. Des correspondances critiques et élevées restent ouvertes, sans exploitation démontrée ni risque déclaré accepté.",
+      "Faible précision ML, données synthétiques, qualité du texte à relire. Publication GitHub et répétition orale restent à réaliser."
+    ],
+    "source": "docs/security-profiles.md et evidence/p8/dependency-scan/platform-summary.json"
+  },
+  {
+    "title": "Discussion technique avec le jury",
+    "paragraphs": [
+      "Pourquoi HDFS et MongoDB ont-ils des rôles différents ? Comment détecter une reprise incomplète ?",
+      "Pourquoi choisir le modèle sur validation et conserver un test temporel réservé ?",
+      "Comment distinguer réplication, bascule et sauvegarde ? Que prouve chaque essai et que reste-t-il à vérifier ?"
+    ],
+    "source": "docs/rncp-matrix.md, C1.1 à C2.4, validation officielle par le jury"
+  }
+]

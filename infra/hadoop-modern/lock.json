@@ -1,0 +1,15 @@
+{
+  "source_url": "https://downloads.apache.org/hadoop/common/hadoop-3.4.3/hadoop-3.4.3.tar.gz",
+  "sha512_source_url": "https://downloads.apache.org/hadoop/common/hadoop-3.4.3/hadoop-3.4.3.tar.gz.sha512",
+  "bytes": 514917037,
+  "sha512": "e25be7e57b4d3c5bfe83895844321a21d6cf7331266d524d8983c27cf484e576c3d79b3b60d590f8cddecf16229d0e232de2491b1b61b362ee7d67072c7290e1",
+  "sha256": "ca65b67a9cdad27b3aa1cb81496a3136de572bab3e8f2289c2aade965f687353",
+  "sha512_matches_published": true,
+  "gpg_signature_verified": true,
+  "java_image": "eclipse-temurin:11-jre-noble@sha256:8f3fe814a88932ac679142aee0615a627b448e8a87c31dac279e538923870c84",
+  "java_source": "https://hub.docker.com/v2/repositories/library/eclipse-temurin/tags/11-jre-noble",
+  "architecture": "linux/amd64",
+  "primary_hdfs_unchanged": true,
+  "signature_fingerprint": "38237EE425050285077DB57AD22CF846DBB162A0",
+  "signature_evidence": "../../docs/evidence/p8/hadoop-modern/signature.json"
+}

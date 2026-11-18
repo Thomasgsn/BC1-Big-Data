@@ -1,0 +1,13 @@
+{
+  "date": "2026-11-17",
+  "command": "docker compose run --rm administration-tests",
+  "exit_code": 0,
+  "token_active_status": 200,
+  "token_revoked_status": 401,
+  "sql_immutable_decisions": true,
+  "sql_identity_write_denied": true,
+  "sql_wrong_password_denied": true,
+  "mongo_anonymous_and_wrong_password_denied": true,
+  "fixture": "dedicated test principal retained inactive; no existing account changed",
+  "limitations": "HDFS/Kafka/Spark strong authentication and TLS not tested or configured"
+}

@@ -1,0 +1,36 @@
+{
+  "created_at_utc": "2026-11-17T18:02:35.003026+00:00",
+  "scope": "static Compose, not container execution",
+  "services": [
+    "datanode",
+    "hdfs-init",
+    "kafka",
+    "mongo",
+    "namenode",
+    "postgres",
+    "spark-master",
+    "spark-worker",
+    "zookeeper"
+  ],
+  "published_ports": [
+    {
+      "service": "namenode",
+      "host_ip": "127.0.0.1",
+      "published": "9870"
+    },
+    {
+      "service": "spark-master",
+      "host_ip": "127.0.0.1",
+      "published": "8080"
+    }
+  ],
+  "secrets_env_mode": "0600",
+  "pinned_external_images": true,
+  "ignored_paths": [
+    ".env",
+    "data/raw/paysim-v2.zip",
+    ".venv",
+    ".venv-3.15"
+  ],
+  "compose_config_valid": true
+}

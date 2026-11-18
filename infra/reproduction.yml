@@ -1,0 +1,33 @@
+# Projet Compose distinct, volumes métier neufs, aucune publication de port.
+# Seuls les poids publics Ollama déjà vérifiés servent de cache en lecture seule.
+services:
+  api:
+    ports: !reset []
+  namenode:
+    ports: !reset []
+  spark-master:
+    ports: !reset []
+  mongo:
+    volumes: !override
+      - mongo-data:/data/db
+      - ./infra/mongo/init.js:/docker-entrypoint-initdb.d/001-init.js:ro
+      - ./infra/mongo/export.js:/opt/bc1/export.js:ro
+      - ./exports/reproduction-v1:/exports
+  gephi-toolkit:
+    volumes: !override
+      - ./infra/gephi:/project/infra/gephi:ro
+      - ./tmp/m2:/root/.m2
+      - ./tmp/gephi-target:/build
+      - ./exports/reproduction-v1:/exports
+  ollama:
+    volumes: !override
+      - type: volume
+        source: ollama-model-cache
+        target: /root/.ollama/models
+        read_only: true
+        volume:
+          subpath: models
+volumes:
+  ollama-model-cache:
+    external: true
+    name: rncp-bc1_ollama-models

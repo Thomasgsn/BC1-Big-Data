@@ -1,0 +1,11 @@
+{
+  "event": "candidate_hdfs_verified",
+  "rows": 1000,
+  "dataset_sha256": "16910f90577b0d981bf8ff289714510bb89bc71bff7d3f220f024e287e4eea6b",
+  "path": "hdfs://namenode:8020/bc1/runtime-check/modern-v1",
+  "read_existing": true,
+  "multiset_and_decimal_sums_equal": true,
+  "spark_version": "3.5.8",
+  "client_hadoop_version": "3.3.4",
+  "scope": "local Spark driver, real HDFS servers and real PaySim prefix; not a whole-platform migration"
+}

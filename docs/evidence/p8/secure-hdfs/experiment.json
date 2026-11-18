@@ -1,0 +1,38 @@
+{
+  "status": "isolated_controls_verified",
+  "scope": "Isolated HDFS Kerberos/SASL/HTTPS, not main stack",
+  "initialization_incident": "YAML reset did not remove inherited cap_drop ALL; confirmed root UID with CapEff=0; provisioner granted CHOWN,DAC_OVERRIDE,FOWNER only",
+  "initial_stack_up_exit_code": 0,
+  "admin_setup_exit_code": 0,
+  "client_comparison_incident": {
+    "cat_exit_code": 0,
+    "cat_stdout_bytes": 79194,
+    "stdout_started_with_crypto_warning": true,
+    "get_exit_code": 0,
+    "downloaded_bytes": 75449,
+    "downloaded_sha256": "52a90327ee73fa69cf22895cf3600c3a850876ffeca77602fa77adceec04cd2f",
+    "diagnosis": "CLI logging polluted stdout; actual HDFS downloaded file starts with PaySim header; complete equality test to rerun after stderr logging configured"
+  },
+  "native_crypto_note": "JCE AES codec selected explicitly instead of attempting unavailable native OpenSSL. No plaintext fallback claimed.",
+  "before_dependency_maintenance": {
+    "authorized_rpc_and_https_read_exact": true,
+    "dataset_rows": 1000,
+    "bytes": 75449,
+    "payload_sha256": "52a90327ee73fa69cf22895cf3600c3a850876ffeca77602fa77adceec04cd2f",
+    "tls_version": "TLSv1.3",
+    "cipher": "TLS_AES_256_GCM_SHA384",
+    "wrong_hostname_and_untrusted_ca_refused": true,
+    "anonymous_https_status": 401,
+    "valid_bob_ticket_private_read_refused": true,
+    "no_ticket_and_hadoop_username_spoof_refused": true,
+    "weak_rpc_protection_refused": true
+  },
+  "http_auth_correction": "Initial HTTPS root returned 200 anonymously; global Kerberos AuthenticationFilterInitializer added. Repeated RPC/HTTPS positive and anonymous-negative controls then passed.",
+  "after_dependency_maintenance": {
+    "image": "sha256:fca9946eae807fb8dc63c41349973986c528c054c04dec5ae07e4bc273e38849",
+    "authorized_evidence": "authorized.json",
+    "unauthorized_evidence": "unauthorized.json",
+    "tests_exit_code": 0,
+    "main_stack_not_migrated_to_kerberos": true
+  }
+}

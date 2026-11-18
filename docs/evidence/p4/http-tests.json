@@ -1,0 +1,23 @@
+{
+  "date": "2026-11-17",
+  "command": "docker compose run --rm api-tests",
+  "exit_code": 0,
+  "tests": 6,
+  "skipped": 0,
+  "duration_seconds": 3.539,
+  "coverage": [
+    "authentication",
+    "authorization",
+    "pagination_limits",
+    "unknown_references",
+    "decision_persistence",
+    "idempotency",
+    "concurrent_idempotency",
+    "quota_429"
+  ],
+  "limitations": [
+    "not a load benchmark",
+    "generated decisions explicitly automated_test",
+    "revocation and service failure not covered by this suite"
+  ]
+}

@@ -1,0 +1,17 @@
+{
+  "event": "producer_failures_verified",
+  "input": "first 100 actual PaySim rows, temporary CSV",
+  "prefix_sha256": "55e6ff23629c8534f44837561a7519bd342b45dc8ffecdf369c2bc88db340816",
+  "unreachable_broker": {
+    "exit_code": 1,
+    "acknowledged": 0,
+    "error_type": "NoBrokersAvailable"
+  },
+  "sigint": {
+    "exit_code": 130,
+    "acknowledged_rows": 2,
+    "partial_output_published": false,
+    "temporary_file_removed": true
+  },
+  "elapsed_seconds": 4.037063880998176
+}

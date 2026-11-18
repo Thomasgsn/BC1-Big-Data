@@ -1,0 +1,7 @@
+{
+  "event": "namenode_process_killed",
+  "node": "nn1",
+  "pid": 80,
+  "signal": "SIGKILL",
+  "at_epoch_ms": 1794995082329
+}

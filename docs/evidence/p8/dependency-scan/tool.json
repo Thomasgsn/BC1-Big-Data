@@ -1,0 +1,9 @@
+{
+  "tool": "Trivy",
+  "version": "0.76.2",
+  "source": "https://github.com/aquasecurity/trivy/releases/tag/v0.76.2",
+  "archive_sha256": "bc0fc726e017b8927a62b2d3531d7a84ee01769daf5c99ed866dced54089fdbf",
+  "matches_official_checksums": true,
+  "sigstore_provenance_verified": false,
+  "scope": "tool acquisition only, no scan executed yet"
+}

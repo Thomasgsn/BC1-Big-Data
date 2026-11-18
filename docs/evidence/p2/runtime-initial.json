@@ -1,0 +1,34 @@
+{
+  "recorded_at_utc": "2026-11-17T18:13:09.933849+00:00",
+  "actor": "codex",
+  "runtime": {
+    "spark": "3.5.8",
+    "java": "17.0.17",
+    "python_container": "3.10.12",
+    "postgres": "17.12"
+  },
+  "checks": {
+    "spark_jdbc_join": {
+      "event": "spark_jdbc_verified",
+      "joined_roles": 2,
+      "exit_code": 0
+    },
+    "postgres_constraints": {
+      "event": "postgres_constraints_and_rollback_passed",
+      "exit_code": 0,
+      "scope": "synthetic fixtures rolled back; not real analyst decisions"
+    },
+    "kafka_replay": {
+      "run_id": "runtime-v1",
+      "acknowledged_rows": 1000,
+      "elapsed_seconds": 2.168235055000025,
+      "observed_rows_per_second": 461.204608648848,
+      "exit_code": 0
+    }
+  },
+  "limitations": [
+    "Kafka producer rate on one short run; not a platform benchmark.",
+    "No HDFS ingestion result available yet.",
+    "HA and strong authentication not validated."
+  ]
+}

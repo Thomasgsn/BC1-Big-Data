@@ -1,0 +1,88 @@
+{
+  "_id": "247d9692-40be-4d14-960b-cdac767a5a20",
+  "transaction_id": "1bc21e0da81e6f11c95bdaf12df05637cc4f9b72065f5e57d8036b280a9f2b70",
+  "model_version": "training-sample64-seed42:baseline-v1",
+  "created_at": "2026-11-17T23:43:44.239000+00:00",
+  "status": "draft_requires_human_review",
+  "llm_model": "qwen2.5:3b",
+  "prompt_version": "fraud-fr-v7-verified-linear-signal",
+  "llm_digest": "357c53fb659c5076de1d65ccb0b397446227b71a42be9d1603d46168015c9e4b",
+  "system_prompt_sha256": "1996e9d3c6330142e474f9f9f94c59feffa76cf941c5d895c34165bfebfddcd8",
+  "client_prompt_sha256": "0494b145464faa9c25c14ed5d326bc26c57a30c12f26c736ca6c78c794f7e25b",
+  "context": {
+    "transaction_reference": "1bc21e0da81e",
+    "account_alias": "C1420196421",
+    "amount_local_currency": "2806.00",
+    "transaction_type": "TRANSFER",
+    "score": 0.7694998979968439,
+    "threshold": 0.7,
+    "model_version": "training-sample64-seed42:baseline-v1",
+    "risk_signal": "Le score atteint ou dépasse le seuil choisi sur validation ; cause non démontrée.",
+    "amount_above_training_p95": false,
+    "training_amount_p95": "1839997.42",
+    "signal_interpretation": "Comparaison descriptive au train uniquement, pas une causalité du score.",
+    "model_signal": {
+      "method": "verified_additive_logit_decomposition",
+      "top_factor": "type de transaction",
+      "interpretation": "Contribution du modèle face au vecteur nul ; référence algébrique, pas une cause ni un client typique."
+    },
+    "synthetic_data": true
+  },
+  "context_sha256": "d45afa47824f6b558d92f07a4ffc7458771387724fb9788c1ee1e8031229272f",
+  "output": {
+    "analyst_explanation": "Le score non calibré dépasse le seuil de contrôle. Une vérification humaine est nécessaire. Le type de transaction contribue au score du modèle, sans établir une cause.",
+    "client_email": {
+      "subject": "Vérification de votre opération 1bc21e0da81e",
+      "body": "Cette opération SYNTHÉTIQUE nécessite votre attention. Veuillez la vérifier dans votre application habituelle."
+    }
+  },
+  "calls": [
+    {
+      "timing_ns": {
+        "total_duration": 32614491317,
+        "load_duration": 13708003836,
+        "eval_duration": 6238839000
+      },
+      "tokens": {
+        "prompt": 339,
+        "output": 48
+      },
+      "done_reason": "stop",
+      "options": {
+        "temperature": 0.1,
+        "seed": 42,
+        "repeat_penalty": 1.15,
+        "num_predict": 300,
+        "num_ctx": 2048,
+        "num_batch": 64,
+        "num_thread": 2
+      },
+      "system_prompt_sha256": "1996e9d3c6330142e474f9f9f94c59feffa76cf941c5d895c34165bfebfddcd8",
+      "facts_sha256": "2b40a4f1f4f9d0f5d9b5c82703fa76cafbb83e5f8820e3c2b5ad9d8482cc4137"
+    },
+    {
+      "timing_ns": {
+        "total_duration": 15121484826,
+        "load_duration": 1215647,
+        "eval_duration": 6914910000
+      },
+      "tokens": {
+        "prompt": 233,
+        "output": 53
+      },
+      "done_reason": "stop",
+      "options": {
+        "temperature": 0.1,
+        "seed": 42,
+        "repeat_penalty": 1.15,
+        "num_predict": 300,
+        "num_ctx": 2048,
+        "num_batch": 64,
+        "num_thread": 2
+      },
+      "system_prompt_sha256": "0494b145464faa9c25c14ed5d326bc26c57a30c12f26c736ca6c78c794f7e25b",
+      "facts_sha256": "1fc48d2fecd89bdea1bd5591839036b36866f3ce19586d20751ddccce8529843"
+    }
+  ],
+  "limitations": "Contrôles automatiques partiels ; aucune garantie sémantique, revue humaine obligatoire."
+}

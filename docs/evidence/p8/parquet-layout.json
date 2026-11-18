@@ -1,0 +1,66 @@
+{
+  "event": "parquet_layout_verified",
+  "created_at_utc": "2026-11-17T22:26:18.189134+00:00",
+  "run_id": "training-sample64-seed42",
+  "layout_version": "by-type-v1",
+  "rows": 98813,
+  "all_columns_multiset_equality": true,
+  "write_seconds": 5.432502519999616,
+  "comparison": {
+    "curated_initial": {
+      "query_seconds": [
+        0.6022774729990488,
+        0.5137961360014742,
+        0.7227948950003338
+      ],
+      "median_seconds": 0.6022774729990488,
+      "result": [
+        {
+          "transactions": 1706,
+          "amount": "1455205488.68"
+        }
+      ],
+      "scan_metrics": [
+        {
+          "numFiles": 20,
+          "scanTime": 632,
+          "metadataTime": 0,
+          "filesSize": 12784264,
+          "numOutputRows": 19823
+        }
+      ],
+      "physical_plan": "*(3) HashAggregate(keys=[], functions=[sum(amount#614), count(distinct transaction_id#605)], output=[transactions#649L, amount#651])\n+- Exchange SinglePartition, ENSURE_REQUIREMENTS, [plan_id=637]\n   +- *(2) HashAggregate(keys=[], functions=[merge_sum(amount#614), partial_count(distinct transaction_id#605)], output=[sum#680, isEmpty#681, count#684L])\n      +- *(2) HashAggregate(keys=[transaction_id#605], functions=[merge_sum(amount#614)], output=[transaction_id#605, sum#680, isEmpty#681])\n         +- Exchange hashpartitioning(transaction_id#605, 4), ENSURE_REQUIREMENTS, [plan_id=632]\n            +- *(1) HashAggregate(keys=[transaction_id#605], functions=[partial_sum(amount#614)], output=[transaction_id#605, sum#680, isEmpty#681])\n               +- *(1) Project [transaction_id#605, amount#614]\n                  +- *(1) Filter (((isnotnull(type#611) AND isnotnull(step#610L)) AND (type#611 = TRANSFER)) AND (step#610L > 355))\n                     +- *(1) ColumnarToRow\n                        +- FileScan parquet [transaction_id#605,step#610L,type#611,amount#614] Batched: true, DataFilters: [isnotnull(type#611), isnotnull(step#610L), (type#611 = TRANSFER), (step#610L > 355)], Format: Parquet, Location: MetadataLogFileIndex(1 paths)[hdfs://namenode:8020/bc1/training-sample64-seed42/curated], PartitionFilters: [], PushedFilters: [IsNotNull(type), IsNotNull(step), EqualTo(type,TRANSFER), GreaterThan(step,355)], ReadSchema: struct<transaction_id:string,step:bigint,type:string,amount:decimal(18,2)>\n",
+      "total_input_files_before_filter": 20
+    },
+    "partitioned_by_type": {
+      "query_seconds": [
+        0.3519722349992662,
+        0.345805245999145,
+        0.35264663099951576
+      ],
+      "median_seconds": 0.3519722349992662,
+      "result": [
+        {
+          "transactions": 1706,
+          "amount": "1455205488.68"
+        }
+      ],
+      "scan_metrics": [
+        {
+          "numFiles": 1,
+          "scanTime": 28,
+          "pruningTime": 0,
+          "metadataTime": 0,
+          "filesSize": 1058627,
+          "numOutputRows": 8333,
+          "numPartitions": 1
+        }
+      ],
+      "physical_plan": "*(3) HashAggregate(keys=[], functions=[sum(amount#993), count(distinct transaction_id#985)], output=[transactions#1029L, amount#1031])\n+- Exchange SinglePartition, ENSURE_REQUIREMENTS, [plan_id=913]\n   +- *(2) HashAggregate(keys=[], functions=[merge_sum(amount#993), partial_count(distinct transaction_id#985)], output=[sum#1060, isEmpty#1061, count#1064L])\n      +- *(2) HashAggregate(keys=[transaction_id#985], functions=[merge_sum(amount#993)], output=[transaction_id#985, sum#1060, isEmpty#1061])\n         +- Exchange hashpartitioning(transaction_id#985, 4), ENSURE_REQUIREMENTS, [plan_id=908]\n            +- *(1) HashAggregate(keys=[transaction_id#985], functions=[partial_sum(amount#993)], output=[transaction_id#985, sum#1060, isEmpty#1061])\n               +- *(1) Project [transaction_id#985, amount#993]\n                  +- *(1) Filter (isnotnull(step#990L) AND (step#990L > 355))\n                     +- *(1) ColumnarToRow\n                        +- FileScan parquet [transaction_id#985,step#990L,amount#993,type#1004] Batched: true, DataFilters: [isnotnull(step#990L), (step#990L > 355)], Format: Parquet, Location: InMemoryFileIndex(1 paths)[hdfs://namenode:8020/bc1/training-sample64-seed42/optimized/by-type-v1], PartitionFilters: [isnotnull(type#1004), (type#1004 = TRANSFER)], PushedFilters: [IsNotNull(step), GreaterThan(step,355)], ReadSchema: struct<transaction_id:string,step:bigint,amount:decimal(18,2)>\n",
+      "total_input_files_before_filter": 5
+    }
+  },
+  "result_sha256": "c20d3ca521688bc55f9415803fd3873df52b831440437b774c0c41c6df0fc5d2",
+  "original_untouched": true,
+  "limitations": "small sample; OS cache not flushed, first read excluded per layout; no global speedup claim"
+}

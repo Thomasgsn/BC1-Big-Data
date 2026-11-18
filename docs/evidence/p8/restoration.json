@@ -1,0 +1,51 @@
+{
+  "date": "2026-11-17",
+  "sql": {
+    "exit_code": 0,
+    "target_database": "bc1_restore_test_1794943591",
+    "archive_sha256": "991de245060ad8a5cd7119078fe1d29d70e7ab05bb2e2074b8d690f3af6586b1",
+    "restored_counts": {
+      "investigation_case": 1,
+      "analyst_decision": 4,
+      "api_principal": 3
+    },
+    "counts_match_source": true,
+    "method": "pg_dump -Fc; pg_restore --no-owner --exit-on-error; isolated new database",
+    "limitation": "row counts, not full row digest, verified for SQL"
+  },
+  "mongo": {
+    "exit_code": 0,
+    "target_database": "fraud_restore_test_1794943775979",
+    "archive_sha256": "3f82f0990316639fa1847c20cf182bbbe6fbfd1cbfa44cd0b13ac9ee20346a2a",
+    "method": "mongodump archive gzip; mongorestore nsFrom fraud.* to isolated namespace",
+    "all_collection_content_hashes_match": true,
+    "all_index_counts_match": true,
+    "restored_counts": {
+      "fraud_scores": 1000,
+      "generated_explanations": 0,
+      "generation_attempts": 5,
+      "graph_edges": 1000,
+      "graph_nodes": 1597,
+      "graph_snapshots": 1,
+      "transaction_metrics": 5
+    }
+  },
+  "hdfs": {
+    "snapshot_command_exit_code": 0,
+    "restored_base": "hdfs://namenode:8020/bc1/restore-tests/backup-1794943923",
+    "run_id": "runtime-v1",
+    "verification_exit_code": 0,
+    "raw_rows": 1000,
+    "curated_unique_rows": 1000,
+    "quarantine_rows": 0,
+    "source_ids_counts_and_type_amounts_match": true,
+    "method": "Parquet snapshot excluding absolute FileSink logs; separately verified with verify.py --base",
+    "limitations": "does not restore streaming checkpoints or trained models"
+  },
+  "global_limitations": [
+    "same host and same service processes",
+    "no off-host disaster recovery or measured RPO/RTO",
+    "test databases retained separately, no existing data removed",
+    "archives remain local, not encrypted backups or final delivery artifacts"
+  ]
+}

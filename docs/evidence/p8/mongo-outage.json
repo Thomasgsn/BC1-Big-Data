@@ -1,0 +1,21 @@
+{
+  "date": "2026-11-17",
+  "stop_command": "docker compose stop mongo",
+  "stop_exit_code": 0,
+  "test_script": "tests/integration/check_availability.py",
+  "during_outage": {
+    "expected_status": 503,
+    "observed_status": 503,
+    "elapsed_seconds": 3.3277087289998235,
+    "exit_code": 0
+  },
+  "restart_command": "docker compose up -d --wait --wait-timeout 90 mongo",
+  "restart_exit_code": 0,
+  "after_restart": {
+    "expected_status": 200,
+    "observed_status": 200,
+    "elapsed_seconds": 0.10347168699991016,
+    "exit_code": 0
+  },
+  "limitation": "explicit unavailability followed by recovery; not uninterrupted HA; polling delay prevents a reliable RTO claim"
+}

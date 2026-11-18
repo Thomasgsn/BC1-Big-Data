@@ -1,0 +1,20 @@
+{
+  "event": "kafka_mtls_acl_verified",
+  "command_exit_code": 0,
+  "source_sha256": "16910f90577b0d981bf8ff289714510bb89bc71bff7d3f220f024e287e4eea6b",
+  "rows": 1000,
+  "prefix_equal": true,
+  "topic_start_offset": 0,
+  "tls_version": "TLSv1.3",
+  "cipher": "TLS_AES_256_GCM_SHA384",
+  "negative_tls": {
+    "no_certificate": true,
+    "untrusted_ca": true,
+    "wrong_hostname": true
+  },
+  "producer_forbidden_topic_denied": true,
+  "trusted_intruder_denied": true,
+  "scope": "isolated single-broker test; ZooKeeper plaintext internal; primary pipeline unchanged",
+  "initial_failure": "request_timeout 5000 was shorter than consumer session timeout; adjusted to 10000/6000 and rerun with admin completion dependency",
+  "checked_on": "2026-11-18"
+}

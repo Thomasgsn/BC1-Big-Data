@@ -1,0 +1,12 @@
+{
+  "event": "sql_reviews_integrated",
+  "snapshot_id": "api-review-tests-v1",
+  "rows": 2,
+  "origins": {
+    "automated_test": 2
+  },
+  "references_validated_against": "runtime-v1",
+  "strategy": "complete_immutable_snapshot_not_cdc",
+  "root": "hdfs://namenode:8020/bc1/reviews/api-review-tests-v1",
+  "source": "Actual HDFS report read with docker compose exec -T namenode hdfs dfs -cat /bc1/reviews/api-review-tests-v1/report/part-*"
+}

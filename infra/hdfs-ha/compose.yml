@@ -1,0 +1,180 @@
+name: rncp-bc1-hdfs-ha-v1
+
+x-hadoop: &hadoop
+  image: rncp-bc1-hadoop-ha:3.4.3
+  build: {context: ., dockerfile: Dockerfile}
+  environment: &environment
+    HADOOP_CONF_DIR: /tmp/ha-conf
+    HADOOP_USER_NAME: hadoop
+    HADOOP_HEAPSIZE_MAX: "256"
+  volumes: [".:/scripts:ro"]
+  entrypoint: [/bin/bash, /scripts/start.sh]
+  networks: [ha]
+
+x-zk: &zk
+  image: apache/kafka:3.9.2@sha256:05b4616e0702ef2729327705d54ad6b50ea70b271c4b730fabd2320789fb7b02
+  entrypoint: [/bin/bash, /scripts/zookeeper.sh]
+  healthcheck:
+    test: [CMD-SHELL, "bash -c 'echo > /dev/tcp/127.0.0.1/2181'"]
+    interval: 5s
+    timeout: 3s
+    retries: 24
+  depends_on: {init: {condition: service_completed_successfully}}
+  networks: [ha]
+  mem_limit: 256m
+
+services:
+  init:
+    <<: *hadoop
+    user: root
+    entrypoint: [python3, /scripts/provision.py]
+    volumes:
+      - .:/scripts:ro
+      - fence:/fence
+      - ssh-nn1:/ssh/nn1
+      - ssh-nn2:/ssh/nn2
+      - nn1-data:/storage/nn1
+      - nn2-data:/storage/nn2
+      - jn1-data:/storage/jn1
+      - jn2-data:/storage/jn2
+      - jn3-data:/storage/jn3
+      - dn1-data:/storage/dn1
+      - dn2-data:/storage/dn2
+      - zk1-data:/storage/zk1
+      - zk2-data:/storage/zk2
+      - zk3-data:/storage/zk3
+      - state:/storage/state
+      - control:/storage/control
+    mem_limit: 128m
+
+  zk1:
+    <<: *zk
+    hostname: zk1
+    environment: {ZK_ID: "1", KAFKA_HEAP_OPTS: "-Xms64m -Xmx128m"}
+    volumes: [".:/scripts:ro", "zk1-data:/data"]
+  zk2:
+    <<: *zk
+    hostname: zk2
+    environment: {ZK_ID: "2", KAFKA_HEAP_OPTS: "-Xms64m -Xmx128m"}
+    volumes: [".:/scripts:ro", "zk2-data:/data"]
+  zk3:
+    <<: *zk
+    hostname: zk3
+    environment: {ZK_ID: "3", KAFKA_HEAP_OPTS: "-Xms64m -Xmx128m"}
+    volumes: [".:/scripts:ro", "zk3-data:/data"]
+
+  zk-init:
+    <<: *hadoop
+    command: [zk-init]
+    environment: {<<: *environment, NODE_ID: nn1}
+    volumes: [".:/scripts:ro", "state:/state"]
+    depends_on: {zk1: {condition: service_healthy}, zk2: {condition: service_healthy}, zk3: {condition: service_healthy}}
+    mem_limit: 384m
+
+  jn1:
+    <<: *hadoop
+    hostname: jn1
+    command: [journalnode]
+    environment: {<<: *environment, NODE_ID: jn1, HADOOP_HEAPSIZE_MAX: "128"}
+    volumes: [".:/scripts:ro", "jn1-data:/data/journal"]
+    depends_on: {init: {condition: service_completed_successfully}}
+    healthcheck: &jn-health
+      test: [CMD-SHELL, "bash -c 'echo > /dev/tcp/127.0.0.1/8485'"]
+      interval: 5s
+      timeout: 3s
+      retries: 18
+    mem_limit: 384m
+  jn2:
+    <<: *hadoop
+    hostname: jn2
+    command: [journalnode]
+    environment: {<<: *environment, NODE_ID: jn2, HADOOP_HEAPSIZE_MAX: "128"}
+    volumes: [".:/scripts:ro", "jn2-data:/data/journal"]
+    depends_on: {init: {condition: service_completed_successfully}}
+    healthcheck: *jn-health
+    mem_limit: 384m
+  jn3:
+    <<: *hadoop
+    hostname: jn3
+    command: [journalnode]
+    environment: {<<: *environment, NODE_ID: jn3, HADOOP_HEAPSIZE_MAX: "128"}
+    volumes: [".:/scripts:ro", "jn3-data:/data/journal"]
+    depends_on: {init: {condition: service_completed_successfully}}
+    healthcheck: *jn-health
+    mem_limit: 384m
+
+  nn1:
+    <<: *hadoop
+    user: root
+    hostname: nn1
+    command: [namenode]
+    environment: {<<: *environment, NODE_ID: nn1, HADOOP_HEAPSIZE_MAX: "512"}
+    volumes: [".:/scripts:ro", "nn1-data:/data/name", "ssh-nn1:/ssh:ro", "fence:/fence:ro", "control:/control"]
+    depends_on: {jn1: {condition: service_healthy}, jn2: {condition: service_healthy}, jn3: {condition: service_healthy}, zk-init: {condition: service_completed_successfully}}
+    healthcheck: &nn-health
+      test: [CMD-SHELL, "hdfs haadmin -getServiceState $$NODE_ID"]
+      interval: 10s
+      timeout: 10s
+      retries: 24
+    mem_limit: 1536m
+  nn2:
+    <<: *hadoop
+    user: root
+    hostname: nn2
+    command: [namenode]
+    environment: {<<: *environment, NODE_ID: nn2, HADOOP_HEAPSIZE_MAX: "512"}
+    volumes: [".:/scripts:ro", "nn2-data:/data/name", "ssh-nn2:/ssh:ro", "fence:/fence:ro", "control:/control"]
+    depends_on: {nn1: {condition: service_healthy}}
+    healthcheck: *nn-health
+    mem_limit: 1536m
+
+  dn1:
+    <<: *hadoop
+    hostname: dn1
+    command: [datanode]
+    environment: {<<: *environment, NODE_ID: dn1}
+    volumes: [".:/scripts:ro", "dn1-data:/data/data"]
+    depends_on: {nn1: {condition: service_healthy}, nn2: {condition: service_healthy}}
+    healthcheck: &dn-health
+      test: [CMD-SHELL, "bash -c 'echo > /dev/tcp/127.0.0.1/9866'"]
+      interval: 5s
+      timeout: 3s
+      retries: 18
+    mem_limit: 768m
+  dn2:
+    <<: *hadoop
+    hostname: dn2
+    command: [datanode]
+    environment: {<<: *environment, NODE_ID: dn2}
+    volumes: [".:/scripts:ro", "dn2-data:/data/data"]
+    depends_on: {nn1: {condition: service_healthy}, nn2: {condition: service_healthy}}
+    healthcheck: *dn-health
+    mem_limit: 768m
+
+  probe:
+    <<: *hadoop
+    profiles: [tests]
+    command: [probe, continuity-v1]
+    volumes: [".:/scripts:ro", "control:/control"]
+    depends_on: {dn1: {condition: service_healthy}, dn2: {condition: service_healthy}}
+    mem_limit: 768m
+
+networks:
+  ha: {internal: true}
+
+volumes:
+  fence:
+  ssh-nn1:
+  ssh-nn2:
+  nn1-data:
+  nn2-data:
+  jn1-data:
+  jn2-data:
+  jn3-data:
+  dn1-data:
+  dn2-data:
+  zk1-data:
+  zk2-data:
+  zk3-data:
+  state:
+  control:

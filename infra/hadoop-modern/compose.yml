@@ -1,0 +1,66 @@
+# Campagne isolée : aucun volume ou port du lac principal.
+name: rncp-bc1-hadoop-modern-v1
+
+x-runtime: &runtime
+  image: rncp-bc1-hadoop:3.4.3-java11
+  platform: linux/amd64
+  build:
+    context: ../../tmp/hadoop-modern
+    dockerfile: ../../infra/hadoop-modern/Dockerfile
+    args:
+      JAVA_IMAGE: eclipse-temurin:11-jre-noble@sha256:8f3fe814a88932ac679142aee0615a627b448e8a87c31dac279e538923870c84
+      HADOOP_SHA512: e25be7e57b4d3c5bfe83895844321a21d6cf7331266d524d8983c27cf484e576c3d79b3b60d590f8cddecf16229d0e232de2491b1b61b362ee7d67072c7290e1
+  environment: {HADOOP_HEAPSIZE_MAX: "512"}
+
+services:
+  init:
+    <<: *runtime
+    user: root
+    entrypoint: ["/bin/bash", "-ec"]
+    command: ["mkdir -p /name /data; chown 1000:1000 /name /data; chmod 750 /name /data"]
+    volumes: ["namenode-data:/name", "datanode-data:/data"]
+    mem_limit: 128m
+
+  namenode:
+    <<: *runtime
+    hostname: namenode
+    entrypoint: ["/bin/bash", "/etc/bc1/start.sh", "namenode"]
+    volumes: ["../hadoop:/etc/bc1:ro", "namenode-data:/data/name"]
+    depends_on: {init: {condition: service_completed_successfully}}
+    healthcheck:
+      test: ["CMD", "hdfs", "dfsadmin", "-safemode", "get"]
+      interval: 10s
+      timeout: 10s
+      retries: 12
+    mem_limit: 1g
+
+  datanode:
+    <<: *runtime
+    hostname: datanode
+    entrypoint: ["/bin/bash", "/etc/bc1/start.sh", "datanode"]
+    volumes: ["../hadoop:/etc/bc1:ro", "datanode-data:/data/data"]
+    depends_on: {namenode: {condition: service_healthy}}
+    healthcheck:
+      test: ["CMD-SHELL", "bash -c 'echo > /dev/tcp/127.0.0.1/9866'"]
+      interval: 10s
+      timeout: 5s
+      retries: 12
+    mem_limit: 1g
+
+  probe:
+    image: rncp-bc1-spark:3.5.8
+    profiles: [tests]
+    environment: {HADOOP_CONF_DIR: /etc/bc1}
+    volumes:
+      - ../hadoop:/etc/bc1:ro
+      - ../../src:/project/src:ro
+      - ../../tests:/project/tests:ro
+      - ../../data/raw:/project/data/raw:ro
+    depends_on: {datanode: {condition: service_healthy}}
+    entrypoint: [/opt/spark/bin/spark-submit, --master, "local[2]", --driver-memory, 768m]
+    command: [/project/tests/integration/check_hdfs_runtime.py, --run-id, modern-v1]
+    mem_limit: 1536m
+
+volumes:
+  namenode-data:
+  datanode-data:

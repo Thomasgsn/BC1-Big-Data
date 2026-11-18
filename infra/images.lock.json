@@ -1,0 +1,105 @@
+{
+  "captured_at_utc": "2026-11-17T17:17:06.025329+00:00",
+  "status": "metadata_verified_runtime_unverified",
+  "images": {
+    "spark": {
+      "repository": "apache/spark",
+      "tag": "3.5.8-scala2.12-java17-python3-ubuntu",
+      "digest": "sha256:dbe5f3b3926b01fa0b818ae8463c2994bfd2945d8db96d2337e23dc62d6fa73d",
+      "reference": "apache/spark:3.5.8-scala2.12-java17-python3-ubuntu@sha256:dbe5f3b3926b01fa0b818ae8463c2994bfd2945d8db96d2337e23dc62d6fa73d",
+      "platforms": [
+        "amd64",
+        "arm64"
+      ],
+      "source": "https://hub.docker.com/v2/repositories/apache/spark/tags/3.5.8-scala2.12-java17-python3-ubuntu"
+    },
+    "kafka": {
+      "repository": "apache/kafka",
+      "tag": "3.9.2",
+      "digest": "sha256:05b4616e0702ef2729327705d54ad6b50ea70b271c4b730fabd2320789fb7b02",
+      "reference": "apache/kafka:3.9.2@sha256:05b4616e0702ef2729327705d54ad6b50ea70b271c4b730fabd2320789fb7b02",
+      "platforms": [
+        "amd64",
+        "arm64"
+      ],
+      "source": "https://hub.docker.com/v2/repositories/apache/kafka/tags/3.9.2"
+    },
+    "hadoop": {
+      "repository": "apache/hadoop",
+      "tag": "3.4.2",
+      "digest": "sha256:0f79c18d27a2b15984868a41e245b09c98daa5638b573b4dbd848be650f05635",
+      "reference": "apache/hadoop:3.4.2@sha256:0f79c18d27a2b15984868a41e245b09c98daa5638b573b4dbd848be650f05635",
+      "platforms": [
+        "amd64"
+      ],
+      "source": "https://hub.docker.com/v2/repositories/apache/hadoop/tags/3.4.2"
+    },
+    "postgres": {
+      "repository": "library/postgres",
+      "tag": "17-bookworm",
+      "digest": "sha256:40865bc877a289da75963d97d72b59633f639fc5af7a4e856bfa3714cae5b536",
+      "reference": "library/postgres:17-bookworm@sha256:40865bc877a289da75963d97d72b59633f639fc5af7a4e856bfa3714cae5b536",
+      "platforms": [
+        "amd64",
+        "ppc64le",
+        "386",
+        "arm",
+        "arm64"
+      ],
+      "source": "https://hub.docker.com/v2/repositories/library/postgres/tags/17-bookworm"
+    },
+    "mongo": {
+      "repository": "library/mongo",
+      "tag": "8.0",
+      "digest": "sha256:bdc216e9d5a6ec2cfdac789b5832fdab64cd32055f59885cae918a92de63c361",
+      "reference": "library/mongo:8.0@sha256:bdc216e9d5a6ec2cfdac789b5832fdab64cd32055f59885cae918a92de63c361",
+      "platforms": [
+        "amd64",
+        "arm64",
+        "amd64",
+        "amd64"
+      ],
+      "source": "https://hub.docker.com/v2/repositories/library/mongo/tags/8.0"
+    },
+    "python": {
+      "repository": "library/python",
+      "tag": "3.12-slim-bookworm",
+      "digest": "sha256:935c3c5b12357a7e10caa9c1e6ca5692344d97cf229832ef584be2cec9fc03df",
+      "reference": "library/python:3.12-slim-bookworm@sha256:935c3c5b12357a7e10caa9c1e6ca5692344d97cf229832ef584be2cec9fc03df",
+      "platforms": [
+        "386",
+        "amd64",
+        "arm",
+        "arm64",
+        "ppc64le"
+      ],
+      "source": "https://hub.docker.com/v2/repositories/library/python/tags/3.12-slim-bookworm"
+    },
+    "ollama": {
+      "repository": "ollama/ollama",
+      "tag": "latest",
+      "digest": "sha256:910d0d8107b538fb0894e63163eb195de0cc7aefcbc666dc62d3b18f71124592",
+      "reference": "ollama/ollama:latest@sha256:910d0d8107b538fb0894e63163eb195de0cc7aefcbc666dc62d3b18f71124592",
+      "platforms": [
+        "amd64",
+        "arm64"
+      ],
+      "source": "https://hub.docker.com/v2/repositories/ollama/ollama/tags/latest"
+    },
+    "maven": {
+      "repository": "library/maven",
+      "tag": "3.9.9-eclipse-temurin-17",
+      "digest": "sha256:f58d59b6273e785ac0a4477f6e9b5ba1d7731c75b906c0f7b34076f1851318cc",
+      "reference": "library/maven:3.9.9-eclipse-temurin-17@sha256:f58d59b6273e785ac0a4477f6e9b5ba1d7731c75b906c0f7b34076f1851318cc",
+      "platforms": [
+        "amd64",
+        "arm",
+        "arm64",
+        "ppc64le",
+        "riscv64",
+        "s390x"
+      ],
+      "source": "https://hub.docker.com/v2/repositories/library/maven/tags/3.9.9-eclipse-temurin-17"
+    }
+  }
+}

@@ -1,0 +1,39 @@
+{
+  "status": "local_process_failover_verified",
+  "scope": "Isolated QJM/ZKFC local process-failure study, not primary stack, no combined Kerberos HA claim",
+  "image": "sha256:819b5a02deb03d9c66e1e4812a51e701054f6adfceed98f5098be60766f5ab6c",
+  "build_exit_code": 0,
+  "java_probe_compiled_for_release": 11,
+  "primary_volumes_mounted": false,
+  "host_ports_published": false,
+  "fencing": "Standard Hadoop shell integration, real SSH forced fuser/nc commands with pinned known_hosts; no always-success mock fence.",
+  "authentication_scope": "HDFS/ZooKeeper simple on isolated internal network; SSH fencing key-only, no password login. Separate Kerberos profile already tested.",
+  "private_keys": "Generated at runtime in Docker volumes, not Git or image. SSH package temporary build-time keys removed in same layer.",
+  "phases": [
+    {
+      "run": "continuity-v1",
+      "active_before": "nn1",
+      "active_after": "nn2",
+      "acknowledged": 80,
+      "lost_acknowledged": 0,
+      "max_write_seconds": 4.023325428
+    },
+    {
+      "run": "continuity-v2",
+      "active_before": "nn2",
+      "active_after": "nn1",
+      "acknowledged": 80,
+      "lost_acknowledged": 0,
+      "max_write_seconds": 11.235928368
+    }
+  ],
+  "fencing_validation": {
+    "unexpected_command_exit": 126,
+    "listening_port_probe_exit": 0,
+    "real_standby_fuser_exit": 0,
+    "after_kill_port_probe_exit": 1,
+    "already_closed_fence_exit": 0,
+    "automatic_fencer_invocation_proven": false
+  },
+  "correction": "Remote nc now probes the actual configured hostname, not loopback: RPC binds only the container address. Corrected positive test and real standby kill executed before continuity-v2."
+}

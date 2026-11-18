@@ -1,0 +1,93 @@
+{
+  "date": "2026-11-17",
+  "source_snapshot": "runtime-v1-steps-1-1",
+  "command": "docker compose run --rm gephi-toolkit",
+  "exit_code": 0,
+  "runtime_seconds": 7.815,
+  "independent_checks": {
+    "all_degrees_match_csv": true,
+    "gexf_nodes": 1597,
+    "gexf_edges": 1000,
+    "modularity_equals_disconnected_component_formula": true
+  },
+  "top_degree": [
+    {
+      "id": "C1590550415",
+      "in_degree": "23",
+      "out_degree": "0",
+      "total_degree": "23",
+      "modularity_class": "23"
+    },
+    {
+      "id": "C985934102",
+      "in_degree": "17",
+      "out_degree": "0",
+      "total_degree": "17",
+      "modularity_class": "153"
+    },
+    {
+      "id": "C451111351",
+      "in_degree": "15",
+      "out_degree": "0",
+      "total_degree": "15",
+      "modularity_class": "85"
+    },
+    {
+      "id": "C33524623",
+      "in_degree": "14",
+      "out_degree": "0",
+      "total_degree": "14",
+      "modularity_class": "75"
+    },
+    {
+      "id": "C564160838",
+      "in_degree": "14",
+      "out_degree": "0",
+      "total_degree": "14",
+      "modularity_class": "100"
+    },
+    {
+      "id": "C1789550256",
+      "in_degree": "12",
+      "out_degree": "0",
+      "total_degree": "12",
+      "modularity_class": "36"
+    },
+    {
+      "id": "C1023714065",
+      "in_degree": "11",
+      "out_degree": "0",
+      "total_degree": "11",
+      "modularity_class": "80"
+    },
+    {
+      "id": "C1170794006",
+      "in_degree": "10",
+      "out_degree": "0",
+      "total_degree": "10",
+      "modularity_class": "14"
+    },
+    {
+      "id": "C1360767589",
+      "in_degree": "10",
+      "out_degree": "0",
+      "total_degree": "10",
+      "modularity_class": "25"
+    },
+    {
+      "id": "C1531333864",
+      "in_degree": "10",
+      "out_degree": "0",
+      "total_degree": "10",
+      "modularity_class": "19"
+    }
+  ],
+  "files": {
+    "full-network.gexf": "78543575457690c5f6411c15ae7c7ac551e584743b665ac05d5150629af46693",
+    "report.json": "1ce88fd21aac5094be6c5557e10ade0837a8cbfd1cbfca13cf226b00a0fc5b24",
+    "largest-five-components.svg": "cec8713c95af9151b667a798552d91b99c02566e2b6d02abe72cf455df1e94a9",
+    "degrees.csv": "3ba6fce8c6ea68d5d44b112cb7147f2eff5cb9f923e8071d645a995566044428",
+    "largest-five-components.png": "5236131a7e1619dca3e35857279bbdbe3a486cf3bde041c13eea41750043473f"
+  },
+  "limitation": "Toolkit render, not desktop screenshot; 1000-row synthetic prefix, no evidence of money laundering"
+}

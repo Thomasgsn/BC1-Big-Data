@@ -1,0 +1,11 @@
+{
+  "model": "qwen2.5:3b",
+  "digest": "357c53fb659c5076de1d65ccb0b397446227b71a42be9d1603d46168015c9e4b",
+  "bytes": 1929912432,
+  "format": "gguf",
+  "parameter_size": "3.1B",
+  "quantization": "Q4_K_M",
+  "license": "Qwen Research License, non-commercial research/evaluation only",
+  "license_source": "https://ollama.com/library/qwen2.5:3b-instruct/license",
+  "source": "Local Ollama /api/tags and /api/show, 2026-11-17"
+}

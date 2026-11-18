@@ -1,0 +1,19 @@
+{
+  "event": "hdfs_models_reloaded",
+  "models": {
+    "logistic_regression": {
+      "rows": 1000,
+      "scores_sha256": "9dc1f88d04f2f6ec782308f152745c0df812a146fcbbe68a4e85c3ad5ba4fc2d",
+      "alerts": 305
+    },
+    "random_forest": {
+      "rows": 1000,
+      "scores_sha256": "c2c070bf9990fbe19380260a0536b3a8d315f35b806be7c00a5ce82b6d9cde89"
+    }
+  },
+  "training_rows_read": 98813,
+  "training_report_text_sha256": "afb272f590a8ccbed5f7a94eaa56a9f52da486e226febed0a8fb01ffaf63914c",
+  "selected": "logistic_regression",
+  "threshold": 0.7,
+  "scope": "Read-only artifacts and inference scores; no training or checkpoint resume."
+}

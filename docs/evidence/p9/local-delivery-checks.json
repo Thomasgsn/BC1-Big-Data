@@ -1,0 +1,14 @@
+{
+  "created_at_utc": "2026-11-18T10:27:15.775334+00:00",
+  "checks": {
+    "python": 61,
+    "json": 96,
+    "markdown_links": 193,
+    "files": 249
+  },
+  "source_manifest_files": 131,
+  "exact_secret_values_checked": 6,
+  "secret_scan_scope": "Exact values from local .env and private-key markers in nonignored text; not a general security scanner",
+  "errors": [],
+  "status": "passed"
+}

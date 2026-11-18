@@ -1,0 +1,42 @@
+name: rncp-bc1-secure-spark-v1
+x-spark: &spark
+  image: rncp-bc1-spark:3.5.8
+  environment: {SPARK_CONF_DIR: /identity, PYSPARK_PYTHON: python3}
+  networks: [secure]
+  volumes: ['authorized:/identity:ro','.:/scripts:ro']
+services:
+  init:
+    image: rncp-bc1-hadoop-secure:3.4.3
+    user: root
+    entrypoint: [python3,/scripts/provision.py]
+    volumes: ['.:/scripts:ro','authorized:/identities/authorized','unauthorized:/identities/unauthorized']
+    networks: [secure]
+    mem_limit: 128m
+  master:
+    <<: *spark
+    hostname: master
+    entrypoint: [/opt/spark/bin/spark-class,org.apache.spark.deploy.master.Master,--host,master,--port,'7077',--webui-port,'8080']
+    environment: {SPARK_CONF_DIR: /identity, SPARK_DAEMON_MEMORY: 512m}
+    depends_on: {init: {condition: service_completed_successfully}}
+    healthcheck: {test: [CMD, python3, -c, 'import urllib.request; urllib.request.urlopen("http://master:8080/json/",timeout=3)'], interval: 5s, timeout: 5s, retries: 24}
+    mem_limit: 768m
+  worker:
+    <<: *spark
+    hostname: worker
+    entrypoint: [/opt/spark/bin/spark-class,org.apache.spark.deploy.worker.Worker,--host,worker,--cores,'1',--memory,768m,spark://master:7077]
+    environment: {SPARK_CONF_DIR: /identity, SPARK_DAEMON_MEMORY: 256m, PYSPARK_PYTHON: python3}
+    depends_on: {master: {condition: service_healthy}}
+    mem_limit: 1536m
+  check:
+    <<: *spark
+    profiles: [tests]
+    hostname: check
+    entrypoint: [python3,/scripts/check.py]
+    volumes: ['authorized:/identity:ro','unauthorized:/unauthorized:ro','.:/scripts:ro']
+    depends_on: {worker: {condition: service_started}}
+    mem_limit: 1024m
+networks:
+  secure: {internal: true}
+volumes:
+  authorized:
+  unauthorized:

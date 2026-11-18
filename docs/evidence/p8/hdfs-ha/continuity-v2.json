@@ -1,0 +1,415 @@
+{
+  "event": "ha_continuity_verified",
+  "run_id": "continuity-v2",
+  "synthetic_fixture": true,
+  "acknowledged": 80,
+  "unique_files": 80,
+  "data_equal": true,
+  "lost_acknowledged": 0,
+  "max_write_seconds": 11.235928368,
+  "p95_write_seconds": 0.233078117,
+  "chronology": [
+    {
+      "sequence": 0,
+      "started_epoch_ms": 1794995166026,
+      "seconds": 0.351796413
+    },
+    {
+      "sequence": 1,
+      "started_epoch_ms": 1794995166547,
+      "seconds": 0.046878429
+    },
+    {
+      "sequence": 2,
+      "started_epoch_ms": 1794995166695,
+      "seconds": 0.049103497
+    },
+    {
+      "sequence": 3,
+      "started_epoch_ms": 1794995166844,
+      "seconds": 0.053146084
+    },
+    {
+      "sequence": 4,
+      "started_epoch_ms": 1794995166998,
+      "seconds": 0.048088309
+    },
+    {
+      "sequence": 5,
+      "started_epoch_ms": 1794995195867,
+      "seconds": 11.235928368
+    },
+    {
+      "sequence": 6,
+      "started_epoch_ms": 1794995207172,
+      "seconds": 0.233078117
+    },
+    {
+      "sequence": 7,
+      "started_epoch_ms": 1794995207506,
+      "seconds": 0.14798758
+    },
+    {
+      "sequence": 8,
+      "started_epoch_ms": 1794995207755,
+      "seconds": 0.121107955
+    },
+    {
+      "sequence": 9,
+      "started_epoch_ms": 1794995207977,
+      "seconds": 0.102891755
+    },
+    {
+      "sequence": 10,
+      "started_epoch_ms": 1794995208180,
+      "seconds": 0.143771066
+    },
+    {
+      "sequence": 11,
+      "started_epoch_ms": 1794995208424,
+      "seconds": 0.115097761
+    },
+    {
+      "sequence": 12,
+      "started_epoch_ms": 1794995208640,
+      "seconds": 0.128487785
+    },
+    {
+      "sequence": 13,
+      "started_epoch_ms": 1794995208869,
+      "seconds": 0.139325235
+    },
+    {
+      "sequence": 14,
+      "started_epoch_ms": 1794995209109,
+      "seconds": 0.126857775
+    },
+    {
+      "sequence": 15,
+      "started_epoch_ms": 1794995209337,
+      "seconds": 0.136859101
+    },
+    {
+      "sequence": 16,
+      "started_epoch_ms": 1794995209574,
+      "seconds": 0.131577258
+    },
+    {
+      "sequence": 17,
+      "started_epoch_ms": 1794995209806,
+      "seconds": 0.1522581
+    },
+    {
+      "sequence": 18,
+      "started_epoch_ms": 1794995210059,
+      "seconds": 0.100386262
+    },
+    {
+      "sequence": 19,
+      "started_epoch_ms": 1794995210260,
+      "seconds": 0.112769503
+    },
+    {
+      "sequence": 20,
+      "started_epoch_ms": 1794995210473,
+      "seconds": 0.09242236
+    },
+    {
+      "sequence": 21,
+      "started_epoch_ms": 1794995210666,
+      "seconds": 0.084197178
+    },
+    {
+      "sequence": 22,
+      "started_epoch_ms": 1794995210851,
+      "seconds": 0.090770865
+    },
+    {
+      "sequence": 23,
+      "started_epoch_ms": 1794995211042,
+      "seconds": 0.121602043
+    },
+    {
+      "sequence": 24,
+      "started_epoch_ms": 1794995211264,
+      "seconds": 0.106046143
+    },
+    {
+      "sequence": 25,
+      "started_epoch_ms": 1794995211470,
+      "seconds": 0.100410765
+    },
+    {
+      "sequence": 26,
+      "started_epoch_ms": 1794995211672,
+      "seconds": 0.152694753
+    },
+    {
+      "sequence": 27,
+      "started_epoch_ms": 1794995211926,
+      "seconds": 0.106643463
+    },
+    {
+      "sequence": 28,
+      "started_epoch_ms": 1794995212134,
+      "seconds": 0.134893714
+    },
+    {
+      "sequence": 29,
+      "started_epoch_ms": 1794995212370,
+      "seconds": 0.100956614
+    },
+    {
+      "sequence": 30,
+      "started_epoch_ms": 1794995212571,
+      "seconds": 0.080682862
+    },
+    {
+      "sequence": 31,
+      "started_epoch_ms": 1794995212752,
+      "seconds": 0.142927918
+    },
+    {
+      "sequence": 32,
+      "started_epoch_ms": 1794995212995,
+      "seconds": 0.076234584
+    },
+    {
+      "sequence": 33,
+      "started_epoch_ms": 1794995213172,
+      "seconds": 0.095783929
+    },
+    {
+      "sequence": 34,
+      "started_epoch_ms": 1794995213369,
+      "seconds": 0.081550841
+    },
+    {
+      "sequence": 35,
+      "started_epoch_ms": 1794995213552,
+      "seconds": 0.129996466
+    },
+    {
+      "sequence": 36,
+      "started_epoch_ms": 1794995213783,
+      "seconds": 0.224237376
+    },
+    {
+      "sequence": 37,
+      "started_epoch_ms": 1794995214107,
+      "seconds": 0.097017117
+    },
+    {
+      "sequence": 38,
+      "started_epoch_ms": 1794995214305,
+      "seconds": 0.086891189
+    },
+    {
+      "sequence": 39,
+      "started_epoch_ms": 1794995214492,
+      "seconds": 0.085096823
+    },
+    {
+      "sequence": 40,
+      "started_epoch_ms": 1794995214678,
+      "seconds": 0.137621661
+    },
+    {
+      "sequence": 41,
+      "started_epoch_ms": 1794995214916,
+      "seconds": 0.077399875
+    },
+    {
+      "sequence": 42,
+      "started_epoch_ms": 1794995215094,
+      "seconds": 0.114335978
+    },
+    {
+      "sequence": 43,
+      "started_epoch_ms": 1794995215309,
+      "seconds": 0.067623698
+    },
+    {
+      "sequence": 44,
+      "started_epoch_ms": 1794995215477,
+      "seconds": 0.08055196
+    },
+    {
+      "sequence": 45,
+      "started_epoch_ms": 1794995215658,
+      "seconds": 0.072849062
+    },
+    {
+      "sequence": 46,
+      "started_epoch_ms": 1794995215831,
+      "seconds": 0.07526222
+    },
+    {
+      "sequence": 47,
+      "started_epoch_ms": 1794995216007,
+      "seconds": 0.08956276
+    },
+    {
+      "sequence": 48,
+      "started_epoch_ms": 1794995216197,
+      "seconds": 0.087207902
+    },
+    {
+      "sequence": 49,
+      "started_epoch_ms": 1794995216385,
+      "seconds": 0.093801902
+    },
+    {
+      "sequence": 50,
+      "started_epoch_ms": 1794995216580,
+      "seconds": 0.082870342
+    },
+    {
+      "sequence": 51,
+      "started_epoch_ms": 1794995216763,
+      "seconds": 0.090387463
+    },
+    {
+      "sequence": 52,
+      "started_epoch_ms": 1794995216955,
+      "seconds": 0.109027298
+    },
+    {
+      "sequence": 53,
+      "started_epoch_ms": 1794995217164,
+      "seconds": 0.066765497
+    },
+    {
+      "sequence": 54,
+      "started_epoch_ms": 1794995217331,
+      "seconds": 0.076690424
+    },
+    {
+      "sequence": 55,
+      "started_epoch_ms": 1794995217509,
+      "seconds": 0.070043843
+    },
+    {
+      "sequence": 56,
+      "started_epoch_ms": 1794995217679,
+      "seconds": 0.073723176
+    },
+    {
+      "sequence": 57,
+      "started_epoch_ms": 1794995217853,
+      "seconds": 0.069997339
+    },
+    {
+      "sequence": 58,
+      "started_epoch_ms": 1794995218024,
+      "seconds": 0.065193591
+    },
+    {
+      "sequence": 59,
+      "started_epoch_ms": 1794995218190,
+      "seconds": 0.054487682
+    },
+    {
+      "sequence": 60,
+      "started_epoch_ms": 1794995218345,
+      "seconds": 0.07736298
+    },
+    {
+      "sequence": 61,
+      "started_epoch_ms": 1794995218522,
+      "seconds": 0.077597523
+    },
+    {
+      "sequence": 62,
+      "started_epoch_ms": 1794995218701,
+      "seconds": 0.064466377
+    },
+    {
+      "sequence": 63,
+      "started_epoch_ms": 1794995218866,
+      "seconds": 0.115646992
+    },
+    {
+      "sequence": 64,
+      "started_epoch_ms": 1794995219082,
+      "seconds": 0.38465289
+    },
+    {
+      "sequence": 65,
+      "started_epoch_ms": 1794995219568,
+      "seconds": 0.495731526
+    },
+    {
+      "sequence": 66,
+      "started_epoch_ms": 1794995220164,
+      "seconds": 0.09180652
+    },
+    {
+      "sequence": 67,
+      "started_epoch_ms": 1794995220357,
+      "seconds": 0.08775905
+    },
+    {
+      "sequence": 68,
+      "started_epoch_ms": 1794995220545,
+      "seconds": 0.07670229
+    },
+    {
+      "sequence": 69,
+      "started_epoch_ms": 1794995220722,
+      "seconds": 0.090580375
+    },
+    {
+      "sequence": 70,
+      "started_epoch_ms": 1794995220913,
+      "seconds": 0.075366189
+    },
+    {
+      "sequence": 71,
+      "started_epoch_ms": 1794995221089,
+      "seconds": 0.089417517
+    },
+    {
+      "sequence": 72,
+      "started_epoch_ms": 1794995221279,
+      "seconds": 0.09233322
+    },
+    {
+      "sequence": 73,
+      "started_epoch_ms": 1794995221472,
+      "seconds": 0.097550131
+    },
+    {
+      "sequence": 74,
+      "started_epoch_ms": 1794995221670,
+      "seconds": 0.075062435
+    },
+    {
+      "sequence": 75,
+      "started_epoch_ms": 1794995221847,
+      "seconds": 0.097187579
+    },
+    {
+      "sequence": 76,
+      "started_epoch_ms": 1794995222044,
+      "seconds": 0.218496693
+    },
+    {
+      "sequence": 77,
+      "started_epoch_ms": 1794995222364,
+      "seconds": 0.090907775
+    },
+    {
+      "sequence": 78,
+      "started_epoch_ms": 1794995222555,
+      "seconds": 0.071252781
+    },
+    {
+      "sequence": 79,
+      "started_epoch_ms": 1794995222727,
+      "seconds": 0.075611835
+    }
+  ],
+  "finished_at": "2026-11-18T09:47:04.263264Z",
+  "scope": "process failure on one Docker host; no whole-platform or host-loss guarantee"
+}

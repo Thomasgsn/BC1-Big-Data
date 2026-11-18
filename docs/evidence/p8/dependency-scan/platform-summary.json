@@ -1,0 +1,144 @@
+{
+  "created_at": "2026-11-18T10:10:49.796335+00:00",
+  "tool": "Trivy 0.76.2",
+  "scope": "Ephemeral rootfs from current seven main runtime images, no primary volumes, secrets or Docker socket; network disabled; shared existing public DB cache",
+  "exit_code_meaning": "0 means scan execution completed, not absence of vulnerabilities",
+  "images": {
+    "api": {
+      "image": "sha256:a4b5f5f23b088a6ccaa4c0421d304d9c25b88c43b1a6f43ebcef61e17d02cc50",
+      "report": "api.json",
+      "report_sha256": "613159516245d955c2a124d7c976f5d7670e1d63a13b56639da937cb68dea214",
+      "exit_code": 0,
+      "matches": 368,
+      "distinct_cves": 163,
+      "severity": {
+        "LOW": 109,
+        "HIGH": 99,
+        "MEDIUM": 147,
+        "UNKNOWN": 11,
+        "CRITICAL": 2
+      },
+      "critical_packages": [
+        "libsqlite3-0",
+        "zlib1g"
+      ]
+    },
+    "spark": {
+      "image": "sha256:7aba15f4edfe0929deedef9d832db1f01ff0b6c562b30a599eb6a6803f3690ca",
+      "report": "spark.json",
+      "report_sha256": "34bb00c3998350792492f2add91046fe0f4cfd83b46525a756d143e08730de65",
+      "exit_code": 0,
+      "matches": 6927,
+      "distinct_cves": 6306,
+      "severity": {
+        "HIGH": 1424,
+        "MEDIUM": 2718,
+        "LOW": 2696,
+        "CRITICAL": 89
+      },
+      "critical_packages": [
+        "io.netty:netty-handler",
+        "linux-libc-dev",
+        "org.apache.avro:avro",
+        "org.apache.derby:derby",
+        "org.apache.zookeeper:zookeeper",
+        "org.codehaus.jackson:jackson-mapper-asl"
+      ]
+    },
+    "hdfs-main": {
+      "image": "sha256:ec962c7edaaee18d3326e6c62a70e8673787f233cc8128eed6adccd7c3a77f69",
+      "report": "hdfs-main.json",
+      "report_sha256": "c66671472f64a1e1c8eb4c701e120bea243117956645647b6647f42089060ea3",
+      "exit_code": 0,
+      "matches": 542,
+      "distinct_cves": 154,
+      "severity": {
+        "MEDIUM": 261,
+        "LOW": 24,
+        "HIGH": 248,
+        "CRITICAL": 9
+      },
+      "critical_packages": [
+        "io.netty:netty-handler",
+        "org.bouncycastle:bcprov-jdk18on"
+      ]
+    },
+    "kafka": {
+      "image": "sha256:05b4616e0702ef2729327705d54ad6b50ea70b271c4b730fabd2320789fb7b02",
+      "report": "kafka.json",
+      "report_sha256": "05c347d5b1c06b0bf4ec02ab243356a33092a1c97d5b6341f721b1a35f0fda72",
+      "exit_code": 0,
+      "matches": 206,
+      "distinct_cves": 138,
+      "severity": {
+        "CRITICAL": 7,
+        "HIGH": 67,
+        "MEDIUM": 79,
+        "LOW": 53
+      },
+      "critical_packages": [
+        "brotli-libs",
+        "gnutls",
+        "io.netty:netty-handler",
+        "libcrypto3",
+        "libssl3",
+        "openssl"
+      ]
+    },
+    "mongo": {
+      "image": "sha256:bdc216e9d5a6ec2cfdac789b5832fdab64cd32055f59885cae918a92de63c361",
+      "report": "mongo.json",
+      "report_sha256": "b5def27aa376fb5f9ec7d567ac70519b79999265f8f15e4e222e95744e4563a1",
+      "exit_code": 0,
+      "matches": 155,
+      "distinct_cves": 99,
+      "severity": {
+        "MEDIUM": 99,
+        "LOW": 10,
+        "HIGH": 36,
+        "UNKNOWN": 9,
+        "CRITICAL": 1
+      },
+      "critical_packages": [
+        "stdlib"
+      ]
+    },
+    "postgres": {
+      "image": "sha256:40865bc877a289da75963d97d72b59633f639fc5af7a4e856bfa3714cae5b536",
+      "report": "postgres.json",
+      "report_sha256": "e831699c637c2e737be82140f1030de58751047b424ab0f32a71a5ce396eac30",
+      "exit_code": 0,
+      "matches": 586,
+      "distinct_cves": 242,
+      "severity": {
+        "LOW": 192,
+        "HIGH": 139,
+        "MEDIUM": 235,
+        "UNKNOWN": 16,
+        "CRITICAL": 4
+      },
+      "critical_packages": [
+        "libsqlite3-0",
+        "libxml2",
+        "stdlib",
+        "zlib1g"
+      ]
+    },
+    "ollama": {
+      "image": "sha256:910d0d8107b538fb0894e63163eb195de0cc7aefcbc666dc62d3b18f71124592",
+      "report": "ollama.json",
+      "report_sha256": "715c008d5c6520f785ff82e9c5af3e4776f6359a83d2d0a68cf380fc089d8b9e",
+      "exit_code": 0,
+      "matches": 54,
+      "distinct_cves": 38,
+      "severity": {
+        "HIGH": 3,
+        "MEDIUM": 42,
+        "LOW": 8,
+        "UNKNOWN": 1
+      },
+      "critical_packages": []
+    }
+  },
+  "risk_acceptance": "none; version matches require contextual investigation and maintenance; no production-safe claim"
+}

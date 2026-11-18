@@ -1,0 +1,13 @@
+[build-system]
+requires = ["setuptools==80.9.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "rncp-bc1-fraud"
+version = "0.1.0"
+description = "Plateforme pédagogique Big Data de détection de fraude — BC1"
+requires-python = ">=3.10,<3.14"
+dependencies = []
+
+[tool.setuptools.packages.find]
+where = ["src"]

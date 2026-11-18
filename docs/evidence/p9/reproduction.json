@@ -1,0 +1,201 @@
+{
+  "status": "verified_with_documented_limits",
+  "project": "rncp-bc1-repro-v1",
+  "source_manifest": "../source-code-manifest-pre-security-update.json",
+  "primary_volumes_preserved": true,
+  "phases": [
+    {
+      "name": "fresh_cluster",
+      "exit_code": 0,
+      "business_volumes_new": [
+        "namenode-data",
+        "datanode-data",
+        "kafka-data",
+        "zookeeper-data",
+        "postgres-data",
+        "mongo-data"
+      ],
+      "all_base_services_healthy": true,
+      "host_ports_published": false
+    },
+    {
+      "name": "initialization",
+      "exit_code": 0,
+      "hdfs_safemode": "OFF",
+      "hdfs_root_mode": "700",
+      "topic": "transactions.v1",
+      "partitions": 3,
+      "replication": 1
+    },
+    {
+      "name": "sql_constraints_on_fresh_schema",
+      "exit_code": 0,
+      "result": "postgres_constraints_and_rollback_passed"
+    },
+    {
+      "name": "public_model_cache",
+      "exit_code": 0,
+      "read_only_subpath": "models",
+      "model": "qwen2.5:3b",
+      "digest": "357c53fb659c5076de1d65ccb0b397446227b71a42be9d1603d46168015c9e4b",
+      "private_server_keys_not_shared": true
+    },
+    {
+      "name": "prefix_producer",
+      "exit_code": 0,
+      "rows_acknowledged": 1000,
+      "positive_labels": 9,
+      "elapsed_seconds": 2.6990968419995625
+    },
+    {
+      "name": "prefix_ingestion",
+      "exit_code": 0
+    },
+    {
+      "name": "prefix_csv_hdfs_verification",
+      "exit_code": 0,
+      "raw": 1000,
+      "curated_unique": 1000,
+      "quarantine": 0,
+      "counts_and_sums_match_csv": true,
+      "batch_latency_p95_seconds": 61.09200716018677,
+      "latency_excludes_commit_visibility": true
+    },
+    {
+      "name": "training_sample_producer",
+      "exit_code": 0,
+      "acknowledged_rows": 98813,
+      "positive_labels": 141,
+      "last_source_row": 6362533,
+      "elapsed_seconds": 177.82004807900012
+    },
+    {
+      "name": "fresh_mongo_graph_export",
+      "exit_code": 0,
+      "nodes": 1597,
+      "edges": 1000,
+      "csv_hashes_identical_to_original_run": true,
+      "isolated_host_export_directory": "exports/reproduction-v1"
+    },
+    {
+      "name": "api_container_isolation",
+      "exit_code": 0,
+      "uid": 10001,
+      "host_env_absent": true,
+      "raw_dataset_absent": true
+    },
+    {
+      "name": "training_ingestion",
+      "exit_code": 0,
+      "rows": 98813
+    },
+    {
+      "name": "fresh_training",
+      "exit_code": 0,
+      "same_split": true,
+      "same_test_metrics": true,
+      "selected": "logistic_regression",
+      "threshold": 0.7
+    },
+    {
+      "name": "fresh_gephi",
+      "exit_code": 0,
+      "nodes": 1597,
+      "edges": 1000,
+      "modularity": 0.995408
+    },
+    {
+      "name": "security_dependency_update",
+      "old": "kafka-python 2.3.1",
+      "new": "kafka-python 2.3.2",
+      "wheel_sha256": "e8a5e6f2c4ce13a8041669337038d5125e0e09e6d6f0911902ae5939e5b9595e",
+      "docker_build_exit_code": 0,
+      "parser_scram_tests_in_container": 2,
+      "test_exit_code": 0,
+      "new_producer_run": "security-patch-v1",
+      "new_producer_acknowledged_rows": 1000,
+      "post_patch_audit_exit_code": 0,
+      "scope_note": "Initial ingestion/training used original runtime; patched producer separately exercised, subsequent jobs use rebuilt image. No claim of a full initial replay entirely under 2.3.2."
+    },
+    {
+      "name": "fresh_scoring",
+      "exit_code": 0,
+      "transactions": 1000,
+      "alerts": 305,
+      "linear_decomposition_verified": true
+    },
+    {
+      "name": "patched_client_csv_hdfs_verification",
+      "exit_code": 0,
+      "run_id": "security-patch-v1",
+      "raw": 1000,
+      "curated_unique": 1000,
+      "quarantine": 0,
+      "counts_ids_and_decimal_sums_match_csv": true,
+      "logical_latency_p95_seconds": 303.74981594085693,
+      "latency_note": "Producer preceded ingestion by several minutes; includes startup/wait, excludes sink commit/read visibility. Not throughput benchmark."
+    },
+    {
+      "name": "api_http_tests_repeated_after_recovery",
+      "exit_code": 0,
+      "tests": 6,
+      "seconds": 2.374,
+      "creates_automated_test_decisions": true,
+      "note": "Previous call output unavailable after recovery; suite deliberately repeated, not claimed to be first execution."
+    },
+    {
+      "name": "local_unit_tests_after_dependency_update",
+      "exit_code": 0,
+      "tests": 38,
+      "seconds": 0.902
+    },
+    {
+      "name": "sql_reviews_fresh_extract",
+      "exit_code": 0,
+      "snapshot_id": "reproduction-reviews-v1",
+      "rows": 4,
+      "origins": {
+        "automated_test": 4
+      },
+      "references_validated_against": "runtime-v1",
+      "strategy": "complete_immutable_snapshot_not_cdc"
+    },
+    {
+      "name": "real_local_generation",
+      "exit_code": 0,
+      "evidence": "generated-draft.json",
+      "model": "qwen2.5:3b",
+      "digest": "357c53fb659c5076de1d65ccb0b397446227b71a42be9d1603d46168015c9e4b",
+      "prompt_version": "fraud-fr-v7-verified-linear-signal",
+      "status": "draft_requires_human_review",
+      "backend_total_seconds": 53.835402984,
+      "quality_review": "Correct synthetic reference, noncalibrated score, human verification, model factor and no causal assertion. Minor French typo factor retained; human editing required. No email sent."
+    }
+  ],
+  "primary_restoration": {
+    "base_services_healthy": true,
+    "primary_ollama_running": true,
+    "reproduction_services_stopped": true,
+    "volumes_deleted": false,
+    "hdfs_verification_exit_code": 0,
+    "raw_rows": 1000,
+    "curated_unique": 1000,
+    "quarantine_rows": 0,
+    "counts_ids_decimal_sums_match_csv": true,
+    "api_ready": 200,
+    "scores": 1000,
+    "alerts": 305,
+    "sql_decisions": 8,
+    "qwen_digest_verified": true,
+    "checks_exit_code": 0,
+    "startup_incident": {
+      "first_compose_up_exit_code": 1,
+      "error": "Kafka registerBroker KeeperException NodeExists",
+      "zk_log": "Expired restored session 0x10000025b2c0004, timeout 18000 ms",
+      "read_only_probe": "/brokers/ids/1 absent after expiry",
+      "recovery": "Same configuration, up kafka succeeded after automatic session expiry; no node/volume deletion",
+      "automatic_retry_not_implemented": true
+    },
+    "checker_development_note": "First retained-state check referenced nonexistent collection scores; corrected to actual fraud_scores and passed. No data loss inferred from that failed assertion."
+  }
+}

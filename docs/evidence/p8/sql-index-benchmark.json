@@ -1,0 +1,120 @@
+{
+  "created_at_utc": "2026-11-17T19:26:46.430030+00:00",
+  "fixture": "SYNTHETIC_TEMPORARY_CASES_NOT_BUSINESS_DECISIONS",
+  "rows": 100000,
+  "seed": 42,
+  "insert_seconds": 2.5034508669996285,
+  "insert_rows_per_second": 39944.86223724032,
+  "integrity": {
+    "rows": 100000,
+    "unique_transactions": 100000
+  },
+  "comparison": {
+    "without_transaction_index": {
+      "p50_ms": 16.025738500047737,
+      "p95_ms": 35.210433000429475,
+      "min_ms": 12.338233000264154,
+      "max_ms": 50.3737450007975,
+      "queries": 50,
+      "sample_plan": {
+        "Plan": {
+          "Node Type": "Seq Scan",
+          "Parallel Aware": false,
+          "Async Capable": false,
+          "Relation Name": "benchmark_cases",
+          "Alias": "benchmark_cases",
+          "Startup Cost": 0,
+          "Total Cost": 2789,
+          "Plan Rows": 1,
+          "Plan Width": 16,
+          "Actual Startup Time": 10.88,
+          "Actual Total Time": 12.527,
+          "Actual Rows": 1,
+          "Actual Loops": 1,
+          "Filter": "(transaction_id = '0000000000000000000000000000000000000000000000000000000000083811'::bpchar)",
+          "Rows Removed by Filter": 99999,
+          "Shared Hit Blocks": 0,
+          "Shared Read Blocks": 0,
+          "Shared Dirtied Blocks": 0,
+          "Shared Written Blocks": 0,
+          "Local Hit Blocks": 0,
+          "Local Read Blocks": 1539,
+          "Local Dirtied Blocks": 0,
+          "Local Written Blocks": 0,
+          "Temp Read Blocks": 0,
+          "Temp Written Blocks": 0
+        },
+        "Planning": {
+          "Shared Hit Blocks": 0,
+          "Shared Read Blocks": 0,
+          "Shared Dirtied Blocks": 0,
+          "Shared Written Blocks": 0,
+          "Local Hit Blocks": 0,
+          "Local Read Blocks": 0,
+          "Local Dirtied Blocks": 0,
+          "Local Written Blocks": 0,
+          "Temp Read Blocks": 0,
+          "Temp Written Blocks": 0
+        },
+        "Planning Time": 0.057,
+        "Triggers": [],
+        "Execution Time": 12.552
+      }
+    },
+    "with_unique_transaction_index": {
+      "p50_ms": 0.31028249986775336,
+      "p95_ms": 0.39339800059678964,
+      "min_ms": 0.2513449999241857,
+      "max_ms": 0.4720759998235735,
+      "queries": 50,
+      "sample_plan": {
+        "Plan": {
+          "Node Type": "Index Scan",
+          "Parallel Aware": false,
+          "Async Capable": false,
+          "Scan Direction": "Forward",
+          "Index Name": "benchmark_cases_transaction_id_idx",
+          "Relation Name": "benchmark_cases",
+          "Alias": "benchmark_cases",
+          "Startup Cost": 0.42,
+          "Total Cost": 8.44,
+          "Plan Rows": 1,
+          "Plan Width": 16,
+          "Actual Startup Time": 0.04,
+          "Actual Total Time": 0.04,
+          "Actual Rows": 1,
+          "Actual Loops": 1,
+          "Index Cond": "(transaction_id = '0000000000000000000000000000000000000000000000000000000000083811'::bpchar)",
+          "Rows Removed by Index Recheck": 0,
+          "Shared Hit Blocks": 0,
+          "Shared Read Blocks": 0,
+          "Shared Dirtied Blocks": 0,
+          "Shared Written Blocks": 0,
+          "Local Hit Blocks": 4,
+          "Local Read Blocks": 0,
+          "Local Dirtied Blocks": 0,
+          "Local Written Blocks": 0,
+          "Temp Read Blocks": 0,
+          "Temp Written Blocks": 0
+        },
+        "Planning": {
+          "Shared Hit Blocks": 0,
+          "Shared Read Blocks": 0,
+          "Shared Dirtied Blocks": 0,
+          "Shared Written Blocks": 0,
+          "Local Hit Blocks": 0,
+          "Local Read Blocks": 0,
+          "Local Dirtied Blocks": 0,
+          "Local Written Blocks": 0,
+          "Temp Read Blocks": 0,
+          "Temp Written Blocks": 0
+        },
+        "Planning Time": 0.188,
+        "Triggers": [],
+        "Execution Time": 0.052
+      }
+    }
+  },
+  "isolation": "temporary table; rollback; no persisted business rows",
+  "limitations": "single client, warm cache, loopback Docker network; not production capacity"
+}

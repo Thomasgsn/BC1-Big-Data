@@ -1,0 +1,144 @@
+{
+  "status": "isolated_validation_passed_deployment_requires_approval",
+  "primary_runtime_unchanged": true,
+  "old_runtime_observed": {
+    "hadoop": "3.4.2",
+    "os": "CentOS Linux 7",
+    "java": "OpenJDK 1.8.0_212"
+  },
+  "candidate": {
+    "hadoop": "3.4.3",
+    "java_image": "Temurin 11 JRE Ubuntu Noble pinned by digest",
+    "archive_sha512_verified": true,
+    "fresh_volumes_only": true,
+    "host_ports": [],
+    "observed_os": "Ubuntu 24.04.5 LTS",
+    "observed_java": "Temurin 11.0.33+10",
+    "observed_hadoop": "3.4.3",
+    "build_note": "Initial image used COPY then archive removal; final image rebuilt with a read-only BuildKit bind mount so archive is not retained in a runtime layer.",
+    "build_exit_code": 0,
+    "manifest_list": "sha256:ec962c7edaaee18d3326e6c62a70e8673787f233cc8128eed6adccd7c3a77f69",
+    "tested_image_manifest_list": "sha256:1dd6554556894cd5e0bcc048b3f7ba498c53e855b952b6d5b0f6c3d5ebab1706",
+    "final_build_note": "Proposed migration override build exited 0 with identical pinned defaults; final image successfully reread preserved 1000-row Parquet."
+  },
+  "source_urls": [
+    "https://hadoop.apache.org/release/",
+    "https://cwiki.apache.org/confluence/spaces/HADOOP/pages/100827883/Hadoop%2BJava%2BVersions",
+    "https://adoptium.net/installation/containers/"
+  ],
+  "security_scope": "New runtime candidate is not yet an audited or Kerberos/TLS secured deployment.",
+  "phases": [
+    {
+      "name": "fresh_hdfs_services",
+      "exit_code": 0,
+      "namenode_healthy": true,
+      "datanode_healthy": true,
+      "safemode": "OFF"
+    },
+    {
+      "name": "real_paysim_write_read",
+      "exit_code": 0,
+      "rows": 1000,
+      "exact_multiset_and_decimal_sums": true,
+      "spark": "3.5.8",
+      "client_hadoop": "3.3.4",
+      "server_hadoop": "3.4.3",
+      "scope": "local Spark driver, real isolated HDFS daemons"
+    },
+    {
+      "name": "fresh_restart_reread",
+      "exit_code": 0,
+      "rows": 1000,
+      "exact_multiset_and_decimal_sums": true,
+      "evidence": "fresh-restart.json"
+    },
+    {
+      "name": "consistent_original_volumes_copy",
+      "exit_code": 0,
+      "original_nn_dn_stopped_during_copy": true,
+      "source_mounts_declared_read_only": true,
+      "all_file_hash_sets_match": true,
+      "source_hashes_unchanged": true,
+      "evidence": "clone.json"
+    },
+    {
+      "name": "nonempty_clone_destination_guard",
+      "exit_code": 1,
+      "expected_exit_code": 1,
+      "observed_message": "Destination non vide : copie refus\u00e9e pour pr\u00e9server ses donn\u00e9es.",
+      "copy_not_repeated": true
+    },
+    {
+      "name": "clone_runtime_start",
+      "exit_code": 0,
+      "namenode_healthy": true,
+      "datanode_healthy": true,
+      "format_upgrade_finalize_rollback_commands_used": false
+    },
+    {
+      "name": "clone_original_prefix_verification",
+      "exit_code": 0,
+      "raw": 1000,
+      "curated_unique": 1000,
+      "quarantine": 0,
+      "counts_ids_decimal_sums_match_original_csv": true,
+      "note": "Historical emitted_at/ingested_at preserved; no new latency benchmark."
+    },
+    {
+      "name": "clone_models_reloaded",
+      "exit_code": 0,
+      "training_rows_read": 98813,
+      "model_report_and_both_1000_score_hashes_equal_to_primary": true,
+      "selected_alerts": 305,
+      "baseline_evidence": "primary-models.json",
+      "candidate_evidence": "clone-models.json"
+    },
+    {
+      "name": "primary_restored_original_runtime",
+      "exit_code": 0,
+      "namenode_healthy": true,
+      "datanode_healthy": true,
+      "hadoop_version_rechecked": "3.4.2"
+    },
+    {
+      "name": "final_override_build_and_fresh_reread",
+      "build_exit_code": 0,
+      "read_exit_code": 0,
+      "rows": 1000,
+      "evidence": "final-image-read.json"
+    },
+    {
+      "name": "archive_gpg_verification",
+      "exit_code": 0,
+      "fingerprint": "38237EE425050285077DB57AD22CF846DBB162A0",
+      "evidence": "signature.json"
+    }
+  ],
+  "limitations": [
+    "no primary migration",
+    "Kerberos/TLS not enabled",
+    "OS/JAR vulnerability scan incomplete",
+    "no stream checkpoint resumed on clone",
+    "candidate Spark probe local[2], primary baseline distributed Spark",
+    "archive platform amd64 only",
+    "Public signing key retrieved from Apache over HTTPS, not authenticated out of band"
+  ],
+  "primary_restored_state": {
+    "exit_code": 0,
+    "api_ready": 200,
+    "scores": 1000,
+    "alerts": 305,
+    "sql_decisions": 8,
+    "llm_digest_checked": true,
+    "hadoop": "3.4.2"
+  },
+  "final_state": {
+    "primary_hadoop": "3.4.2",
+    "primary_base_services_healthy": true,
+    "primary_ollama_and_spark_worker_running": true,
+    "fresh_candidate_stopped": true,
+    "clone_stopped": true,
+    "volumes_deleted": false,
+    "deployment_approval_received": false
+  }
+}

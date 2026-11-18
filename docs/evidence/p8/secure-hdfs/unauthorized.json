@@ -1,0 +1,7 @@
+{
+  "event": "secure_hdfs_unauthorized_verified",
+  "principal": "bob@BC1.TEST",
+  "no_ticket_and_username_spoof_refused": true,
+  "valid_ticket_private_data_refused": true,
+  "synthetic_service_identity": true
+}

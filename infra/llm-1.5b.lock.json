@@ -1,0 +1,10 @@
+{
+  "model": "qwen2.5:1.5b",
+  "digest": "65ec06548149b04c096a120e4a6da9d4017ea809c91734ea5631e89f96ddc57b",
+  "bytes": 986061892,
+  "format": "gguf",
+  "parameter_size": "1.5B",
+  "quantization": "Q4_K_M",
+  "license_marker_observed": "Apache License Version 2.0, January 2004",
+  "source": "Local Ollama /api/tags and /api/show after project download"
+}

@@ -1,0 +1,16 @@
+{
+  "input_report": "hadoop-secure.json",
+  "report_sha256": "e539f7d564deb293b1641a6c3d945a14af6385745b740e10552457f9d5cec150",
+  "target_image": "sha256:f45523ed7f49533bb764cf366acdc75c9411a5e1fdf18493c66e0c18fddb6baf",
+  "checkout": "untracked working tree; no commit claimed",
+  "critical_alert_ids": [
+    "CVE-2026-75595",
+    "CVE-2025-14813",
+    "CVE-2026-8763"
+  ],
+  "resolved_copies": "common/lib and hdfs/lib Netty; common BC; embedded optional client-minicluster/YARN WAR and HBase copies",
+  "runtime_classpath_observed": "common/* and common/lib/*; hdfs/* and hdfs/lib/*; mapreduce/*; yarn/* and yarn/lib/*",
+  "reachability": "Version matches confirmed. No SNI-routing/mTLS bypass or GOST/BC constraint exploit demonstrated in this configuration. Do not claim exploit validation.",
+  "proposed_maintenance": "Align Netty 4.1.141, BC 1.87, JSch 0.2.26; remove optional client/YARN embedded copies; preserve active HDFS behavior; compare post-change inventory and functional controls.",
+  "status": "assessment_complete_changes_and_runtime_checks_pending"
+}

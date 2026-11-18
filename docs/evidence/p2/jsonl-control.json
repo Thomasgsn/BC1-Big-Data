@@ -1,0 +1,22 @@
+{
+  "scope": "JSONL control against real source; no Kafka, Spark or model execution",
+  "source_sha256": "16910f90577b0d981bf8ff289714510bb89bc71bff7d3f220f024e287e4eea6b",
+  "rows": 10000,
+  "counts": {
+    "PAYMENT": 5465,
+    "TRANSFER": 921,
+    "CASH_OUT": 1321,
+    "DEBIT": 344,
+    "CASH_IN": 1949
+  },
+  "amounts": {
+    "PAYMENT": "43126669.69",
+    "TRANSFER": "434393811.92",
+    "CASH_OUT": "229203200.82",
+    "DEBIT": "1230348.24",
+    "CASH_IN": "327512868.82"
+  },
+  "fraud_rows": 68,
+  "control_sha256": "c7cc0c230182dd98ea1d265f14563e254cd7b145b204cc5c3aedafbc2166f1ac",
+  "passed": true
+}

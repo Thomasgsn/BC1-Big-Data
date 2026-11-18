@@ -1,0 +1,5 @@
+*.pdf binary
+*.png binary
+*.gephi binary
+# Conserver les licences tierces telles qu'acquises, y compris leurs espaces.
+infra/licenses/* -whitespace

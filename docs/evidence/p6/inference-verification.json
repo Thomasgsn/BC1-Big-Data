@@ -1,0 +1,24 @@
+{
+  "event": "model_inference_verified",
+  "training_run": "training-sample64-seed42",
+  "model_version": "baseline-v1",
+  "transaction_run": "runtime-v1",
+  "artificial_boundary_fixtures": {
+    "logistic_regression": {
+      "rows": 21,
+      "all_vectors_and_scores_finite": true,
+      "feature_dimension": 9
+    },
+    "random_forest": {
+      "rows": 21,
+      "all_vectors_and_scores_finite": true,
+      "feature_dimension": 9
+    }
+  },
+  "fixture_scope": "five valid types, zero/cent/max amount, day boundary/future hour; separate unseen internal type",
+  "real_rows_compared": 1000,
+  "max_score_absolute_difference": 0,
+  "published_threshold_and_alerts_match": true,
+  "labels_or_balances_in_input": false,
+  "writes_or_retraining": false
+}

@@ -1,0 +1,17 @@
+{
+  "created_at_utc": "2026-11-17T19:24:25.817883+00:00",
+  "command": "docker compose run --rm --entrypoint python api-tests tests/integration/benchmark_api.py",
+  "exit_code": 0,
+  "target_requests_per_second": 5,
+  "attempts": 50,
+  "elapsed_seconds": 9.835185797000122,
+  "observed_requests_per_second": 5.083788047527353,
+  "latency_ms": {
+    "p50": 29.88389400070446,
+    "p95": 36.31193000001076,
+    "min": 24.161506999917037,
+    "max": 81.13694700023188
+  },
+  "errors": [],
+  "scope": "actual Mongo alert API; shared Docker VM, single client, warm cache"
+}

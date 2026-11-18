@@ -1,0 +1,35 @@
+name: rncp-bc1-image-audit-v1
+x-scan: &scan
+  user: root
+  cap_drop: [ALL]
+  cap_add: [DAC_OVERRIDE]
+  security_opt: [no-new-privileges:true]
+  volumes: ['../../tmp/security-tools/trivy:/tools/trivy:ro','cache:/cache','work:/tmp','../../docs/evidence/p8/dependency-scan:/report']
+  entrypoint: [/tools/trivy]
+  network_mode: none
+  mem_limit: 1536m
+services:
+  spark:
+    <<: *scan
+    image: rncp-bc1-spark:3.5.8
+  api:
+    <<: *scan
+    image: rncp-bc1-api:0.1.0
+  hdfs:
+    <<: *scan
+    image: rncp-bc1-hadoop:3.4.3-java11
+  kafka:
+    <<: *scan
+    image: ${KAFKA_IMAGE:?}
+  mongo:
+    <<: *scan
+    image: ${MONGO_IMAGE:?}
+  postgres:
+    <<: *scan
+    image: ${POSTGRES_IMAGE:?}
+  ollama:
+    <<: *scan
+    image: ${OLLAMA_IMAGE:?}
+volumes:
+  cache: {external: true, name: rncp-bc1-secure-hdfs-v1_scan-cache}
+  work: {}

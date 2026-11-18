@@ -1,0 +1,6 @@
+# Wheel pure Python, SHA-256 vérifié contre les métadonnées PyPI.
+kafka-python==2.3.2 --hash=sha256:e8a5e6f2c4ce13a8041669337038d5125e0e09e6d6f0911902ae5939e5b9595e
+
+numpy==2.2.6 \
+    --hash=sha256:efd28d4e9cd7d7a8d39074a4d44c63eda73401580c5c76acda2ce969e0a38e83 \
+    --hash=sha256:fc7b73d02efb0e18c000e9ad8b83480dfcd5dfd11065997ed4c6747470ae8915

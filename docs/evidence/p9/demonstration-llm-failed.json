@@ -1,0 +1,10 @@
+{
+  "event": "llm_draft_failed",
+  "command_exit_code": 1,
+  "http_status": 503,
+  "detail": "Génération locale indisponible ou sortie rejetée ; aucun message envoyé.",
+  "api_duration_ms": 91072.37,
+  "observed_backend": "Ollama model loading aborted when client timeout expired after 90 seconds",
+  "concurrent_work": "rootfs audits ran during model load; resource contention plausible, not isolated as proven sole cause",
+  "next_action": "finish audits, warm model separately, retry; preserve this failure"
+}

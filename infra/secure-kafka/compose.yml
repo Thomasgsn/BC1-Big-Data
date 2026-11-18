@@ -1,0 +1,58 @@
+name: rncp-bc1-secure-kafka-v1
+x-kafka: &kafka
+  image: apache/kafka:3.9.2@sha256:05b4616e0702ef2729327705d54ad6b50ea70b271c4b730fabd2320789fb7b02
+  networks: [secure]
+  environment: {KAFKA_HEAP_OPTS: '-Xms128m -Xmx256m'}
+services:
+  init:
+    image: rncp-bc1-hadoop-secure:3.4.3
+    user: root
+    entrypoint: [python3,/scripts/provision.py]
+    volumes: ['.:/scripts:ro','ca:/ca','broker-id:/identities/broker','admin-id:/identities/admin','producer-id:/identities/producer','consumer-id:/identities/consumer','intruder-id:/identities/intruder','broker-data:/storage/broker','zk-data:/storage/zk']
+    networks: [secure]
+    mem_limit: 256m
+  zk:
+    <<: *kafka
+    hostname: zk
+    environment: {ZK_ID: '1', KAFKA_HEAP_OPTS: '-Xms64m -Xmx128m'}
+    volumes: ['../hdfs-ha:/scripts:ro','zk-data:/data']
+    # ZooKeeper autonome, configuration locale distincte des trois pairs HA.
+    entrypoint: [/bin/bash,-c]
+    command: ['printf "tickTime=2000\ndataDir=/data\nclientPort=2181\nadmin.enableServer=false\n" > /tmp/zk.properties; exec /opt/kafka/bin/zookeeper-server-start.sh /tmp/zk.properties']
+    depends_on: {init: {condition: service_completed_successfully}}
+    healthcheck: {test: [CMD-SHELL, "bash -c 'echo > /dev/tcp/127.0.0.1/2181'"], interval: 5s, timeout: 3s, retries: 24}
+    mem_limit: 256m
+  broker:
+    <<: *kafka
+    hostname: broker
+    entrypoint: [/opt/kafka/bin/kafka-server-start.sh,/identity/server.properties]
+    volumes: ['broker-id:/identity:ro','broker-data:/data']
+    depends_on: {zk: {condition: service_healthy}}
+    healthcheck: {test: [CMD-SHELL, "bash -c 'echo > /dev/tcp/127.0.0.1/9093'"], interval: 5s, timeout: 3s, retries: 24}
+    mem_limit: 768m
+  admin:
+    <<: *kafka
+    entrypoint: [/bin/bash,/scripts/admin.sh]
+    volumes: ['.:/scripts:ro','admin-id:/identity:ro']
+    depends_on: {broker: {condition: service_healthy}}
+    mem_limit: 512m
+  check:
+    image: rncp-bc1-spark:3.5.8
+    profiles: [tests]
+    user: '1000'
+    entrypoint: [python3,/scripts/check.py]
+    volumes: ['.:/scripts:ro','producer-id:/identities/producer:ro','consumer-id:/identities/consumer:ro','intruder-id:/identities/intruder:ro','../../data/raw:/source:ro']
+    depends_on: {admin: {condition: service_completed_successfully}}
+    networks: [secure]
+    mem_limit: 512m
+networks:
+  secure: {internal: true}
+volumes:
+  ca:
+  broker-id:
+  admin-id:
+  producer-id:
+  consumer-id:
+  intruder-id:
+  broker-data:
+  zk-data:

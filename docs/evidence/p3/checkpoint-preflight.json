@@ -1,0 +1,14 @@
+{
+  "event": "checkpoint_preflight_verified",
+  "command_exit_code": 0,
+  "synthetic_fixture_root": "hdfs://namenode:8020/bc1/checkpoint-contract-750757bb4d7045478c711cc6a88e4de1",
+  "checks": {
+    "empty_new_run_allowed": true,
+    "missing_refused": true,
+    "corrupt_refused": true,
+    "invalid-id_refused": true,
+    "valid_metadata_allowed": true,
+    "existing_real_run_allowed": true
+  },
+  "scope": "preconditions only; Spark validates full offsets/state on resume; fixtures preserved"
+}

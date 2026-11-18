@@ -1,0 +1,319 @@
+{
+  "event": "ingestion_completed",
+  "run_id": "post-migration-v1",
+  "root": "hdfs://namenode:8020/bc1/post-migration-v1",
+  "queries": [
+    {
+      "name": "bc1_raw",
+      "active": false,
+      "last_progress": {
+        "id": "505799f2-29b0-48d3-827d-db99603c7247",
+        "runId": "8748c4c1-3513-47dc-84e7-1acc2b4f875b",
+        "name": "bc1_raw",
+        "timestamp": "2026-11-18T08:31:53.432Z",
+        "batchId": 10,
+        "numInputRows": 2832,
+        "inputRowsPerSecond": 1912.2214719783929,
+        "processedRowsPerSecond": 1048.5005553498704,
+        "durationMs": {
+          "addBatch": 1784,
+          "commitOffsets": 431,
+          "getBatch": 0,
+          "latestOffset": 1,
+          "queryPlanning": 61,
+          "triggerExecution": 2701,
+          "walCommit": 420
+        },
+        "stateOperators": [],
+        "sources": [
+          {
+            "description": "KafkaV2[Subscribe[transactions.v1]]",
+            "startOffset": {
+              "transactions.v1": {
+                "0": 33298,
+                "1": 33494,
+                "2": 33192
+              }
+            },
+            "endOffset": {
+              "transactions.v1": {
+                "0": 34241,
+                "1": 34443,
+                "2": 34132
+              }
+            },
+            "latestOffset": {
+              "transactions.v1": {
+                "0": 34241,
+                "1": 34443,
+                "2": 34132
+              }
+            },
+            "numInputRows": 2832,
+            "inputRowsPerSecond": 1912.2214719783929,
+            "processedRowsPerSecond": 1048.5005553498704,
+            "metrics": {
+              "avgOffsetsBehindLatest": "0.0",
+              "maxOffsetsBehindLatest": "0",
+              "minOffsetsBehindLatest": "0"
+            }
+          }
+        ],
+        "sink": {
+          "description": "FileSink[hdfs://namenode:8020/bc1/post-migration-v1/raw]",
+          "numOutputRows": -1
+        }
+      }
+    },
+    {
+      "name": "bc1_curated",
+      "active": false,
+      "last_progress": {
+        "id": "e1c4ac02-0f5a-4925-8344-2d5e229c065b",
+        "runId": "7688805b-f031-488a-8a95-2874fcf9527f",
+        "name": "bc1_curated",
+        "timestamp": "2026-11-18T08:32:04.347Z",
+        "batchId": 10,
+        "numInputRows": 2832,
+        "inputRowsPerSecond": 1220.1637225333907,
+        "processedRowsPerSecond": 740.3921568627451,
+        "durationMs": {
+          "addBatch": 3750,
+          "commitOffsets": 16,
+          "getBatch": 1,
+          "latestOffset": 1,
+          "queryPlanning": 40,
+          "triggerExecution": 3825,
+          "walCommit": 15
+        },
+        "stateOperators": [
+          {
+            "operatorName": "dedupe",
+            "numRowsTotal": 1000,
+            "numRowsUpdated": 1000,
+            "allUpdatesTimeMs": 179,
+            "numRowsRemoved": 0,
+            "allRemovalsTimeMs": 0,
+            "commitTimeMs": 1748,
+            "memoryUsedBytes": 537752,
+            "numRowsDroppedByWatermark": 0,
+            "numShufflePartitions": 2,
+            "numStateStoreInstances": 2,
+            "customMetrics": {
+              "numDroppedDuplicateRows": 0,
+              "rocksdbBytesCopied": 78111,
+              "rocksdbCommitCheckpointLatency": 37,
+              "rocksdbCommitCompactLatency": 0,
+              "rocksdbCommitFileSyncLatencyMs": 1603,
+              "rocksdbCommitFlushLatency": 37,
+              "rocksdbCommitPauseLatency": 0,
+              "rocksdbCommitWriteBatchLatency": 0,
+              "rocksdbFilesCopied": 2,
+              "rocksdbFilesReused": 0,
+              "rocksdbGetCount": 2000,
+              "rocksdbGetLatency": 6,
+              "rocksdbPinnedBlocksMemoryUsage": 530368,
+              "rocksdbPutCount": 1000,
+              "rocksdbPutLatency": 6,
+              "rocksdbReadBlockCacheHitCount": 0,
+              "rocksdbReadBlockCacheMissCount": 4,
+              "rocksdbSstFileSize": 78111,
+              "rocksdbTotalBytesRead": 0,
+              "rocksdbTotalBytesReadByCompaction": 0,
+              "rocksdbTotalBytesReadThroughIterator": 0,
+              "rocksdbTotalBytesWritten": 113000,
+              "rocksdbTotalBytesWrittenByCompaction": 0,
+              "rocksdbTotalBytesWrittenByFlush": 78655,
+              "rocksdbTotalCompactionLatencyMs": 0,
+              "rocksdbWriterStallLatencyMs": 0,
+              "rocksdbZipFileBytesUncompressed": 15182
+            }
+          }
+        ],
+        "sources": [
+          {
+            "description": "KafkaV2[Subscribe[transactions.v1]]",
+            "startOffset": {
+              "transactions.v1": {
+                "0": 33298,
+                "1": 33494,
+                "2": 33192
+              }
+            },
+            "endOffset": {
+              "transactions.v1": {
+                "0": 34241,
+                "1": 34443,
+                "2": 34132
+              }
+            },
+            "latestOffset": {
+              "transactions.v1": {
+                "0": 34241,
+                "1": 34443,
+                "2": 34132
+              }
+            },
+            "numInputRows": 2832,
+            "inputRowsPerSecond": 1220.1637225333907,
+            "processedRowsPerSecond": 740.3921568627451,
+            "metrics": {
+              "avgOffsetsBehindLatest": "0.0",
+              "maxOffsetsBehindLatest": "0",
+              "minOffsetsBehindLatest": "0"
+            }
+          }
+        ],
+        "sink": {
+          "description": "FileSink[hdfs://namenode:8020/bc1/post-migration-v1/curated]",
+          "numOutputRows": -1
+        }
+      }
+    },
+    {
+      "name": "bc1_quarantine",
+      "active": false,
+      "last_progress": {
+        "id": "303a6d26-2ea8-46e2-88f5-6e36c29a5d02",
+        "runId": "9bdb87db-b61c-4b0c-807c-bd255f67e721",
+        "name": "bc1_quarantine",
+        "timestamp": "2026-11-18T08:31:58.188Z",
+        "batchId": 10,
+        "numInputRows": 2832,
+        "inputRowsPerSecond": 1243.7417654808958,
+        "processedRowsPerSecond": 1234.5248474280731,
+        "durationMs": {
+          "addBatch": 1387,
+          "commitOffsets": 443,
+          "getBatch": 0,
+          "latestOffset": 1,
+          "queryPlanning": 46,
+          "triggerExecution": 2294,
+          "walCommit": 414
+        },
+        "stateOperators": [],
+        "sources": [
+          {
+            "description": "KafkaV2[Subscribe[transactions.v1]]",
+            "startOffset": {
+              "transactions.v1": {
+                "0": 33298,
+                "1": 33494,
+                "2": 33192
+              }
+            },
+            "endOffset": {
+              "transactions.v1": {
+                "0": 34241,
+                "1": 34443,
+                "2": 34132
+              }
+            },
+            "latestOffset": {
+              "transactions.v1": {
+                "0": 34241,
+                "1": 34443,
+                "2": 34132
+              }
+            },
+            "numInputRows": 2832,
+            "inputRowsPerSecond": 1243.7417654808958,
+            "processedRowsPerSecond": 1234.5248474280731,
+            "metrics": {
+              "avgOffsetsBehindLatest": "0.0",
+              "maxOffsetsBehindLatest": "0",
+              "minOffsetsBehindLatest": "0"
+            }
+          }
+        ],
+        "sink": {
+          "description": "FileSink[hdfs://namenode:8020/bc1/post-migration-v1/quarantine]",
+          "numOutputRows": -1
+        }
+      }
+    },
+    {
+      "name": "bc1_metrics",
+      "active": false,
+      "last_progress": {
+        "id": "40141d4b-afe6-4490-a35d-68df5ddc005f",
+        "runId": "340bd4c5-f4d1-48f8-be1a-ff6873196191",
+        "name": "bc1_metrics",
+        "timestamp": "2026-11-18T08:32:08.742Z",
+        "batchId": 0,
+        "numInputRows": 1000,
+        "inputRowsPerSecond": 0,
+        "processedRowsPerSecond": 254.25883549453346,
+        "durationMs": {
+          "addBatch": 2517,
+          "commitOffsets": 419,
+          "getBatch": 49,
+          "latestOffset": 428,
+          "queryPlanning": 92,
+          "triggerExecution": 3933,
+          "walCommit": 422
+        },
+        "stateOperators": [
+          {
+            "operatorName": "stateStoreSave",
+            "numRowsTotal": 5,
+            "numRowsUpdated": 5,
+            "allUpdatesTimeMs": 31,
+            "numRowsRemoved": 0,
+            "allRemovalsTimeMs": 0,
+            "commitTimeMs": 574,
+            "memoryUsedBytes": 539872,
+            "numRowsDroppedByWatermark": 0,
+            "numShufflePartitions": 2,
+            "numStateStoreInstances": 2,
+            "customMetrics": {
+              "rocksdbBytesCopied": 2663,
+              "rocksdbCommitCheckpointLatency": 25,
+              "rocksdbCommitCompactLatency": 0,
+              "rocksdbCommitFileSyncLatencyMs": 512,
+              "rocksdbCommitFlushLatency": 28,
+              "rocksdbCommitPauseLatency": 0,
+              "rocksdbCommitWriteBatchLatency": 0,
+              "rocksdbFilesCopied": 2,
+              "rocksdbFilesReused": 0,
+              "rocksdbGetCount": 10,
+              "rocksdbGetLatency": 0,
+              "rocksdbPinnedBlocksMemoryUsage": 532192,
+              "rocksdbPutCount": 5,
+              "rocksdbPutLatency": 0,
+              "rocksdbReadBlockCacheHitCount": 0,
+              "rocksdbReadBlockCacheMissCount": 4,
+              "rocksdbSstFileSize": 2663,
+              "rocksdbTotalBytesRead": 0,
+              "rocksdbTotalBytesReadByCompaction": 0,
+              "rocksdbTotalBytesReadThroughIterator": 0,
+              "rocksdbTotalBytesWritten": 605,
+              "rocksdbTotalBytesWrittenByCompaction": 0,
+              "rocksdbTotalBytesWrittenByFlush": 3103,
+              "rocksdbTotalCompactionLatencyMs": 0,
+              "rocksdbWriterStallLatencyMs": 0,
+              "rocksdbZipFileBytesUncompressed": 15072
+            }
+          }
+        ],
+        "sources": [
+          {
+            "description": "FileStreamSource[hdfs://namenode:8020/bc1/post-migration-v1/curated]",
+            "startOffset": null,
+            "endOffset": {
+              "logOffset": 0
+            },
+            "latestOffset": null,
+            "numInputRows": 1000,
+            "inputRowsPerSecond": 0,
+            "processedRowsPerSecond": 254.25883549453346
+          }
+        ],
+        "sink": {
+          "description": "ForeachBatchSink",
+          "numOutputRows": -1
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,42 @@
+{
+  "date": "2026-11-18",
+  "tool": "pip-audit 2.10.1",
+  "api_dependencies": 18,
+  "api_known_vulnerabilities": 0,
+  "runtime_initial_version": "kafka-python 2.3.1",
+  "runtime_initial_raw_advisory_entries": 4,
+  "runtime_initial_unique_advisories": [
+    "PYSEC-2026-2190",
+    "PYSEC-2026-2191"
+  ],
+  "sources": [
+    "https://github.com/advisories/GHSA-m3px-q5gj-j9x7",
+    "https://github.com/advisories/GHSA-2jcm-hq8r-84wx"
+  ],
+  "fixed_runtime_version": "kafka-python 2.3.2",
+  "wheel_sha256": "e8a5e6f2c4ce13a8041669337038d5125e0e09e6d6f0911902ae5939e5b9595e",
+  "post_patch_advisories": 0,
+  "post_patch_audit_exit_code": 0,
+  "local_regression_tests": {
+    "tests": 2,
+    "exit_code": 0,
+    "seconds": 0.002753919005044736
+  },
+  "container_regression_tests": {
+    "tests": 2,
+    "exit_code": 0,
+    "seconds": 0.013189536999561824
+  },
+  "regression_scope": [
+    "invalid negative/oversized frame rejected before large allocation",
+    "valid partial frame accepted",
+    "huge/non-integer SCRAM count rejected before PBKDF2",
+    "valid 4096-iteration SCRAM challenge processed"
+  ],
+  "limitations": [
+    "no exploit run on vulnerable client",
+    "Python dependency advisories only, not OS/JAR/image vulnerabilities",
+    "not a repository-wide security audit",
+    "initial reproduction producer/training preceded this dependency patch; patched producer and subsequent jobs separately traced"
+  ]
+}

@@ -1,0 +1,24 @@
+{
+  "event": "spark_compute_benchmark",
+  "created_at_utc": "2026-11-17T22:21:24.504192+00:00",
+  "run_id": "training-sample64-seed42",
+  "rows": 98813,
+  "groups": 1853,
+  "result_sha256": "5e738323f604b58dda3f7bce3f4975563ad17de0dcd7c373ec1be795df630a07",
+  "executor_count": 1,
+  "executor_cores": [
+    2
+  ],
+  "executor_memory": "1g",
+  "shuffle_partitions": 32,
+  "adaptive_query_execution": false,
+  "load_and_cache_seconds": 7.424459739999293,
+  "query_seconds": [
+    0.5751027459991747,
+    0.5938958549995732,
+    0.4836246859995299
+  ],
+  "median_seconds": 0.5751027459991747,
+  "limitations": "small cached sample; single-host worker scaling, no host fault tolerance; warmup excluded",
+  "concurrent_workload": "Ollama stopped; no Gephi or training job"
+}

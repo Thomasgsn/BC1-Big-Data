@@ -1,0 +1,22 @@
+{
+  "created_at_utc": "2026-11-17T17:17:06.362961+00:00",
+  "actor": "codex",
+  "platform": "macOS-26.7.3-x86_64-i386-64bit-Mach-O",
+  "python": "3.15.2",
+  "disk_free_bytes": 453926834176,
+  "scope": "Environnement et images seulement ; pas de compatibilité interservices validée.",
+  "gephi_application_found": false,
+  "checks": [
+    {
+      "command": [
+        "docker",
+        "info",
+        "--format",
+        "{{json .}}"
+      ],
+      "returncode": 1,
+      "stderr": "permission denied while trying to connect to the docker API at unix:///Users/thomasgassmann/.docker/run/docker.sock"
+    }
+  ],
+  "status": "blocked_or_failed"
+}

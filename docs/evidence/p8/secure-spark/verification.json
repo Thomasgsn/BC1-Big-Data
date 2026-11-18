@@ -1,0 +1,16 @@
+{
+  "event": "spark_secure_rpc_verified",
+  "command_exit_code": 0,
+  "authorized_job_exit": 0,
+  "sum_squares": 333283335000,
+  "wrong_secret_result_absent": true,
+  "wrong_secret_authentication_failure": true,
+  "wrong_secret_exit": null,
+  "wrong_secret_timeout": true,
+  "registered_workers": 1,
+  "configured_rpc_encryption": true,
+  "sasl_fallback": false,
+  "local_storage_encryption": true,
+  "elapsed_seconds": 49.92347546199744,
+  "scope": "isolated standalone cluster, shared secret, no UI TLS or main-stack deployment; no packet capture"
+}

@@ -1,0 +1,464 @@
+{
+  "status": "technical_path_verified_with_recorded_retry",
+  "candidate": "Thomas Gassmann",
+  "run_id": "jury-20261118-v1",
+  "actor": "Codex CLI; no human oral rehearsal",
+  "observed_start": "2026-11-18T09:56:19.579Z",
+  "model_output_created_at": "2026-11-18T10:23:00.246840+00:00",
+  "elapsed_observation_seconds": 1600.667,
+  "timing_scope": "Includes documentation pauses, audits and failed cold-load attempt; not a continuous presentation duration or throughput benchmark",
+  "training": "Existing training-sample64-seed42/baseline-v1 reused explicitly; no live retraining",
+  "write_scope": "New HDFS run and graph snapshot; score IDs are versioned by model and transaction, existing logical scores upserted",
+  "phases": [
+    {
+      "phase": "producer",
+      "completed_at": "2026-11-18T09:56:33.508Z",
+      "exit_code": 0,
+      "output": "{\"event\": \"replay_progress\", \"acknowledged_rows\": 1000, \"next_source_row\": 1001}\n{\"event\": \"replay_completed\", \"mode\": \"kafka\", \"run_id\": \"jury-20261118-v1\", \"acknowledged_rows\": 1000, \"last_source_row\": 1000, \"positive_labels\": 9, \"selection\": {\"sample_modulus\": 1, \"sample_seed\": 42, \"start_row\": 1, \"maximum_events\": 1000}, \"elapsed_seconds\": 10.001428686002328, \"observed_rows_per_second\": 99.98571518082885}\n"
+    },
+    {
+      "phase": "ingestion",
+      "completed_at": "2026-11-18T09:58:35.522Z",
+      "exit_code": 0,
+      "result": {
+        "event": "ingestion_completed",
+        "run_id": "jury-20261118-v1",
+        "root": "hdfs://namenode:8020/bc1/jury-20261118-v1",
+        "queries": [
+          {
+            "name": "bc1_raw",
+            "active": false,
+            "last_progress": {
+              "id": "e2ffbf9c-6dfa-425e-9223-9042164415aa",
+              "runId": "ec0e3e19-3abd-4c85-be20-9ef427a5165c",
+              "name": "bc1_raw",
+              "timestamp": "2026-11-18T09:57:24.739Z",
+              "batchId": 10,
+              "numInputRows": 3826,
+              "inputRowsPerSecond": 1988.5654885654885,
+              "processedRowsPerSecond": 983.0421377183967,
+              "durationMs": {
+                "addBatch": 2925,
+                "commitOffsets": 450,
+                "getBatch": 0,
+                "latestOffset": 2,
+                "queryPlanning": 82,
+                "triggerExecution": 3892,
+                "walCommit": 429
+              },
+              "stateOperators": [],
+              "sources": [
+                {
+                  "description": "KafkaV2[Subscribe[transactions.v1]]",
+                  "startOffset": {
+                    "transactions.v1": {
+                      "0": 33300,
+                      "1": 33490,
+                      "2": 33200
+                    }
+                  },
+                  "endOffset": {
+                    "transactions.v1": {
+                      "0": 34575,
+                      "1": 34771,
+                      "2": 34470
+                    }
+                  },
+                  "latestOffset": {
+                    "transactions.v1": {
+                      "0": 34575,
+                      "1": 34771,
+                      "2": 34470
+                    }
+                  },
+                  "numInputRows": 3826,
+                  "inputRowsPerSecond": 1988.5654885654885,
+                  "processedRowsPerSecond": 983.0421377183967,
+                  "metrics": {
+                    "avgOffsetsBehindLatest": "0.0",
+                    "maxOffsetsBehindLatest": "0",
+                    "minOffsetsBehindLatest": "0"
+                  }
+                }
+              ],
+              "sink": {
+                "description": "FileSink[hdfs://namenode:8020/bc1/jury-20261118-v1/raw]",
+                "numOutputRows": -1
+              }
+            }
+          },
+          {
+            "name": "bc1_curated",
+            "active": false,
+            "last_progress": {
+              "id": "1ce295f0-7209-4663-9867-6918b702493c",
+              "runId": "3d049af0-eebf-4acc-88aa-7cbcbf857d03",
+              "name": "bc1_curated",
+              "timestamp": "2026-11-18T09:57:37.841Z",
+              "batchId": 10,
+              "numInputRows": 3826,
+              "inputRowsPerSecond": 1558.4521384928717,
+              "processedRowsPerSecond": 551.933064050779,
+              "durationMs": {
+                "addBatch": 6101,
+                "commitOffsets": 597,
+                "getBatch": 1,
+                "latestOffset": 1,
+                "queryPlanning": 80,
+                "triggerExecution": 6932,
+                "walCommit": 141
+              },
+              "stateOperators": [
+                {
+                  "operatorName": "dedupe",
+                  "numRowsTotal": 1000,
+                  "numRowsUpdated": 1000,
+                  "allUpdatesTimeMs": 408,
+                  "numRowsRemoved": 0,
+                  "allRemovalsTimeMs": 0,
+                  "commitTimeMs": 3320,
+                  "memoryUsedBytes": 537736,
+                  "numRowsDroppedByWatermark": 0,
+                  "numShufflePartitions": 2,
+                  "numStateStoreInstances": 2,
+                  "customMetrics": {
+                    "numDroppedDuplicateRows": 0,
+                    "rocksdbBytesCopied": 78111,
+                    "rocksdbCommitCheckpointLatency": 63,
+                    "rocksdbCommitCompactLatency": 0,
+                    "rocksdbCommitFileSyncLatencyMs": 3089,
+                    "rocksdbCommitFlushLatency": 125,
+                    "rocksdbCommitPauseLatency": 0,
+                    "rocksdbCommitWriteBatchLatency": 0,
+                    "rocksdbFilesCopied": 2,
+                    "rocksdbFilesReused": 0,
+                    "rocksdbGetCount": 2000,
+                    "rocksdbGetLatency": 20,
+                    "rocksdbPinnedBlocksMemoryUsage": 530368,
+                    "rocksdbPutCount": 1000,
+                    "rocksdbPutLatency": 18,
+                    "rocksdbReadBlockCacheHitCount": 0,
+                    "rocksdbReadBlockCacheMissCount": 4,
+                    "rocksdbSstFileSize": 78111,
+                    "rocksdbTotalBytesRead": 0,
+                    "rocksdbTotalBytesReadByCompaction": 0,
+                    "rocksdbTotalBytesReadThroughIterator": 0,
+                    "rocksdbTotalBytesWritten": 113000,
+                    "rocksdbTotalBytesWrittenByCompaction": 0,
+                    "rocksdbTotalBytesWrittenByFlush": 78655,
+                    "rocksdbTotalCompactionLatencyMs": 0,
+                    "rocksdbWriterStallLatencyMs": 0,
+                    "rocksdbZipFileBytesUncompressed": 15182
+                  }
+                }
+              ],
+              "sources": [
+                {
+                  "description": "KafkaV2[Subscribe[transactions.v1]]",
+                  "startOffset": {
+                    "transactions.v1": {
+                      "0": 33300,
+                      "1": 33490,
+                      "2": 33200
+                    }
+                  },
+                  "endOffset": {
+                    "transactions.v1": {
+                      "0": 34575,
+                      "1": 34771,
+                      "2": 34470
+                    }
+                  },
+                  "latestOffset": {
+                    "transactions.v1": {
+                      "0": 34575,
+                      "1": 34771,
+                      "2": 34470
+                    }
+                  },
+                  "numInputRows": 3826,
+                  "inputRowsPerSecond": 1558.4521384928717,
+                  "processedRowsPerSecond": 551.933064050779,
+                  "metrics": {
+                    "avgOffsetsBehindLatest": "0.0",
+                    "maxOffsetsBehindLatest": "0",
+                    "minOffsetsBehindLatest": "0"
+                  }
+                }
+              ],
+              "sink": {
+                "description": "FileSink[hdfs://namenode:8020/bc1/jury-20261118-v1/curated]",
+                "numOutputRows": -1
+              }
+            }
+          },
+          {
+            "name": "bc1_quarantine",
+            "active": false,
+            "last_progress": {
+              "id": "08c84834-da98-4380-94d4-15744d352f29",
+              "runId": "2baec4b5-276e-4865-9303-861c63bcf8ce",
+              "name": "bc1_quarantine",
+              "timestamp": "2026-11-18T09:57:30.479Z",
+              "batchId": 10,
+              "numInputRows": 3826,
+              "inputRowsPerSecond": 698.6851716581447,
+              "processedRowsPerSecond": 1114.4771337023012,
+              "durationMs": {
+                "addBatch": 2382,
+                "commitOffsets": 444,
+                "getBatch": 1,
+                "latestOffset": 2,
+                "queryPlanning": 145,
+                "triggerExecution": 3432,
+                "walCommit": 452
+              },
+              "stateOperators": [],
+              "sources": [
+                {
+                  "description": "KafkaV2[Subscribe[transactions.v1]]",
+                  "startOffset": {
+                    "transactions.v1": {
+                      "0": 33300,
+                      "1": 33490,
+                      "2": 33200
+                    }
+                  },
+                  "endOffset": {
+                    "transactions.v1": {
+                      "0": 34575,
+                      "1": 34771,
+                      "2": 34470
+                    }
+                  },
+                  "latestOffset": {
+                    "transactions.v1": {
+                      "0": 34575,
+                      "1": 34771,
+                      "2": 34470
+                    }
+                  },
+                  "numInputRows": 3826,
+                  "inputRowsPerSecond": 698.6851716581447,
+                  "processedRowsPerSecond": 1114.4771337023012,
+                  "metrics": {
+                    "avgOffsetsBehindLatest": "0.0",
+                    "maxOffsetsBehindLatest": "0",
+                    "minOffsetsBehindLatest": "0"
+                  }
+                }
+              ],
+              "sink": {
+                "description": "FileSink[hdfs://namenode:8020/bc1/jury-20261118-v1/quarantine]",
+                "numOutputRows": -1
+              }
+            }
+          },
+          {
+            "name": "bc1_metrics",
+            "active": false,
+            "last_progress": {
+              "id": "a61704f8-dceb-43c6-89f3-46c2ec3c14b4",
+              "runId": "29b1af1c-beb5-4131-ac13-ea7b2ea9507f",
+              "name": "bc1_metrics",
+              "timestamp": "2026-11-18T09:57:48.655Z",
+              "batchId": 0,
+              "numInputRows": 1000,
+              "inputRowsPerSecond": 0,
+              "processedRowsPerSecond": 84.70269354565475,
+              "durationMs": {
+                "addBatch": 11165,
+                "commitOffsets": 25,
+                "getBatch": 166,
+                "latestOffset": 51,
+                "queryPlanning": 342,
+                "triggerExecution": 11806,
+                "walCommit": 41
+              },
+              "stateOperators": [
+                {
+                  "operatorName": "stateStoreSave",
+                  "numRowsTotal": 5,
+                  "numRowsUpdated": 5,
+                  "allUpdatesTimeMs": 102,
+                  "numRowsRemoved": 0,
+                  "allRemovalsTimeMs": 0,
+                  "commitTimeMs": 1454,
+                  "memoryUsedBytes": 540144,
+                  "numRowsDroppedByWatermark": 0,
+                  "numShufflePartitions": 2,
+                  "numStateStoreInstances": 2,
+                  "customMetrics": {
+                    "rocksdbBytesCopied": 2679,
+                    "rocksdbCommitCheckpointLatency": 52,
+                    "rocksdbCommitCompactLatency": 0,
+                    "rocksdbCommitFileSyncLatencyMs": 1358,
+                    "rocksdbCommitFlushLatency": 35,
+                    "rocksdbCommitPauseLatency": 0,
+                    "rocksdbCommitWriteBatchLatency": 0,
+                    "rocksdbFilesCopied": 2,
+                    "rocksdbFilesReused": 0,
+                    "rocksdbGetCount": 10,
+                    "rocksdbGetLatency": 0,
+                    "rocksdbPinnedBlocksMemoryUsage": 532192,
+                    "rocksdbPutCount": 5,
+                    "rocksdbPutLatency": 0,
+                    "rocksdbReadBlockCacheHitCount": 0,
+                    "rocksdbReadBlockCacheMissCount": 4,
+                    "rocksdbSstFileSize": 2679,
+                    "rocksdbTotalBytesRead": 0,
+                    "rocksdbTotalBytesReadByCompaction": 0,
+                    "rocksdbTotalBytesReadThroughIterator": 0,
+                    "rocksdbTotalBytesWritten": 605,
+                    "rocksdbTotalBytesWrittenByCompaction": 0,
+                    "rocksdbTotalBytesWrittenByFlush": 3119,
+                    "rocksdbTotalCompactionLatencyMs": 0,
+                    "rocksdbWriterStallLatencyMs": 0,
+                    "rocksdbZipFileBytesUncompressed": 15072
+                  }
+                }
+              ],
+              "sources": [
+                {
+                  "description": "FileStreamSource[hdfs://namenode:8020/bc1/jury-20261118-v1/curated]",
+                  "startOffset": null,
+                  "endOffset": {
+                    "logOffset": 0
+                  },
+                  "latestOffset": null,
+                  "numInputRows": 1000,
+                  "inputRowsPerSecond": 0,
+                  "processedRowsPerSecond": 84.70269354565475
+                }
+              ],
+              "sink": {
+                "description": "ForeachBatchSink",
+                "numOutputRows": -1
+              }
+            }
+          }
+        ]
+      }
+    },
+    {
+      "phase": "verification",
+      "completed_at": "2026-11-18T09:58:47.115Z",
+      "exit_code": 0,
+      "results": [
+        {
+          "event": "hdfs_verified",
+          "run_id": "jury-20261118-v1",
+          "rows": 1000,
+          "raw_rows": 1000,
+          "quarantine_rows": 0,
+          "rejection_reasons": {},
+          "dataset_sha256": "16910f90577b0d981bf8ff289714510bb89bc71bff7d3f220f024e287e4eea6b",
+          "observed": {
+            "TRANSFER": {
+              "count": 99,
+              "amount": "50582404.38"
+            },
+            "CASH_IN": {
+              "count": 183,
+              "amount": "28557538.04"
+            },
+            "CASH_OUT": {
+              "count": 230,
+              "amount": "36179257.94"
+            },
+            "PAYMENT": {
+              "count": 437,
+              "amount": "2625877.47"
+            },
+            "DEBIT": {
+              "count": 51,
+              "amount": "254447.49"
+            }
+          },
+          "expected": {
+            "CASH_IN": {
+              "count": 183,
+              "amount": "28557538.04"
+            },
+            "CASH_OUT": {
+              "count": 230,
+              "amount": "36179257.94"
+            },
+            "DEBIT": {
+              "count": 51,
+              "amount": "254447.49"
+            },
+            "PAYMENT": {
+              "count": 437,
+              "amount": "2625877.47"
+            },
+            "TRANSFER": {
+              "count": 99,
+              "amount": "50582404.38"
+            }
+          },
+          "latency_seconds": {
+            "min": 64.5642659664154,
+            "max": 74.54724502563477,
+            "p95": 74.05425596237183
+          },
+          "latency_definition": "emitted_at to Spark batch ingested_at; excludes sink commit/read visibility",
+          "scope": "rejeu borné ; pas benchmark de production"
+        }
+      ]
+    },
+    {
+      "phase": "data_lab",
+      "completed_at": "2026-11-18T09:59:38.830Z",
+      "exit_code": 0,
+      "result": {
+        "event": "data_lab_published",
+        "_id": "jury-20261118-v1-steps-1-1",
+        "snapshot_id": "jury-20261118-v1-steps-1-1",
+        "run_id": "jury-20261118-v1",
+        "step_from": 1,
+        "step_to": 1,
+        "transactions": 1000,
+        "nodes": 1597,
+        "edges": 1000,
+        "status": "complete"
+      }
+    },
+    {
+      "phase": "scoring",
+      "completed_at": "2026-11-18T10:00:42.475Z",
+      "exit_code": 0,
+      "result": {
+        "event": "fraud_scores_published",
+        "model_version": "training-sample64-seed42:baseline-v1",
+        "run_id": "jury-20261118-v1",
+        "linear_decomposition_verified": true,
+        "transactions": 1000,
+        "alerts": 305,
+        "scope": "Démonstration de scoring ; seule la partition test du rapport mesure la performance."
+      }
+    },
+    {
+      "phase": "api_llm",
+      "completed_at": "2026-11-18T10:23:00.246840+00:00",
+      "exit_code": 0,
+      "backend_total_seconds": 88.026402815,
+      "evidence": "demonstration-draft.json"
+    }
+  ],
+  "graph_export": {
+    "nodes": 1597,
+    "edges": 1000,
+    "nodes_sha256": "e08bf9437ecdef238617ebc6fc14a89f63b2126477f44a8171017bc666729d78",
+    "edges_sha256": "8391806512b3d10f9c452578a24028d5921c47ed2994fb64ad5d4c803e85ca74",
+    "note": "Edge IDs depend on new snapshot ID; do not claim binary identity with older exports"
+  },
+  "llm_failure_evidence": "demonstration-llm-failed.json",
+  "warmup": {
+    "elapsed_seconds": 67.28471772599733,
+    "load_duration_ns": 64870910098
+  },
+  "llm_result": "demonstration-draft.json",
+  "human_review": "Required; raw French typo 'factor' preserved; no email sent",
+  "main_services": "Healthy at final observation, Ollama running"
+}

@@ -1,0 +1,9 @@
+{
+  "event": "hdfs_volumes_cloned",
+  "file_hash_sets_match": true,
+  "source_hashes_unchanged": true,
+  "namenode_tree_sha256": "391b620cc6be5a20677eaf0dd7b6dec173a9a2971259754d87663484f46888b0",
+  "datanode_tree_sha256": "99a45e1ead2dc665dcaff1ed4437565870a67c172e20129ba13720d34cbbac9f",
+  "source_mounts": "declared read-only in Compose",
+  "scope": "source NN/DN must be stopped by caller before copy"
+}

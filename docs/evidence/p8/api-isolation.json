@@ -1,0 +1,8 @@
+{
+  "event": "api_isolation_verified",
+  "uid": 10001,
+  "host_env_absent": true,
+  "raw_dataset_absent": true,
+  "owner_credentials_and_client_tokens_absent": true,
+  "project_write_denied": true
+}

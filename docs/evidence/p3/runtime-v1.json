@@ -1,0 +1,96 @@
+{
+  "recorded_at_utc": "2026-11-17T18:26:13.519881+00:00",
+  "actor": "codex",
+  "run_id": "runtime-v1",
+  "hdfs_verifier_exit_code": 0,
+  "curated_rows": 1000,
+  "raw_rows": 1000,
+  "observed": {
+    "TRANSFER": {
+      "count": 99,
+      "amount": "50582404.38"
+    },
+    "CASH_IN": {
+      "count": 183,
+      "amount": "28557538.04"
+    },
+    "CASH_OUT": {
+      "count": 230,
+      "amount": "36179257.94"
+    },
+    "PAYMENT": {
+      "count": 437,
+      "amount": "2625877.47"
+    },
+    "DEBIT": {
+      "count": 51,
+      "amount": "254447.49"
+    }
+  },
+  "expected": {
+    "CASH_IN": {
+      "count": 183,
+      "amount": "28557538.04"
+    },
+    "CASH_OUT": {
+      "count": 230,
+      "amount": "36179257.94"
+    },
+    "DEBIT": {
+      "count": 51,
+      "amount": "254447.49"
+    },
+    "PAYMENT": {
+      "count": 437,
+      "amount": "2625877.47"
+    },
+    "TRANSFER": {
+      "count": 99,
+      "amount": "50582404.38"
+    }
+  },
+  "latency_seconds": {
+    "min": 85.66482901573181,
+    "max": 87.82214307785034,
+    "p95": 87.42840003967285
+  },
+  "latency_scope": "Includes queue before Spark startup and initial dependency loading; not steady-state streaming.",
+  "resume_without_new_data": {
+    "exit_code": 0,
+    "new_input_rows": 0
+  },
+  "persistence_after_kafka_hdfs_restart": {
+    "verifier_exit_code": 0,
+    "curated_rows": 1000,
+    "raw_rows": 1000
+  },
+  "mongo_publication": {
+    "snapshot_id": "runtime-v1-steps-1-1",
+    "transactions": 1000,
+    "nodes": 1597,
+    "edges": 1000,
+    "exit_code": 0
+  },
+  "gephi_csv": {
+    "snapshot_id": "runtime-v1-steps-1-1",
+    "nodes": 1597,
+    "edges": 1000,
+    "origin": "MongoDB Data Lab",
+    "directed": true,
+    "weight": "transaction_count",
+    "limitations": "Fenêtre filtrée ; hubs et communautés ne prouvent pas une fraude ou un blanchiment.",
+    "files": {
+      "nodes.csv": {
+        "sha256": "e08bf9437ecdef238617ebc6fc14a89f63b2126477f44a8171017bc666729d78"
+      },
+      "edges.csv": {
+        "sha256": "81c25b3db15f06dc846549cdcc52c1222f670dd54ee54c23e506fa5870986cc7"
+      }
+    }
+  },
+  "limits": [
+    "No Gephi GUI import or screenshot yet.",
+    "No high availability demonstrated.",
+    "No model trained on this 1000-row prefix."
+  ]
+}

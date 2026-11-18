@@ -1,0 +1,328 @@
+name: rncp-bc1
+
+x-spark: &spark
+  image: rncp-bc1-spark:3.5.8
+  build:
+    context: .
+    dockerfile: infra/spark/Dockerfile
+    args:
+      SPARK_IMAGE: ${SPARK_IMAGE:?Lancer python3 scripts/bootstrap.py}
+  volumes:
+    - ./src:/project/src:ro
+    - ./scripts:/project/scripts:ro
+    - ./tests:/project/tests:ro
+    - ./data:/project/data:ro
+    - ./infra/hadoop:/project/infra/hadoop:ro
+    - spark-ivy:/tmp/ivy
+  environment:
+    SPARK_LOCAL_IP: spark-driver
+  mem_limit: 2g
+
+services:
+  gephi-desktop:
+    image: ${MAVEN_IMAGE:?Configuration requise}
+    profiles: ["desktop"]
+    entrypoint: ["/bin/bash", "/opt/bc1/gephi-desktop.sh"]
+    volumes:
+      - ./scripts/gephi-desktop.sh:/opt/bc1/gephi-desktop.sh:ro
+      - ./tmp/gephi-0.11.4-linux-x64.tar.gz:/downloads/gephi.tar.gz:ro
+      - ./tmp/gephi-client:/work
+      - ./exports:/exports
+    mem_limit: 2g
+
+  gephi-toolkit:
+    image: ${MAVEN_IMAGE:?Configuration requise}
+    profiles: ["tools"]
+    working_dir: /project/infra/gephi
+    environment: {MAVEN_OPTS: "-Xmx1200m -Djava.awt.headless=true --add-opens=java.base/java.net=ALL-UNNAMED"}
+    volumes:
+      - ./infra/gephi:/project/infra/gephi:ro
+      - ./tmp/m2:/root/.m2
+      - ./tmp/gephi-target:/build
+      - ./exports:/exports
+    entrypoint: ["mvn", "--batch-mode", "--no-transfer-progress", "-Dbc1.build.directory=/build"]
+    command: ["compile", "exec:java", "-Dexec.mainClass=fr.rncp.bc1.NetworkAnalysis", "-Dexec.args=/exports/gephi/runtime-v1-steps-1-1 /exports/analysis/runtime-v1-steps-1-1-v5", "-Dexec.cleanupDaemonThreads=false"]
+    mem_limit: 2g
+
+  api:
+    image: rncp-bc1-api:0.1.0
+    build:
+      context: .
+      dockerfile: infra/api/Dockerfile
+      args: {PYTHON_IMAGE: "${PYTHON_IMAGE:?Configuration requise}"}
+    environment:
+      POSTGRES_APP_PASSWORD: ${POSTGRES_APP_PASSWORD:?Secret requis}
+      MONGO_APP_PASSWORD: ${MONGO_APP_PASSWORD:?Secret requis}
+      LLM_BASE_URL: http://ollama:11434
+      LLM_MODEL: ${LLM_MODEL:-qwen2.5:3b}
+    volumes: ["./src:/project/src:ro", "./tests:/project/tests:ro", "./infra/llm.lock.json:/project/infra/llm.lock.json:ro"]
+    ports: ["127.0.0.1:8000:8000"]
+    read_only: true
+    tmpfs: ["/tmp:size=32m,mode=1777"]
+    cap_drop: [ALL]
+    security_opt: ["no-new-privileges:true"]
+    depends_on: {postgres: {condition: service_healthy}, mongo: {condition: service_healthy}}
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/health/ready',timeout=8)"]
+      interval: 15s
+      timeout: 10s
+      retries: 12
+    mem_limit: 256m
+
+  api-tests:
+    image: rncp-bc1-api:0.1.0
+    profiles: ["tests"]
+    entrypoint: ["python", "-m", "unittest", "discover", "-s", "tests/integration", "-v"]
+    environment:
+      API_TOKEN_READER: ${API_TOKEN_READER:?Secret requis}
+      API_TOKEN_ANALYST: ${API_TOKEN_ANALYST:?Secret requis}
+    volumes: ["./src:/project/src:ro", "./tests:/project/tests:ro"]
+    depends_on: {api: {condition: service_healthy}}
+    mem_limit: 256m
+
+  administration-tests:
+    image: rncp-bc1-api:0.1.0
+    profiles: ["tests"]
+    entrypoint: ["python", "tests/integration/check_permissions.py"]
+    environment:
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?Secret requis}
+      POSTGRES_APP_PASSWORD: ${POSTGRES_APP_PASSWORD:?Secret requis}
+      MONGO_APP_PASSWORD: ${MONGO_APP_PASSWORD:?Secret requis}
+    volumes: ["./src:/project/src:ro", "./tests:/project/tests:ro", "./data/raw:/project/data/raw:ro"]
+    read_only: true
+    tmpfs: ["/tmp:size=32m"]
+    cap_drop: [ALL]
+    mem_limit: 256m
+
+  ollama:
+    image: ${OLLAMA_IMAGE:?Configuration requise}
+    profiles: ["genai"]
+    environment: {OLLAMA_NUM_PARALLEL: "1", OLLAMA_MAX_LOADED_MODELS: "1"}
+    volumes: ["ollama-models:/root/.ollama"]
+    mem_limit: 4g
+
+  dependency-lock:
+    image: ${PYTHON_IMAGE:?Configuration requise}
+    profiles: ["tools"]
+    working_dir: /lock
+    volumes:
+      - ./requirements-api.in:/project/requirements-api.in:ro
+      - ./tmp/lock:/lock
+    entrypoint: ["/bin/sh", "-ec"]
+    command: ["python -m pip install --disable-pip-version-check pip-tools==7.7.0 && pip-compile --quiet --generate-hashes --output-file=/lock/requirements-api.lock /project/requirements-api.in && pip show pip-tools"]
+    mem_limit: 512m
+
+  hdfs-init:
+    image: ${HADOOP_IMAGE:?Configuration requise}
+    user: root
+    entrypoint: ["/bin/bash", "-ec"]
+    command: ["mkdir -p /name /data /ivy; chown hadoop:users /name /data; chmod 750 /name /data; chown 185:0 /ivy"]
+    volumes: ["namenode-data:/name", "datanode-data:/data", "spark-ivy:/ivy"]
+    mem_limit: 128m
+
+  zookeeper:
+    image: ${KAFKA_IMAGE:?Configuration requise}
+    entrypoint: ["/opt/kafka/bin/zookeeper-server-start.sh", "/etc/bc1/zookeeper.properties"]
+    environment: {KAFKA_HEAP_OPTS: "-Xms128m -Xmx256m"}
+    volumes:
+      - ./infra/kafka/zookeeper.properties:/etc/bc1/zookeeper.properties:ro
+      - zookeeper-data:/var/lib/kafka/data
+    healthcheck:
+      test: ["CMD-SHELL", "bash -c 'echo > /dev/tcp/127.0.0.1/2181'"]
+      interval: 10s
+      timeout: 3s
+      retries: 12
+    mem_limit: 512m
+
+  kafka:
+    image: ${KAFKA_IMAGE:?Configuration requise}
+    entrypoint: ["/opt/kafka/bin/kafka-server-start.sh", "/etc/bc1/server.properties"]
+    environment: {KAFKA_HEAP_OPTS: "-Xms256m -Xmx512m"}
+    depends_on: {zookeeper: {condition: service_healthy}}
+    volumes:
+      - ./infra/kafka/server.properties:/etc/bc1/server.properties:ro
+      - kafka-data:/var/lib/kafka/data
+    healthcheck:
+      test: ["CMD", "/opt/kafka/bin/kafka-topics.sh", "--bootstrap-server", "kafka:9092", "--list"]
+      interval: 15s
+      timeout: 15s
+      retries: 12
+    mem_limit: 1g
+
+  namenode:
+    image: ${HADOOP_IMAGE:?Configuration requise}
+    hostname: namenode
+    entrypoint: ["/bin/bash", "/etc/bc1/start.sh", "namenode"]
+    environment: {HADOOP_CONF_DIR: /etc/bc1, HADOOP_HEAPSIZE_MAX: "512"}
+    depends_on: {hdfs-init: {condition: service_completed_successfully}}
+    volumes:
+      - ./infra/hadoop:/etc/bc1:ro
+      - namenode-data:/data/name
+    ports: ["127.0.0.1:9870:9870"]
+    healthcheck:
+      test: ["CMD", "hdfs", "dfsadmin", "-safemode", "get"]
+      interval: 15s
+      timeout: 15s
+      retries: 12
+    mem_limit: 1g
+
+  kafka-ha-101:
+    image: ${KAFKA_IMAGE:?Configuration requise}
+    profiles: ["resilience"]
+    entrypoint: ["/opt/kafka/bin/kafka-server-start.sh", "/etc/bc1/server.properties"]
+    environment: {KAFKA_HEAP_OPTS: "-Xms128m -Xmx384m"}
+    depends_on: {zookeeper: {condition: service_healthy}}
+    volumes:
+      - ./infra/kafka/server-ha-101.properties:/etc/bc1/server.properties:ro
+      - kafka-ha-101-data:/var/lib/kafka/data
+    healthcheck:
+      test: ["CMD", "/opt/kafka/bin/kafka-topics.sh", "--bootstrap-server", "kafka-ha-101:9092", "--list"]
+      interval: 10s
+      timeout: 10s
+      retries: 12
+    mem_limit: 768m
+
+  kafka-ha-102:
+    image: ${KAFKA_IMAGE:?Configuration requise}
+    profiles: ["resilience"]
+    entrypoint: ["/opt/kafka/bin/kafka-server-start.sh", "/etc/bc1/server.properties"]
+    environment: {KAFKA_HEAP_OPTS: "-Xms128m -Xmx384m"}
+    depends_on: {zookeeper: {condition: service_healthy}}
+    volumes:
+      - ./infra/kafka/server-ha-102.properties:/etc/bc1/server.properties:ro
+      - kafka-ha-102-data:/var/lib/kafka/data
+    healthcheck:
+      test: ["CMD", "/opt/kafka/bin/kafka-topics.sh", "--bootstrap-server", "kafka-ha-102:9092", "--list"]
+      interval: 10s
+      timeout: 10s
+      retries: 12
+    mem_limit: 768m
+
+  datanode:
+    image: ${HADOOP_IMAGE:?Configuration requise}
+    hostname: datanode
+    entrypoint: ["/bin/bash", "/etc/bc1/start.sh", "datanode"]
+    environment: {HADOOP_CONF_DIR: /etc/bc1, HADOOP_HEAPSIZE_MAX: "512"}
+    depends_on: {namenode: {condition: service_healthy}}
+    volumes:
+      - ./infra/hadoop:/etc/bc1:ro
+      - datanode-data:/data/data
+    healthcheck:
+      test: ["CMD-SHELL", "bash -c 'echo > /dev/tcp/127.0.0.1/9866'"]
+      interval: 15s
+      timeout: 5s
+      retries: 12
+    mem_limit: 1g
+
+  spark-master:
+    <<: *spark
+    hostname: spark-master
+    entrypoint: ["/opt/spark/bin/spark-class", "org.apache.spark.deploy.master.Master", "--host", "spark-master"]
+    environment: {SPARK_LOCAL_IP: spark-master, SPARK_DAEMON_MEMORY: 256m}
+    ports: ["127.0.0.1:8080:8080"]
+    healthcheck:
+      test: ["CMD", "python3", "-c", "import urllib.request; urllib.request.urlopen('http://spark-master:8080',timeout=3)"]
+      interval: 10s
+      timeout: 5s
+      retries: 12
+    mem_limit: 512m
+
+  spark-worker:
+    <<: *spark
+    hostname: spark-worker
+    entrypoint: ["/opt/spark/bin/spark-class", "org.apache.spark.deploy.worker.Worker", "--host", "spark-worker", "--cores", "2", "--memory", "1536m", "spark://spark-master:7077"]
+    environment: {SPARK_LOCAL_IP: spark-worker, SPARK_DAEMON_MEMORY: 256m}
+    depends_on: {spark-master: {condition: service_healthy}}
+    healthcheck:
+      test: ["CMD", "python3", "/project/scripts/check_spark_worker.py"]
+      interval: 15s
+      timeout: 5s
+      retries: 3
+      start_period: 15s
+    mem_limit: 2304m
+
+  spark-driver:
+    <<: *spark
+    hostname: spark-driver
+    environment:
+      SPARK_LOCAL_IP: spark-driver
+      MONGO_APP_PASSWORD: ${MONGO_APP_PASSWORD:?Secret requis}
+      POSTGRES_APP_PASSWORD: ${POSTGRES_APP_PASSWORD:?Secret requis}
+    profiles: ["jobs"]
+    entrypoint: ["/bin/bash", "/project/scripts/driver-entrypoint.sh"]
+    depends_on: {spark-master: {condition: service_healthy}, kafka: {condition: service_healthy}, datanode: {condition: service_healthy}}
+
+  spark-worker-2:
+    <<: *spark
+    profiles: ["scale"]
+    hostname: spark-worker-2
+    entrypoint: ["/opt/spark/bin/spark-class", "org.apache.spark.deploy.worker.Worker", "--host", "spark-worker-2", "--cores", "2", "--memory", "1536m", "spark://spark-master:7077"]
+    environment: {SPARK_LOCAL_IP: spark-worker-2, SPARK_DAEMON_MEMORY: 256m}
+    depends_on: {spark-master: {condition: service_healthy}}
+    healthcheck:
+      test: ["CMD", "python3", "/project/scripts/check_spark_worker.py"]
+      interval: 15s
+      timeout: 5s
+      retries: 3
+      start_period: 15s
+    mem_limit: 2304m
+
+  producer:
+    <<: *spark
+    profiles: ["jobs"]
+    entrypoint: ["python3", "-m", "rncp_bc1.producer"]
+    environment: {SPARK_LOCAL_IP: producer}
+    command: ["--csv", "/project/data/raw/PS_20174392719_1491204439457_log.csv", "--sha256", "${DATASET_SHA256}", "--run-id", "${REPLAY_RUN_ID:-demo-v1}", "--limit", "${REPLAY_LIMIT:-10000}", "--rate", "${REPLAY_RATE_PER_SECOND:-100}", "--bootstrap-servers", "kafka:9092"]
+    depends_on: {kafka: {condition: service_healthy}}
+    mem_limit: 256m
+
+  mongo:
+    image: ${MONGO_IMAGE:?Configuration requise}
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: bc1owner
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_PASSWORD:?Secret requis}
+      MONGO_APP_PASSWORD: ${MONGO_APP_PASSWORD:?Secret requis}
+    volumes:
+      - mongo-data:/data/db
+      - ./infra/mongo/init.js:/docker-entrypoint-initdb.d/001-init.js:ro
+      - ./infra/mongo/export.js:/opt/bc1/export.js:ro
+      - ./exports:/exports
+    command: ["mongod", "--bind_ip_all", "--wiredTigerCacheSizeGB", "0.25"]
+    healthcheck:
+      test: ["CMD", "mongosh", "--quiet", "--eval", "quit(db.adminCommand({ping:1}).ok ? 0 : 1)"]
+      interval: 15s
+      timeout: 10s
+      retries: 12
+    mem_limit: 768m
+
+  postgres:
+    image: ${POSTGRES_IMAGE:?Configuration requise}
+    environment:
+      POSTGRES_USER: bc1owner
+      POSTGRES_DB: bc1
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?Secret requis}
+      POSTGRES_APP_PASSWORD: ${POSTGRES_APP_PASSWORD:?Secret requis}
+      API_TOKEN_READER: ${API_TOKEN_READER:?Secret requis}
+      API_TOKEN_ANALYST: ${API_TOKEN_ANALYST:?Secret requis}
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+      - ./infra/postgres:/docker-entrypoint-initdb.d:ro
+      - ./scripts/test-sql.sql:/opt/bc1/test-sql.sql:ro
+    healthcheck:
+      test: ["CMD", "pg_isready", "-h", "127.0.0.1", "-U", "bc1owner", "-d", "bc1"]
+      interval: 10s
+      timeout: 5s
+      retries: 12
+    mem_limit: 384m
+
+volumes:
+  kafka-ha-101-data:
+  kafka-ha-102-data:
+  zookeeper-data:
+  kafka-data:
+  namenode-data:
+  datanode-data:
+  spark-ivy:
+  postgres-data:
+  mongo-data:
+  ollama-models:

@@ -1,0 +1,46 @@
+{
+  "date": "2026-11-17",
+  "run_id": "live-v1",
+  "consumer_command": "docker compose run --rm spark-driver /project/src/rncp_bc1/jobs/ingest.py --run-id live-v1 --starting-offsets latest --duration-seconds 150",
+  "consumer_exit_code": 0,
+  "producer": {
+    "rows": 1000,
+    "target_per_second": 50,
+    "observed_per_second": 49.99367045886468,
+    "duration_seconds": 20.002532136999434
+  },
+  "subsequent_replay": {
+    "rows": 1000,
+    "target_per_second": 1000,
+    "observed_per_second": 410.5330844601475
+  },
+  "invalid_test_fixtures": {
+    "rows": 3,
+    "marker": "AUTOMATED_INVALID_EVENT_TEST",
+    "reasons": {
+      "type": 1,
+      "destination": 1,
+      "amount": 1
+    }
+  },
+  "restart_command": "docker compose run --rm spark-driver /project/src/rncp_bc1/jobs/ingest.py --run-id live-v1 --once",
+  "restart_exit_code": 0,
+  "spark_duplicate_rows_dropped_on_resume": 1000,
+  "verification_command": "docker compose run --rm -e SPARK_DRIVER_PACKAGES= spark-driver /project/src/rncp_bc1/jobs/verify.py --run-id live-v1 --limit 1000 --expected-raw-rows 2003 --expected-quarantine-rows 3 --csv /project/data/raw/PS_20174392719_1491204439457_log.csv",
+  "verification_exit_code": 0,
+  "raw_rows": 2003,
+  "curated_unique_rows": 1000,
+  "quarantine_rows": 3,
+  "counts_and_sums_match_original_csv": true,
+  "latency_seconds": {
+    "min": 0.007722139358520508,
+    "max": 9.281201124191284,
+    "p95": 8.280638933181763
+  },
+  "latency_definition": "emitted_at to Spark batch ingested_at; excludes sink commit/read visibility",
+  "limitations": [
+    "one 20-second emission interval, not 10-minute capacity benchmark",
+    "Spark 5-second trigger overruns observed",
+    "single worker, shared VM; no host HA"
+  ]
+}

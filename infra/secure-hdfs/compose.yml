@@ -1,0 +1,138 @@
+name: rncp-bc1-secure-hdfs-v1
+
+x-runtime: &runtime
+  image: rncp-bc1-hadoop-secure:3.4.3
+  build: {context: ., dockerfile: Dockerfile}
+  environment: &kerberos
+    KRB5_CONFIG: /etc/bc1/krb5.conf
+    JAVA_TOOL_OPTIONS: -Djava.security.krb5.conf=/etc/bc1/krb5.conf
+    HADOOP_HEAPSIZE_MAX: "512"
+  networks: [secure]
+  read_only: true
+  tmpfs: ["/tmp:size=256m,mode=1777"]
+  cap_drop: [ALL]
+  security_opt: ["no-new-privileges:true"]
+
+services:
+  audit:
+    <<: *runtime
+    profiles: [tools]
+    user: root
+    cap_add: [DAC_OVERRIDE]
+    networks: [audit]
+    tmpfs: []
+    volumes:
+      - ../../tmp/security-tools/trivy:/tools/trivy:ro
+      - scan-cache:/cache
+      - scan-work:/tmp
+      - ../../docs/evidence/p8/dependency-scan:/report
+    entrypoint: [/tools/trivy]
+    command: [rootfs, --scanners, vuln, --offline-scan, --parallel, "1", --timeout, 15m, --no-progress,
+              --cache-dir, /cache, --skip-dirs, "/cache,/tools,/report,/proc,/sys,/dev,/tmp",
+              --format, json, --output, /report/hadoop-secure.json, /]
+    mem_limit: 1536m
+
+  init:
+    <<: *runtime
+    user: root
+    read_only: false
+    cap_drop: [ALL]
+    cap_add: [CHOWN, DAC_OVERRIDE, FOWNER]
+    entrypoint: [python3, /scripts/provision.py]
+    volumes:
+      - ./provision.py:/scripts/provision.py:ro
+      - kdc:/kdc
+      - nn-identity:/roles/namenode
+      - dn-identity:/roles/datanode
+      - admin-identity:/roles/admin
+      - alice-identity:/roles/alice
+      - bob-identity:/roles/bob
+      - namenode-data:/storage/name
+      - datanode-data:/storage/data
+    mem_limit: 512m
+
+  kdc:
+    <<: *runtime
+    user: root
+    hostname: kdc.bc1.test
+    environment: {KRB5_CONFIG: /kdc/krb5.conf, KRB5_KDC_PROFILE: /kdc/kdc.conf}
+    cap_add: [NET_BIND_SERVICE]
+    entrypoint: [krb5kdc, -n]
+    volumes: ["kdc:/kdc"]
+    depends_on: {init: {condition: service_completed_successfully}}
+    healthcheck:
+      test: [CMD, python3, -c, "import socket; socket.create_connection(('127.0.0.1',88),3).close()"]
+      interval: 5s
+      timeout: 5s
+      retries: 12
+    networks: {secure: {aliases: [kdc.bc1.test]}}
+    mem_limit: 256m
+
+  namenode:
+    <<: *runtime
+    hostname: namenode.bc1.test
+    entrypoint: [/bin/bash, /scripts/start.sh, namenode]
+    volumes: ["./start.sh:/scripts/start.sh:ro", "nn-identity:/etc/bc1:ro", "namenode-data:/data/name"]
+    depends_on: {kdc: {condition: service_healthy}}
+    healthcheck:
+      test: [CMD-SHELL, "kinit -kt /etc/bc1/service.keytab nn/namenode.bc1.test@BC1.TEST && hdfs dfsadmin -safemode get"]
+      interval: 10s
+      timeout: 10s
+      retries: 18
+    networks: {secure: {aliases: [namenode.bc1.test, namenode]}}
+    mem_limit: 1g
+
+  datanode:
+    <<: *runtime
+    hostname: datanode.bc1.test
+    entrypoint: [/bin/bash, /scripts/start.sh, datanode]
+    volumes: ["./start.sh:/scripts/start.sh:ro", "dn-identity:/etc/bc1:ro", "datanode-data:/data/data"]
+    depends_on: {namenode: {condition: service_healthy}}
+    healthcheck:
+      test: [CMD, python3, -c, "import socket; socket.create_connection(('127.0.0.1',9866),3).close()"]
+      interval: 10s
+      timeout: 5s
+      retries: 12
+    networks: {secure: {aliases: [datanode.bc1.test, datanode]}}
+    mem_limit: 1g
+
+  admin:
+    <<: *runtime
+    profiles: [tests]
+    entrypoint: [/bin/bash, -ec]
+    command: ["kinit -kt /etc/bc1/service.keytab hadoop@BC1.TEST; hdfs dfsadmin -safemode wait; hdfs dfs -mkdir -p /bc1/private; hdfs dfs -chown alice /bc1/private; hdfs dfs -chmod 700 /bc1/private"]
+    volumes: ["admin-identity:/etc/bc1:ro"]
+    depends_on: {datanode: {condition: service_healthy}}
+    mem_limit: 512m
+
+  alice:
+    <<: *runtime
+    profiles: [tests]
+    entrypoint: [python3, /tests/check_secure_hdfs.py]
+    volumes: ["alice-identity:/etc/bc1:ro", "../../tests/integration:/tests:ro", "../../data/raw:/data/raw:ro"]
+    depends_on: {datanode: {condition: service_healthy}}
+    mem_limit: 768m
+
+  bob:
+    <<: *runtime
+    profiles: [tests]
+    entrypoint: [python3, /tests/check_secure_hdfs.py, --unauthorized]
+    volumes: ["bob-identity:/etc/bc1:ro", "../../tests/integration:/tests:ro"]
+    depends_on: {datanode: {condition: service_healthy}}
+    mem_limit: 512m
+
+networks:
+  secure: {internal: true}
+  audit: {}
+
+volumes:
+  scan-cache:
+  scan-work:
+  kdc:
+  nn-identity:
+  dn-identity:
+  admin-identity:
+  alice-identity:
+  bob-identity:
+  namenode-data:
+  datanode-data:

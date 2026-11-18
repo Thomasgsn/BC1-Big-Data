@@ -1,0 +1,13 @@
+{
+  "event": "hadoop_archive_signature_verified",
+  "exit_code": 0,
+  "signature_fingerprint": "38237EE425050285077DB57AD22CF846DBB162A0",
+  "signature_date": "2026-02-13",
+  "validsig_status": "[GNUPG:] VALIDSIG 38237EE425050285077DB57AD22CF846DBB162A0 2026-02-13 1770996211 0 4 0 1 10 00 38237EE425050285077DB57AD22CF846DBB162A0",
+  "keys_source": "https://downloads.apache.org/hadoop/common/KEYS",
+  "keys_sha256": "bb7fb841c06acbac50992ea57592583ec71ad660274a58dd5e2e4ab984c79605",
+  "signature_source": "https://downloads.apache.org/hadoop/common/hadoop-3.4.3/hadoop-3.4.3.tar.gz.asc",
+  "signature_sha256": "70ee97437b7e019eacf31d875cdb014e8789879065996d7341918b39d8c2afec",
+  "method": "gpg --homedir isolated temporary keyring; public KEYS imported; actual 514917037-byte archive checked; ephemeral tool container",
+  "trust_limit": "Public keys retrieved over HTTPS from Apache; fingerprint not authenticated out of band; no global user keyring modified."
+}

@@ -1,0 +1,157 @@
+{
+  "started_at_utc": "2026-11-18T08:20:42.558708+00:00",
+  "status": "completed_and_verified",
+  "authorization_context": "User replied reprend immediately after explicit migration approval question; treated as instruction to proceed with prepared migration.",
+  "backup_project": "rncp-bc1-hadoop-pre-migration-v1",
+  "primary_project": "rncp-bc1",
+  "old_runtime": "Hadoop 3.4.2, CentOS 7, Java 8u212",
+  "target_runtime": "Hadoop 3.4.3, Ubuntu 24.04, Temurin 11",
+  "volumes_deleted": false,
+  "phases": [
+    {
+      "name": "active_jobs_check",
+      "active_spark_applications": 0,
+      "exit_code": 0
+    },
+    {
+      "name": "fresh_consistent_backup",
+      "project": "rncp-bc1-hadoop-pre-migration-v1",
+      "evidence": "pre-migration-backup.json",
+      "exit_code": 0,
+      "all_file_hash_sets_match": true,
+      "source_hashes_unchanged": true
+    },
+    {
+      "name": "persistent_compose_selection",
+      "exit_code": 0,
+      "setting": "docker-compose.yml:infra/hadoop-modern/migration.yml",
+      "existing_env_content_preserved": true,
+      "file_mode": "0600",
+      "secrets_changed": false
+    },
+    {
+      "name": "bootstrap_isolated_filesystem_check",
+      "exit_code": 0,
+      "fresh_compose_default": true,
+      "existing_config_preserved": true,
+      "mode": "0600"
+    },
+    {
+      "name": "runtime_started",
+      "exit_code": 0,
+      "hadoop": "3.4.3",
+      "java": "11.0.33+10",
+      "os": "Ubuntu 24.04.5",
+      "namenode_healthy": true,
+      "datanode_healthy": true
+    },
+    {
+      "name": "unit_tests",
+      "tests": 38,
+      "seconds": 0.964,
+      "exit_code": 0
+    },
+    {
+      "name": "http_tests",
+      "tests": 6,
+      "seconds": 6.785,
+      "exit_code": 0
+    },
+    {
+      "name": "deployed_hdfs_verified",
+      "exit_code": 0,
+      "raw": 1000,
+      "unique": 1000,
+      "quarantine": 0,
+      "source_counts_ids_decimal_sums_match": true,
+      "evidence": "deployed-hdfs.json"
+    },
+    {
+      "name": "deployed_models_reloaded",
+      "exit_code": 0,
+      "training_rows_read": 98813,
+      "both_1000_score_hashes_and_report_identical_to_baseline": true,
+      "evidence": "deployed-models.json"
+    },
+    {
+      "name": "checkpoint_resume_existing_run",
+      "exit_code": 0,
+      "run_id": "runtime-v1",
+      "evidence": "checkpoint-resume.json",
+      "scope": "Existing checkpoints reloaded; Kafka offsets progressed. Historical run data must be reread separately."
+    },
+    {
+      "name": "worker_registration_health",
+      "positive_exit_code": 0,
+      "artificial_absent_hostname_exit_code": 1,
+      "worker_recreated_healthy": true,
+      "automatic_restart_on_unhealthy": false
+    },
+    {
+      "name": "post_migration_producer",
+      "exit_code": 0,
+      "run_id": "post-migration-v1",
+      "acknowledged_rows": 1000,
+      "positive_labels": 9,
+      "elapsed_seconds": 3.285234330003732
+    },
+    {
+      "name": "post_migration_ingestion",
+      "exit_code": 0,
+      "run_id": "post-migration-v1",
+      "all_four_queries_inactive": true,
+      "metrics_input_rows": 1000,
+      "evidence": "post-migration-ingestion.json"
+    },
+    {
+      "name": "retained_business_state",
+      "exit_code": 0,
+      "api_ready": 200,
+      "scores": 1000,
+      "alerts": 305,
+      "sql_decisions": 10,
+      "llm_digest_checked": true,
+      "note": "HTTP suite added two automated decisions after the eight retained before migration."
+    },
+    {
+      "name": "new_run_source_verification",
+      "exit_code": 0,
+      "raw": 1000,
+      "unique": 1000,
+      "quarantine": 0,
+      "source_counts_ids_decimal_sums_match": true,
+      "evidence": "post-migration-verified.json"
+    },
+    {
+      "name": "original_after_checkpoint_source_verification",
+      "exit_code": 0,
+      "raw": 1000,
+      "unique": 1000,
+      "quarantine": 0,
+      "source_counts_ids_decimal_sums_match": true,
+      "evidence": "after-checkpoint-verified.json"
+    }
+  ],
+  "incident": {
+    "symptom": "Verification job WAITING, cores 0, master workers empty while worker container running",
+    "recovery_attempt": "Restart existing worker, preserve all data",
+    "root_cause": "not yet determined; stale registration suspected, no host-sleep cause claimed",
+    "recovery_observed": {
+      "restart_exit_code": 0,
+      "alive_workers": 1,
+      "cores": 2,
+      "queued_verification_and_models_completed": true
+    }
+  },
+  "review_correction": "Initial suspicion of early data-query termination was withdrawn after full reread: existing code already awaited all three data queries before creating metrics. Redundant await removed; original behavior preserved. Only query active state added to completion diagnostics.",
+  "deployed_image_id": "sha256:ec962c7edaaee18d3326e6c62a70e8673787f233cc8128eed6adccd7c3a77f69",
+  "finished_at_utc": "2026-11-18T08:35:03.406705+00:00",
+  "limits": [
+    "Local host only; no HA added",
+    "HDFS remains simple auth; Kerberos/TLS not enabled",
+    "OS/JAR audit incomplete; runtime upgrade is not a clean security audit",
+    "No rollback operation executed; consistent pre-migration copies preserved",
+    "Worker registration recovered manually; precise initial cause undetermined",
+    "Performance not compared; replay latency includes startup and idle time"
+  ]
+}

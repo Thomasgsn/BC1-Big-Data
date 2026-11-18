@@ -1,0 +1,14 @@
+{
+  "date": "2026-11-18",
+  "run_id": "runtime-v1",
+  "model_version": "training-sample64-seed42:baseline-v1",
+  "replay_job_exit_code": 0,
+  "scores_before": 1000,
+  "scores_after": 1000,
+  "alerts_before": 305,
+  "alerts_after": 305,
+  "unique_transactions_after": 1000,
+  "linear_decomposition_verified_for_all_rows": true,
+  "tolerance_on_model_margin": 1e-08,
+  "limitation": "algebraic explanation relative to zero feature vector, not causal attribution"
+}

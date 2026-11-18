@@ -1,0 +1,23 @@
+# Source strictement en lecture seule ; arrêter NN/DN principaux avant la copie.
+services:
+  clone:
+    image: rncp-bc1-hadoop:3.4.3-java11
+    platform: linux/amd64
+    profiles: [tools]
+    user: root
+    entrypoint: [/bin/bash, /scripts/clone.sh]
+    volumes:
+      - ./clone.sh:/scripts/clone.sh:ro
+      - original-name:/source-name:ro
+      - original-data:/source-data:ro
+      - namenode-data:/target-name
+      - datanode-data:/target-data
+    mem_limit: 256m
+
+volumes:
+  original-name:
+    external: true
+    name: rncp-bc1_namenode-data
+  original-data:
+    external: true
+    name: rncp-bc1_datanode-data

@@ -1,0 +1,18 @@
+# Runtime principal activé après validation sur clone et reprise demandée par l’utilisateur.
+# Premier fichier : docker-compose.yml à la racine BC1.
+x-modern: &modern
+  image: rncp-bc1-hadoop:3.4.3-java11
+  platform: linux/amd64
+  build:
+    context: ./tmp/hadoop-modern
+    dockerfile: ../../infra/hadoop-modern/Dockerfile
+
+services:
+  hdfs-init:
+    <<: *modern
+    # Conserver les identifiants numériques des volumes existants.
+    command: ["mkdir -p /name /data /ivy; chown 1000:100 /name /data; chmod 750 /name /data; chown 185:0 /ivy"]
+  namenode:
+    <<: *modern
+  datanode:
+    <<: *modern

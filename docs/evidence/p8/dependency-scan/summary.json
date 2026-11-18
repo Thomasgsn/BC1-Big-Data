@@ -1,0 +1,45 @@
+{
+  "tool": "Trivy 0.76.2",
+  "scope": "Root filesystem of isolated HDFS image only; OS and Java dependencies; not source-code exploit verification",
+  "before_image": "sha256:f45523ed7f49533bb764cf366acdc75c9411a5e1fdf18493c66e0c18fddb6baf",
+  "after_image": "sha256:fca9946eae807fb8dc63c41349973986c528c054c04dec5ae07e4bc273e38849",
+  "reports": {
+    "hadoop-secure.json": {
+      "sha256": "e539f7d564deb293b1641a6c3d945a14af6385745b740e10552457f9d5cec150",
+      "entries": 555,
+      "distinct_cves": 157,
+      "severity": {
+        "MEDIUM": 273,
+        "LOW": 25,
+        "HIGH": 248,
+        "CRITICAL": 9
+      }
+    },
+    "hadoop-secure-patched.json": {
+      "sha256": "9e0baf9c354a50e70955b0b69440b0ecd46c3066bee70579bb01fd749c98e289",
+      "entries": 145,
+      "distinct_cves": 69,
+      "severity": {
+        "MEDIUM": 94,
+        "LOW": 17,
+        "HIGH": 34
+      }
+    }
+  },
+  "critical_dependency_matches_removed": true,
+  "residual_high": 34,
+  "risk_acceptance": "No human risk acceptance or finding dismissal recorded; residual warnings remain open. No production-safe claim.",
+  "maintenance": "63 JAR copies aligned by SHA512 locks; optional embedded client/YARN distributions removed from live filesystem; archive/base layers retained.",
+  "actual_tests_after_change": [
+    "Kerberos authorized write/read and HTTPS-SPNEGO exact on 1000 PaySim rows",
+    "No-ticket identity spoof denied; Bob with valid ticket denied private content",
+    "Weak RPC protection, untrusted CA, wrong TLS hostname, anonymous HTTPS rejected"
+  ],
+  "scan_exit_codes": {
+    "initial_attempt": 1,
+    "initial_reason": "256 MiB tmpfs insufficient for DB download; cache/work moved to named disk volumes",
+    "completed_before": 0,
+    "completed_after": 0
+  },
+  "db_cache_scope": "Public vulnerability databases, no Docker socket or identity/data volumes mounted."
+}

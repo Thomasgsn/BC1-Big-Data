@@ -1,0 +1,91 @@
+{
+  "event": "llm_draft_generated",
+  "result": {
+    "transaction_id": "01005147ccfb1df0ec5fee00d8d6dd85a1f22cb0cf300989545ff9ae74160a5d",
+    "model_version": "training-sample64-seed42:baseline-v1",
+    "created_at": "2026-11-18T10:23:00.246840+00:00",
+    "status": "draft_requires_human_review",
+    "llm_model": "qwen2.5:3b",
+    "prompt_version": "fraud-fr-v7-verified-linear-signal",
+    "llm_digest": "357c53fb659c5076de1d65ccb0b397446227b71a42be9d1603d46168015c9e4b",
+    "system_prompt_sha256": "1996e9d3c6330142e474f9f9f94c59feffa76cf941c5d895c34165bfebfddcd8",
+    "client_prompt_sha256": "0494b145464faa9c25c14ed5d326bc26c57a30c12f26c736ca6c78c794f7e25b",
+    "context": {
+      "transaction_reference": "01005147ccfb",
+      "account_alias": "C1532139270",
+      "amount_local_currency": "65521.42",
+      "transaction_type": "CASH_OUT",
+      "score": 0.7268406287231461,
+      "threshold": 0.7,
+      "model_version": "training-sample64-seed42:baseline-v1",
+      "risk_signal": "Le score atteint ou dépasse le seuil choisi sur validation ; cause non démontrée.",
+      "amount_above_training_p95": false,
+      "training_amount_p95": "431900.90",
+      "signal_interpretation": "Comparaison descriptive au train uniquement, pas une causalité du score.",
+      "model_signal": {
+        "method": "verified_additive_logit_decomposition",
+        "top_factor": "montant transformé",
+        "interpretation": "Contribution du modèle face au vecteur nul ; référence algébrique, pas une cause ni un client typique."
+      },
+      "synthetic_data": true
+    },
+    "context_sha256": "352657e2784f0b0c3ca01d34c353f536f26898eca47478769089a217748cbf5d",
+    "output": {
+      "analyst_explanation": "Le score non calibré dépasse le seuil de contrôle. Une vérification humaine est nécessaire. Le factor montant transformé contribue au score du modèle, sans établir une cause.",
+      "client_email": {
+        "subject": "Vérification de votre opération 01005147ccfb",
+        "body": "Cette opération SYNTHÉTIQUE nécessite votre attention. Veuillez la vérifier dans votre application habituelle."
+      }
+    },
+    "calls": [
+      {
+        "timing_ns": {
+          "total_duration": 70425069548,
+          "load_duration": 50464637450,
+          "eval_duration": 6860673000
+        },
+        "tokens": {
+          "prompt": 341,
+          "output": 50
+        },
+        "done_reason": "stop",
+        "options": {
+          "temperature": 0.1,
+          "seed": 42,
+          "repeat_penalty": 1.15,
+          "num_predict": 300,
+          "num_ctx": 2048,
+          "num_batch": 64,
+          "num_thread": 2
+        },
+        "system_prompt_sha256": "1996e9d3c6330142e474f9f9f94c59feffa76cf941c5d895c34165bfebfddcd8",
+        "facts_sha256": "4cfe55f129f813cd279fba406f405c975ec6bb333b8c6c45bf758c87f6e2c07c"
+      },
+      {
+        "timing_ns": {
+          "total_duration": 17601333267,
+          "load_duration": 4548695,
+          "eval_duration": 7376113000
+        },
+        "tokens": {
+          "prompt": 233,
+          "output": 53
+        },
+        "done_reason": "stop",
+        "options": {
+          "temperature": 0.1,
+          "seed": 42,
+          "repeat_penalty": 1.15,
+          "num_predict": 300,
+          "num_ctx": 2048,
+          "num_batch": 64,
+          "num_thread": 2
+        },
+        "system_prompt_sha256": "0494b145464faa9c25c14ed5d326bc26c57a30c12f26c736ca6c78c794f7e25b",
+        "facts_sha256": "059305546eedd78799a9e999111869ce82ddc22453ae9719ff1c1416a802dd11"
+      }
+    ],
+    "limitations": "Contrôles automatiques partiels ; aucune garantie sémantique, revue humaine obligatoire.",
+    "_id": "79838d15-ba95-415c-a7af-42633867f34d"
+  }
+}

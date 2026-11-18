@@ -1,0 +1,18 @@
+{
+  "event": "secure_hdfs_authorized_verified",
+  "principal": "alice@BC1.TEST",
+  "dataset_rows": 1000,
+  "csv_bytes": 75449,
+  "payload_sha256": "52a90327ee73fa69cf22895cf3600c3a850876ffeca77602fa77adceec04cd2f",
+  "no_ticket_and_username_spoof_refused": true,
+  "authorized_write_read_exact": true,
+  "weak_rpc_protection_refused": true,
+  "authorized_https_spnego_read_exact": true,
+  "tls_version": "TLSv1.3",
+  "tls_cipher": "TLS_AES_256_GCM_SHA384",
+  "server_certificate_sha256": "c3e371e8205b4083f81172c9864e1c75864943d68e83031f8c07d659487faadf",
+  "untrusted_ca_refused": true,
+  "wrong_hostname_refused": true,
+  "anonymous_https_status": 401,
+  "scope": "real isolated HDFS; synthetic service identity; actual PaySim prefix; no production claim"
+}

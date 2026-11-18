@@ -1,0 +1,9 @@
+name: rncp-bc1-documents
+services:
+  render:
+    image: rncp-bc1-documents:1
+    build: {context: ., dockerfile: Dockerfile}
+    volumes: ['../..:/project']
+    entrypoint: [python3,/project/scripts/build-deliverables.py]
+    network_mode: none
+    mem_limit: 768m

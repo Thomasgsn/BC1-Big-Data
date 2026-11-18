@@ -1,0 +1,10 @@
+.git
+.venv
+.env
+data
+volumes
+models
+exports
+logs
+tmp
+**/__pycache__
