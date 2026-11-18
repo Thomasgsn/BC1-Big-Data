@@ -102,3 +102,7 @@ Durée observée du parcours : 1 600,667 secondes, avec pauses documentaires, au
 Les phases techniques marquées terminées couvrent leurs critères logiciels dans le périmètre documenté. P8 reste En cours : maintenance des vulnérabilités restantes, intégration des profils sécurisés au principal et continuité globale. P4 conserve les réserves d’appréciation pédagogique sur la seconde source. P9 conserve la répétition orale, la machine vierge et la publication autorisée. Le projet n’est pas déclaré entièrement prêt au jury tant que ces écarts ne sont pas traités ou arbitrés explicitement.
 
 Les services principaux ont été observés sains après la campagne (Ollama actif sans healthcheck). Les profils HA, Kerberos, mTLS et Spark sécurisé sont arrêtés, leurs volumes conservés. Aucun BC2/BC3 commencé, aucune publication ou dépense effectuée.
+
+## Version locale du dossier
+
+Premier commit local créé : `b76f133` (plateforme, documentation, preuves et PDF). Aucun remote ou push créé. Les données brutes, poids, volumes, secrets et intermédiaires sont exclus. Une archive de sources de la révision courante est préparée sous `output/` pour remise locale. Les réserves P4/P8/P9 ci-dessus restent ouvertes ; le commit ne les transforme pas en critères satisfaits.

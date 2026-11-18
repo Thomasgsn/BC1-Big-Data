@@ -17,3 +17,7 @@ exports/
 logs/
 tmp/
 infra/gephi/target/
+
+# Archives de remise exportées depuis Git, non réincorporées dans elles-mêmes.
+output/*.zip
+output/delivery-manifest.json

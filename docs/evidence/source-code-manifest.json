@@ -1,10 +1,10 @@
 {
-  "created_at_utc": "2026-11-18T10:27:15.775334+00:00",
+  "created_at_utc": "2026-11-18T10:28:00.295993+00:00",
   "scope": "Local runtime source, tests, tooling and public configuration; excludes secrets, data, builds, rendered artifacts and prose; not a published Git revision",
   "files": {
     ".dockerignore": "3d00ec38d5ae86ad290d83eadd44bdc01e90cf5c926d2512a71494171feabd42",
     ".env.example": "27c22c14308b64bee70062cf394972ee729c44af250d1cd919dcbeea1f03a8a0",
-    ".gitignore": "5c1f599b4654e9cd7261e1868061f2247e5917e260af92a94d1c9a618d2dc265",
+    ".gitignore": "e8d8ab04d606440f4bda1bf799803677c37508261ee18956eabfe27cbc97cf94",
     "Makefile": "758e57c2430dcbb12decc07825507b21e1ce2c5d46503d827cf716038259855a",
     "docker-compose.yml": "efeaf772d3b0e481a51662a61f5825e9f3ea1be19e93d8cfc14861cc97d149a7",
     "infra/api/Dockerfile": "999a842a0a7949ad459859041dac12c2561fa76b8f9e239eea0c953dd410a85d",
