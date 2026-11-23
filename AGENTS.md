@@ -10,10 +10,10 @@
 
 ## Reprise du travail
 
-1. Lire `docs/checklist.md` pour connaître l'état réel et les blocages ; l'historique détaillé (progression, tests, plan, audit, sources) est archivé dans `../preparation-oral/bc1/docs/`.
+1. Lire `../preparation-oral/bc1/checklist.md` (hors dépôt) pour connaître l'état réel et les blocages ; l'historique détaillé (progression, tests, plan, audit, sources) est archivé dans `../preparation-oral/bc1/docs/`.
 2. Avant une décision de périmètre, consulter `docs/rapport.md` (exigences et correspondance RNCP), l'audit archivé et les PDF de `../.data/`. Distinguer sujet pédagogique, référentiel et recommandation.
-3. Après validation, sélectionner la prochaine tâche de `docs/checklist.md` (section technique), vérifier ses dépendances, implémenter puis exécuter ses critères d'acceptation.
-4. À chaque tâche, consigner résultats et preuves dans `docs/evidence/`, mettre à jour `docs/checklist.md` et, si un résultat change, `docs/rapport.md` (dont la correspondance RNCP) avec des preuves réellement produites.
+3. Après validation, sélectionner la prochaine tâche de `../preparation-oral/bc1/checklist.md` (section technique), vérifier ses dépendances, implémenter puis exécuter ses critères d'acceptation.
+4. À chaque tâche, consigner résultats et preuves dans `docs/evidence/`, mettre à jour `../preparation-oral/bc1/checklist.md` et, si un résultat change, `docs/rapport.md` (dont la correspondance RNCP) avec des preuves réellement produites.
 
 ## Règles de réalisation
 

@@ -11,7 +11,6 @@ La plateforme rejoue des transactions bancaires **synthétiques** (PaySim), les 
 | [docs/rapport.md](docs/rapport.md) | Besoin, architecture, choix, résultats, limites, correspondance RNCP |
 | [Rapport PDF](output/pdf/rapport-technique-bc1.pdf) | Version PDF du rapport, générée depuis `docs/rapport.md` |
 | [Support de soutenance PDF](output/pdf/soutenance-bc1.pdf) | Présentation du flux complet, de Kafka à la réponse de l’IA |
-| [docs/checklist.md](docs/checklist.md) | Actions qui restent à faire |
 | [docs/dictionnaire.md](docs/dictionnaire.md) | Termes techniques expliqués |
 | `docs/evidence/` | Preuves brutes des essais (JSON, journaux, captures) |
 
