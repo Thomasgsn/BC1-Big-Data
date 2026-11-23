@@ -9,6 +9,7 @@ import json
 import os
 
 from rncp_bc1.transactions import ID_PATTERN
+from rncp_bc1.security import jdbc_sql_url
 
 
 def main():
@@ -28,7 +29,7 @@ def main():
         query = """SELECT d.decision_id::text, d.case_id::text, c.transaction_id::text, d.analyst_id,
           d.outcome, d.reason, d.version, d.origin, d.created_at
           FROM analyst_decision d JOIN investigation_case c ON c.case_id=d.case_id"""
-        frame = (spark.read.format("jdbc").option("url", "jdbc:postgresql://postgres:5432/bc1")
+        frame = (spark.read.format("jdbc").option("url", jdbc_sql_url())
                  .option("query", query).option("driver", "org.postgresql.Driver").option("user", "bc1app")
                  .option("password", os.environ["POSTGRES_APP_PASSWORD"]).load()
                  .withColumn("source_system", F.lit("postgresql_analyst_reviews"))

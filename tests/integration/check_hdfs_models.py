@@ -17,6 +17,7 @@ def main():
     parser.add_argument("--model-version", required=True)
     parser.add_argument("--transaction-run", required=True)
     parser.add_argument("--expected-rows", type=int, required=True)
+    parser.add_argument("--base", default="hdfs://namenode:8020/bc1")
     args = parser.parse_args()
     if not all(ID_PATTERN.fullmatch(value) for value in
                [args.training_run, args.model_version, args.transaction_run]):
@@ -29,7 +30,7 @@ def main():
     spark = SparkSession.builder.appName("bc1-hdfs-model-reload").getOrCreate()
     spark.sparkContext.setLogLevel("WARN")
     try:
-        root = "hdfs://namenode:8020/bc1"
+        root = args.base.rstrip("/")
         artifact = root+"/"+args.training_run+"/models/"+args.model_version
         report_text = spark.read.text(artifact+"/report").first()["value"]
         report = json.loads(report_text)

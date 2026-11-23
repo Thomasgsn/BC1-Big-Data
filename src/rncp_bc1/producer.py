@@ -26,17 +26,38 @@ def selected_source_row(dataset_sha256: str, source_row: int, modulus: int = 1, 
     return int.from_bytes(digest[:8], "big") % modulus == 0
 
 
+def selected_destination(dataset_sha256: str, destination: str, modulus: int = 1, seed: int = 42) -> bool:
+    """Sélection par compte destinataire : garde tout l'historique des comptes retenus, sans lire les labels."""
+    if modulus < 1:
+        raise ValueError("Le module d'échantillonnage doit être positif.")
+    if modulus == 1:
+        return True
+    digest = hashlib.sha256(f"{dataset_sha256}:{destination}:destination-sample:{seed}".encode()).digest()
+    return int.from_bytes(digest[:8], "big") % modulus == 0
+
+
+SAMPLE_KEYS = ("row", "destination")
+
+
 def events(csv_path: Path, context: ReplayContext, start_row: int = 1, limit: int | None = None,
-           sample_modulus: int = 1, sample_seed: int = 42):
+           sample_modulus: int = 1, sample_seed: int = 42, sample_key: str = "row"):
     if start_row < 1 or (limit is not None and limit < 1):
         raise ValueError("start_row et limit doivent être positifs.")
+    if sample_key not in SAMPLE_KEYS:
+        raise ValueError("Clé d'échantillonnage inconnue : row ou destination.")
     with csv_path.open(newline="", encoding="utf-8-sig") as stream:
         reader = csv.DictReader(stream)
         if tuple(reader.fieldnames or ()) != HEADERS:
             raise ValueError("En-tête CSV PaySim inattendu.")
         sent = 0
         for position, row in enumerate(reader, 1):
-            if position < start_row or not selected_source_row(context.dataset_sha256, position, sample_modulus, sample_seed):
+            if position < start_row:
+                continue
+            if sample_key == "row":
+                keep = selected_source_row(context.dataset_sha256, position, sample_modulus, sample_seed)
+            else:
+                keep = selected_destination(context.dataset_sha256, row.get("nameDest") or "", sample_modulus, sample_seed)
+            if not keep:
                 continue
             if None in row:
                 raise ValueError(f"Colonnes supplémentaires à la ligne source {position}.")
@@ -61,6 +82,8 @@ def main() -> int:
     parser.add_argument("--limit", type=int)
     parser.add_argument("--sample-modulus", type=int, default=1, help="1 : tout ; 64 : environ 1/64 des positions, sans utiliser les labels")
     parser.add_argument("--sample-seed", type=int, default=42)
+    parser.add_argument("--sample-key", choices=SAMPLE_KEYS, default="row",
+                        help="row : positions ; destination : comptes destinataires entiers (historique conservé)")
     parser.add_argument("--rate", type=float, default=100)
     destination = parser.add_mutually_exclusive_group(required=True)
     destination.add_argument("--jsonl", type=Path, help="Contrôle hors ligne, fichier créé exclusivement")
@@ -90,14 +113,16 @@ def main() -> int:
             temporary = Path(output.name)
         else:
             from kafka import KafkaProducer
+            from rncp_bc1.security import producer_tls_options
             producer = KafkaProducer(bootstrap_servers=args.bootstrap_servers.split(","),
+                                     **producer_tls_options(),
                                      acks="all", enable_idempotence=True,
                                      max_block_ms=30000, request_timeout_ms=30000,
                                      key_serializer=lambda key: key.encode("utf-8"),
                                      value_serializer=lambda value: json.dumps(value, allow_nan=False).encode("utf-8"))
         # Durée de rejeu séparée du coût du checksum et de la connexion.
         started = time.monotonic()
-        for event in events(args.csv, context, args.start_row, args.limit, args.sample_modulus, args.sample_seed):
+        for event in events(args.csv, context, args.start_row, args.limit, args.sample_modulus, args.sample_seed, args.sample_key):
             if output is not None:
                 output.write(json.dumps(event, ensure_ascii=False, allow_nan=False) + "\n")
             else:
@@ -129,7 +154,7 @@ def main() -> int:
         print(json.dumps({"event": "replay_completed", "mode": "jsonl_control" if args.jsonl else "kafka",
                           "run_id": args.run_id, "acknowledged_rows": count,
                           "last_source_row": last_source_row, "positive_labels": positives,
-                          "selection": {"sample_modulus": args.sample_modulus, "sample_seed": args.sample_seed,
+                          "selection": {"sample_modulus": args.sample_modulus, "sample_seed": args.sample_seed, "sample_key": args.sample_key,
                                         "start_row": args.start_row, "maximum_events": args.limit},
                           "elapsed_seconds": elapsed, "observed_rows_per_second": count / elapsed}), file=sys.stderr)
         return 0

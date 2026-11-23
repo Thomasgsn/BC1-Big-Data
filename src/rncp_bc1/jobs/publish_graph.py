@@ -3,9 +3,9 @@
 import argparse
 import json
 import os
-from urllib.parse import quote
 
 from rncp_bc1.transactions import ID_PATTERN
+from rncp_bc1.security import mongo_spark_uri
 
 
 def main():
@@ -20,7 +20,7 @@ def main():
     password = os.environ.get("MONGO_APP_PASSWORD")
     if not password:
         parser.error("MONGO_APP_PASSWORD requis dans l'environnement, jamais en argument")
-    uri = "mongodb://bc1app:"+quote(password, safe="")+"@mongo:27017/fraud?authSource=fraud"
+    uri = mongo_spark_uri(password)
     from pyspark.sql import SparkSession, functions as F
     spark = (SparkSession.builder.appName("bc1-data-lab").config("spark.sql.shuffle.partitions", "2")
              .config("spark.redaction.regex", "(?i)secret|password|token|access.key|connection.uri")

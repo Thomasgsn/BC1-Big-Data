@@ -9,8 +9,9 @@ import urllib.request
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--expected-host", default=socket.gethostname())
+    parser.add_argument("--master-url", default="http://spark-master:8080/json/")
     args = parser.parse_args()
-    with urllib.request.urlopen("http://spark-master:8080/json/", timeout=3) as response:
+    with urllib.request.urlopen(args.master_url, timeout=3) as response:
         payload = response.read(1024*1024+1)
     if len(payload) > 1024*1024:
         raise RuntimeError("Réponse du master dépassant la borne du contrôle")

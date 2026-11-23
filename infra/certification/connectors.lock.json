@@ -1,0 +1,98 @@
+{
+  "artifacts": [
+    {
+      "filename": "spark-sql-kafka-0-10_2.12-3.5.9.jar",
+      "group": "org.apache.spark",
+      "artifact": "spark-sql-kafka-0-10_2.12",
+      "version": "3.5.9",
+      "url": "https://repo.maven.apache.org/maven2/org/apache/spark/spark-sql-kafka-0-10_2.12/3.5.9/spark-sql-kafka-0-10_2.12-3.5.9.jar",
+      "sha256": "fed393dcc3ef70611fe3d4f35ae78a8ea7c55301fd4cdd66c5dc97fcfaa5a00f",
+      "published_checksum_algorithm": "sha1",
+      "published_checksum": "17ef44bb094642e6cbe4c31283b49b0e524225a3"
+    },
+    {
+      "filename": "spark-token-provider-kafka-0-10_2.12-3.5.9.jar",
+      "group": "org.apache.spark",
+      "artifact": "spark-token-provider-kafka-0-10_2.12",
+      "version": "3.5.9",
+      "url": "https://repo.maven.apache.org/maven2/org/apache/spark/spark-token-provider-kafka-0-10_2.12/3.5.9/spark-token-provider-kafka-0-10_2.12-3.5.9.jar",
+      "sha256": "e82612e6070438c5ea48b08c74f367a6d214a390bdf6dcf3ff316dca592ddda5",
+      "published_checksum_algorithm": "sha1",
+      "published_checksum": "a925bf703b98506dd130cb56584eb2e8bd325380"
+    },
+    {
+      "filename": "kafka-clients-3.9.2.jar",
+      "group": "org.apache.kafka",
+      "artifact": "kafka-clients",
+      "version": "3.9.2",
+      "url": "https://repo.maven.apache.org/maven2/org/apache/kafka/kafka-clients/3.9.2/kafka-clients-3.9.2.jar",
+      "sha256": "014b4ef36884478a932641818b080c36a8f8e2e92dc771e800c9d2694f4f83d8",
+      "published_checksum_algorithm": "sha512",
+      "published_checksum": "dd824c9a31f38a5a6d2b2c7ac03e9f31d8c5a7f1d8a6baefbe7d55552f4ab961ec831f040bb87a3c52dab6d464ee0954c31d256c1ea323140139465697806369"
+    },
+    {
+      "filename": "mongo-spark-connector_2.12-10.7.0.jar",
+      "group": "org.mongodb.spark",
+      "artifact": "mongo-spark-connector_2.12",
+      "version": "10.7.0",
+      "url": "https://repo.maven.apache.org/maven2/org/mongodb/spark/mongo-spark-connector_2.12/10.7.0/mongo-spark-connector_2.12-10.7.0.jar",
+      "sha256": "1b0908775a41d72621944a43e36ed83df4dbaff5bf8581811f0b5e9eabeb7cbe",
+      "provenance": "SHA256 measured from previously tested Maven artifact; new acquisition must match exactly"
+    },
+    {
+      "filename": "commons-pool2-2.11.1.jar",
+      "group": "org.apache.commons",
+      "artifact": "commons-pool2",
+      "version": "2.11.1",
+      "url": "https://repo.maven.apache.org/maven2/org/apache/commons/commons-pool2/2.11.1/commons-pool2-2.11.1.jar",
+      "sha256": "ea0505ee7515e58b1ac0e686e4d1a5d9f7d808e251a61bc371aa0595b9963f83",
+      "provenance": "SHA256 measured from previously tested Maven artifact; new acquisition must match exactly"
+    },
+    {
+      "filename": "bson-5.1.4.jar",
+      "group": "org.mongodb",
+      "artifact": "bson",
+      "version": "5.1.4",
+      "url": "https://repo.maven.apache.org/maven2/org/mongodb/bson/5.1.4/bson-5.1.4.jar",
+      "sha256": "bba556a8acd4e87545c1b9a1cb25c12ce9587ed5bf01685f236c5d92abf1e676",
+      "provenance": "SHA256 measured from previously tested Maven artifact; new acquisition must match exactly"
+    },
+    {
+      "filename": "mongodb-driver-core-5.1.4.jar",
+      "group": "org.mongodb",
+      "artifact": "mongodb-driver-core",
+      "version": "5.1.4",
+      "url": "https://repo.maven.apache.org/maven2/org/mongodb/mongodb-driver-core/5.1.4/mongodb-driver-core-5.1.4.jar",
+      "sha256": "ae3dbfd439d5afe9e0d6abbd61ef27d858ca2d38083bb7361f69e243aff31dec",
+      "provenance": "SHA256 measured from previously tested Maven artifact; new acquisition must match exactly"
+    },
+    {
+      "filename": "mongodb-driver-sync-5.1.4.jar",
+      "group": "org.mongodb",
+      "artifact": "mongodb-driver-sync",
+      "version": "5.1.4",
+      "url": "https://repo.maven.apache.org/maven2/org/mongodb/mongodb-driver-sync/5.1.4/mongodb-driver-sync-5.1.4.jar",
+      "sha256": "341880078296edd762756440e9d6b1d6d2bf4d6b91975c2638e3da611f28b1c2",
+      "provenance": "SHA256 measured from previously tested Maven artifact; new acquisition must match exactly"
+    },
+    {
+      "filename": "postgresql-42.7.14.jar",
+      "group": "org.postgresql",
+      "artifact": "postgresql",
+      "version": "42.7.14",
+      "url": "https://repo.maven.apache.org/maven2/org/postgresql/postgresql/42.7.14/postgresql-42.7.14.jar",
+      "sha256": "73914527305a40cce504b0d3d90b23caf565136912d607ae8ae7c5895512332c",
+      "provenance": "SHA256 measured from previously tested Maven artifact; new acquisition must match exactly"
+    },
+    {
+      "filename": "bson-record-codec-5.1.4.jar",
+      "group": "org.mongodb",
+      "artifact": "bson-record-codec",
+      "version": "5.1.4",
+      "url": "https://repo.maven.apache.org/maven2/org/mongodb/bson-record-codec/5.1.4/bson-record-codec-5.1.4.jar",
+      "sha256": "698b2b9a10fdd49a3ed99ad2b7bcc8e797639c8c4a5c974de7f6fc8654bda655",
+      "provenance": "SHA256 measured from previously tested Maven artifact; new acquisition must match exactly"
+    }
+  ],
+  "trust": "HTTPS Maven Central acquisition and published checksums; SHA256 pins subsequent copies; SHA1 is integrity only, no PGP verification claimed"
+}

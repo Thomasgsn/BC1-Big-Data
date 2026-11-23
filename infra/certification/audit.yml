@@ -1,0 +1,32 @@
+name: rncp-bc1-certification-audit
+x-audit: &audit
+  user: root
+  cap_drop: [ALL]
+  cap_add: [DAC_OVERRIDE]
+  security_opt: [no-new-privileges:true]
+  network_mode: none
+  volumes: ['../../tmp/security-tools/trivy:/tools/trivy:ro','cache:/cache','work:/tmp','../../docs/evidence/p10:/report']
+  entrypoint: [/tools/trivy]
+  mem_limit: 1536m
+services:
+  hadoop:
+    <<: *audit
+    image: rncp-bc1-hadoop-secure:3.4.3
+  api:
+    <<: *audit
+    image: rncp-bc1-api-secure:0.2.0
+  kafka:
+    <<: *audit
+    image: rncp-bc1-kafka-secure:3.9.2
+  mongo:
+    <<: *audit
+    image: rncp-bc1-mongo-secure:8.0
+  postgres:
+    <<: *audit
+    image: rncp-bc1-postgres-secure:17
+  spark:
+    <<: *audit
+    image: rncp-bc1-spark-secure:3.5.9
+volumes:
+  cache: {external: true, name: rncp-bc1-secure-hdfs-v1_scan-cache}
+  work: {}

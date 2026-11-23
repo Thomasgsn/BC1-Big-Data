@@ -3,9 +3,9 @@
 import argparse
 import json
 import os
-from urllib.parse import quote
 
 from rncp_bc1.transactions import ID_PATTERN
+from rncp_bc1.security import mongo_spark_uri
 
 
 def main():
@@ -32,6 +32,8 @@ def main():
         root = args.base.rstrip("/")
         artifact = root+"/"+args.training_run+"/models/"+args.model_version
         report = json.loads(spark.read.text(artifact+"/report").first()["value"])
+        if report.get("feature_set", "baseline") != "baseline":
+            raise ValueError("Modèle à historique destinataire : expérimental, non branché au scoring en flux.")
         model = PipelineModel.load(artifact+"/"+report["selected"])
         # Les cibles et les quatre soldes sont absents avant même l'inférence.
         data = (spark.read.parquet(root+"/"+args.run_id+"/curated")
@@ -78,7 +80,7 @@ def main():
         counts = scored.agg(F.count("*").alias("transactions"), F.sum(F.col("is_alert").cast("long")).alias("alerts")).first().asDict()
         if counts["transactions"] == 0:
             raise ValueError("Aucune transaction à scorer.")
-        uri = "mongodb://bc1app:"+quote(os.environ["MONGO_APP_PASSWORD"], safe="")+"@mongo:27017/fraud?authSource=fraud"
+        uri = mongo_spark_uri(os.environ["MONGO_APP_PASSWORD"])
         (scored.write.format("mongodb").mode("append").option("connection.uri", uri).option("database", "fraud")
          .option("collection", "fraud_scores").option("operationType", "replace").option("idFieldList", "_id")
          .option("upsertDocument", "true").save())

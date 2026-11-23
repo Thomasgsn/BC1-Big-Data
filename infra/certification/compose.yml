@@ -1,0 +1,271 @@
+name: rncp-bc1-certification-v1
+x-spark: &spark
+  image: rncp-bc1-spark-secure:3.5.9
+  build:
+    context: ../..
+    dockerfile: infra/certification/Dockerfile
+    args: {SPARK_BASE: 'apache/spark:3.5.9-scala2.12-java17-python3-ubuntu@sha256:f3d6eaa8bab8ec2e38f3c3918a5b2f8b253c95bcb19f9e87ad0e0cdacf9df2d5'}
+  user: '1000:1000'
+  environment: &spark-env
+    HADOOP_CONF_DIR: /etc/bc1
+    KRB5_CONFIG: /etc/bc1/krb5.conf
+    SPARK_CONF_DIR: /spark-auth
+    BC1_DB_TLS_CA: /public-ca/ca.crt
+    BC1_KAFKA_TLS_PROPERTIES: /identity/client.properties
+    MONGO_APP_PASSWORD: ${MONGO_APP_PASSWORD:?}
+    POSTGRES_APP_PASSWORD: ${POSTGRES_APP_PASSWORD:?}
+  volumes: &spark-volumes
+    - ../../src:/project/src:ro
+    - ../../tests:/project/tests:ro
+    - ../../data:/project/data:ro
+    - ../../exports:/project/exports
+    - alice-identity:/etc/bc1:ro
+    - spark-auth:/spark-auth:ro
+    - public-ca:/public-ca:ro
+    - consumer-identity:/identity:ro
+    - ../../tmp/spark-maintenance/connectors:/connectors-extra:ro
+  networks: [lake, bus, data, compute]
+  mem_limit: 2304m
+services:
+  fetch-connectors:
+    user: root
+    image: rncp-bc1-api-secure:0.2.0
+    profiles: [tools]
+    entrypoint: [python,/runtime/fetch-connectors.py,--lock,/runtime/connectors.lock.json,--directory,/connectors]
+    volumes: ['./connectors.lock.json:/runtime/connectors.lock.json:ro','../../scripts/fetch-connectors.py:/runtime/fetch-connectors.py:ro','../../tmp/spark-maintenance/connectors:/connectors']
+    networks: [acquisition]
+    mem_limit: 256m
+  init-hdfs:
+    extends: {file: ../secure-hdfs/compose.yml, service: init}
+    volumes: !override ['../secure-hdfs/provision.py:/scripts/provision.py:ro','kdc:/kdc','nn-identity:/roles/namenode','dn-identity:/roles/datanode','admin-identity:/roles/admin','alice-identity:/roles/alice','bob-identity:/roles/bob','namenode-data:/storage/name','datanode-data:/storage/data']
+    networks: !override [lake]
+  kdc:
+    extends: {file: ../secure-hdfs/compose.yml, service: kdc}
+    depends_on: !override {init-hdfs: {condition: service_completed_successfully}}
+    networks: !override {lake: {aliases: [kdc.bc1.test]}}
+  namenode:
+    extends: {file: ../secure-hdfs/compose.yml, service: namenode}
+    volumes: !override ['../secure-hdfs/start.sh:/scripts/start.sh:ro','nn-identity:/etc/bc1:ro','namenode-data:/data/name']
+    networks: !override {lake: {aliases: [namenode.bc1.test, namenode]}}
+  datanode:
+    extends: {file: ../secure-hdfs/compose.yml, service: datanode}
+    volumes: !override ['../secure-hdfs/start.sh:/scripts/start.sh:ro','dn-identity:/etc/bc1:ro','datanode-data:/data/data']
+    networks: !override {lake: {aliases: [datanode.bc1.test, datanode]}}
+  lake-admin:
+    extends: {file: ../secure-hdfs/compose.yml, service: admin}
+    profiles: !reset []
+    networks: !override [lake]
+  init-kafka:
+    extends: {file: ../secure-kafka/compose.yml, service: init}
+    volumes: !override ['../secure-kafka:/scripts:ro','kafka-ca:/ca','broker-identity:/identities/broker','kafka-admin-identity:/identities/admin','producer-identity:/identities/producer','consumer-identity:/identities/consumer','intruder-identity:/identities/intruder','broker-data:/storage/broker','zk-data:/storage/zk']
+    networks: !override [bus]
+  zk:
+    image: rncp-bc1-kafka-secure:3.9.2
+    extends: {file: ../secure-kafka/compose.yml, service: zk}
+    volumes: !override ['zk-data:/data']
+    depends_on: !override {init-kafka: {condition: service_completed_successfully}}
+    networks: !override [coordination]
+  broker:
+    image: rncp-bc1-kafka-secure:3.9.2
+    extends: {file: ../secure-kafka/compose.yml, service: broker}
+    volumes: !override ['broker-identity:/identity:ro','broker-data:/data']
+    networks: !override [bus,coordination]
+  kafka-admin:
+    image: rncp-bc1-kafka-secure:3.9.2
+    profiles: [jobs]
+    extends: {file: ../secure-kafka/compose.yml, service: admin}
+    volumes: !override ['../secure-kafka:/scripts:ro','kafka-admin-identity:/identity:ro']
+    networks: !override [bus]
+  init:
+    image: rncp-bc1-hadoop-secure:3.4.3
+    user: root
+    entrypoint: [python3,/scripts/provision.py]
+    volumes: ['.:/scripts:ro','service-ca:/ca','public-ca:/public-ca','pg-identity:/identities/postgres','mongo-identity:/identities/mongo','api-identity:/identities/api','spark-auth:/spark-auth','postgres-data-v2:/storage/postgres','mongo-data-v2:/storage/mongo']
+    networks: [data]
+    mem_limit: 256m
+  postgres:
+    image: rncp-bc1-postgres-secure:17
+    environment:
+      POSTGRES_USER: bc1owner
+      POSTGRES_DB: bc1
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?}
+      POSTGRES_APP_PASSWORD: ${POSTGRES_APP_PASSWORD:?}
+      API_TOKEN_READER: ${API_TOKEN_READER:?}
+      API_TOKEN_ANALYST: ${API_TOKEN_ANALYST:?}
+    command: [postgres,-c,ssl=on,-c,ssl_cert_file=/identity/cert.pem,-c,ssl_key_file=/identity/key.pem,-c,hba_file=/config/pg_hba.conf]
+    volumes: ['postgres-data-v2:/var/lib/postgresql/data','pg-identity:/identity:ro','./pg_hba.conf:/config/pg_hba.conf:ro','../postgres:/docker-entrypoint-initdb.d:ro']
+    depends_on: {init: {condition: service_completed_successfully}}
+    networks: [data]
+    healthcheck: {test: [CMD,pg_isready,-U,bc1owner,-d,bc1], interval: 5s, timeout: 5s, retries: 24}
+    mem_limit: 384m
+  mongo:
+    image: rncp-bc1-mongo-secure:8.0
+    environment: {MONGO_INITDB_ROOT_USERNAME: bc1owner, MONGO_INITDB_ROOT_PASSWORD: '${MONGO_PASSWORD:?}', MONGO_APP_PASSWORD: '${MONGO_APP_PASSWORD:?}', BC1_DB_TLS_CA: /public-ca/ca.crt}
+    command: [mongod,--bind_ip_all,--wiredTigerCacheSizeGB,'0.25',--tlsMode,requireTLS,--tlsCertificateKeyFile,/identity/server.pem,--tlsCAFile,/public-ca/ca.crt,--tlsAllowConnectionsWithoutCertificates]
+    volumes: ['mongo-data-v2:/data/db','mongo-identity:/identity:ro','public-ca:/public-ca:ro','../mongo/init.js:/docker-entrypoint-initdb.d/001-init.js:ro','../mongo/export.js:/scripts/export.js:ro','../../exports:/exports']
+    depends_on: {init: {condition: service_completed_successfully}}
+    networks: [data]
+    healthcheck: {test: [CMD-SHELL, 'mongosh --quiet --tls --tlsCAFile /public-ca/ca.crt --host mongo --eval "db.adminCommand({ping:1}).ok"'], interval: 5s, timeout: 5s, retries: 24}
+    mem_limit: 512m
+  master:
+    <<: *spark
+    hostname: master
+    entrypoint: [/opt/spark/bin/spark-class,org.apache.spark.deploy.master.Master,--host,master,--port,'7077']
+    volumes: !override ['spark-auth:/spark-auth:ro','public-ca:/public-ca:ro']
+    networks: !override [compute]
+    environment: {SPARK_CONF_DIR: /spark-auth, SPARK_DAEMON_MEMORY: 256m}
+    depends_on: {init: {condition: service_completed_successfully}}
+    healthcheck: {test: [CMD,python3,-c,'import urllib.request; urllib.request.urlopen("http://master:8080/json/",timeout=3)'], interval: 5s, timeout: 5s, retries: 24}
+    mem_limit: 512m
+  worker:
+    <<: *spark
+    hostname: worker
+    entrypoint: [/bin/bash,/runtime/spark.sh,worker]
+    volumes: !override
+      - ../../src:/project/src:ro
+      - ../../tests:/project/tests:ro
+      - alice-identity:/etc/bc1:ro
+      - spark-auth:/spark-auth:ro
+      - public-ca:/public-ca:ro
+      - ./spark.sh:/runtime/spark.sh:ro
+      - ../../scripts/check_spark_worker.py:/runtime/check_worker.py:ro
+      - consumer-identity:/identity:ro
+    healthcheck:
+      test: [CMD,python3,/runtime/check_worker.py,--master-url,'http://master:8080/json/']
+      interval: 15s
+      timeout: 5s
+      retries: 12
+      start_period: 15s
+    depends_on: {master: {condition: service_healthy}, lake-admin: {condition: service_completed_successfully}}
+  import-models:
+    image: rncp-bc1-hadoop-secure:3.4.3
+    profiles: [jobs]
+    user: '1000:1000'
+    environment: {KRB5_CONFIG: /etc/bc1/krb5.conf, JAVA_TOOL_OPTIONS: '-Djava.security.krb5.conf=/etc/bc1/krb5.conf'}
+    entrypoint: [/bin/bash,-ec]
+    command: ['kinit -kt /etc/bc1/service.keytab alice@BC1.TEST; if hdfs dfs -test -e /bc1/private/training-sample64-seed42-restored-v2; then exit 2; fi; hdfs dfs -mkdir -p /bc1/private/training-sample64-seed42-restored-v2/curated; hdfs dfs -put /transfer/curated/*.parquet /bc1/private/training-sample64-seed42-restored-v2/curated/; hdfs dfs -put /transfer/models /bc1/private/training-sample64-seed42-restored-v2/models']
+    volumes: ['alice-identity:/etc/bc1:ro','../../exports/certification-model-transfer:/transfer:ro']
+    networks: [lake]
+    mem_limit: 512m
+  driver:
+    <<: *spark
+    profiles: [jobs]
+    entrypoint: [/bin/bash,/runtime/spark.sh]
+    volumes: !override
+      - ../../src:/project/src:ro
+      - ../../tests:/project/tests:ro
+      - ../../data:/project/data:ro
+      - ../../exports:/project/exports
+      - alice-identity:/etc/bc1:ro
+      - spark-auth:/spark-auth:ro
+      - public-ca:/public-ca:ro
+      - consumer-identity:/identity:ro
+      - ../../tmp/spark-maintenance/connectors:/connectors-extra:ro
+      - ./spark.sh:/runtime/spark.sh:ro
+      - ./connectors.lock.json:/runtime/connectors.lock.json:ro
+      - ../../scripts/fetch-connectors.py:/runtime/fetch-connectors.py:ro
+    depends_on: {worker: {condition: service_started}, kafka-admin: {condition: service_completed_successfully}}
+  producer:
+    <<: *spark
+    profiles: [jobs]
+    entrypoint: [python3,-m,rncp_bc1.producer]
+    environment: {BC1_KAFKA_TLS_DIR: /producer-identity}
+    volumes: !override ['../../src:/project/src:ro','../../data:/project/data:ro','producer-identity:/producer-identity:ro']
+    networks: !override [bus]
+    depends_on: {kafka-admin: {condition: service_completed_successfully}}
+    mem_limit: 256m
+  api:
+    image: rncp-bc1-api-secure:0.2.0
+    user: '10001:10001'
+    environment: {POSTGRES_APP_PASSWORD: '${POSTGRES_APP_PASSWORD:?}', MONGO_APP_PASSWORD: '${MONGO_APP_PASSWORD:?}', BC1_DB_TLS_CA: /public-ca/ca.crt, LLM_BASE_URL: 'http://ollama:11434', LLM_MODEL: 'qwen2.5:3b'}
+    entrypoint: [python,-m,uvicorn,rncp_bc1.api:app,--host,0.0.0.0,--port,'8443',--ssl-certfile,/identity/cert.pem,--ssl-keyfile,/identity/key.pem,--no-access-log,--no-proxy-headers]
+    volumes: ['../../src:/project/src:ro','../../tests:/project/tests:ro','../llm.lock.json:/project/infra/llm.lock.json:ro','api-identity:/identity:ro','public-ca:/public-ca:ro']
+    ports: ['127.0.0.1:8443:8443']
+    read_only: true
+    tmpfs: ['/tmp:size=32m,mode=1777']
+    cap_drop: [ALL]
+    security_opt: [no-new-privileges:true]
+    networks: [data,consultation,ai]
+    depends_on: {postgres: {condition: service_healthy}, mongo: {condition: service_healthy}}
+    healthcheck:
+      test: [CMD,python,-c,'import ssl,urllib.request; urllib.request.urlopen("https://api:8443/health/ready",context=ssl.create_default_context(cafile="/public-ca/ca.crt"),timeout=6)']
+      interval: 10s
+      timeout: 8s
+      retries: 24
+    mem_limit: 256m
+  ollama:
+    image: ${OLLAMA_IMAGE:?}
+    profiles: [genai]
+    environment: {OLLAMA_NUM_PARALLEL: '1', OLLAMA_MAX_LOADED_MODELS: '1'}
+    volumes:
+      - ollama-state:/root/.ollama
+      - type: volume
+        source: ollama-model-cache
+        target: /root/.ollama/models
+        read_only: true
+        volume: {subpath: models}
+    networks: [ai]
+    mem_limit: 4g
+  browser-tests:
+    image: rncp-bc1-browser-tests:1
+    build: {context: ../browser-tests, dockerfile: Dockerfile}
+    profiles: [tests]
+    environment: {API_TOKEN_READER: '${API_TOKEN_READER:?}', BC1_API_BASE_URL: 'https://api:8443'}
+    volumes: ['../../tests:/project/tests:ro','../../docs/evidence/p10:/evidence']
+    networks: [consultation]
+    mem_limit: 768m
+  security-tests:
+    image: rncp-bc1-api-secure:0.2.0
+    profiles: [tests]
+    entrypoint: [python,tests/integration/check_integrated_security.py]
+    environment: {POSTGRES_APP_PASSWORD: '${POSTGRES_APP_PASSWORD:?}', MONGO_APP_PASSWORD: '${MONGO_APP_PASSWORD:?}', BC1_DB_TLS_CA: /public-ca/ca.crt}
+    volumes: ['../../src:/project/src:ro','../../tests:/project/tests:ro','public-ca:/public-ca:ro']
+    networks: [consultation,data]
+    mem_limit: 256m
+  api-tests:
+    image: rncp-bc1-api-secure:0.2.0
+    profiles: [tests]
+    entrypoint: [python,-m,unittest,discover,-s,tests/integration,-v]
+    environment: {API_TOKEN_READER: '${API_TOKEN_READER:?}', API_TOKEN_ANALYST: '${API_TOKEN_ANALYST:?}', BC1_API_BASE_URL: 'https://api:8443', BC1_API_TLS_CA: /public-ca/ca.crt}
+    volumes: ['../../src:/project/src:ro','../../tests:/project/tests:ro','public-ca:/public-ca:ro']
+    networks: [consultation]
+    mem_limit: 256m
+networks:
+  acquisition: {}
+  consultation: {}
+  lake: {internal: true}
+  bus: {internal: true}
+  coordination: {internal: true}
+  data: {internal: true}
+  compute: {internal: true}
+  api: {internal: true}
+  ai: {internal: true}
+volumes:
+  kdc:
+  nn-identity:
+  dn-identity:
+  admin-identity:
+  alice-identity:
+  bob-identity:
+  namenode-data:
+  datanode-data:
+  kafka-ca:
+  broker-identity:
+  kafka-admin-identity:
+  producer-identity:
+  consumer-identity:
+  intruder-identity:
+  broker-data:
+  zk-data:
+  service-ca:
+  public-ca:
+  pg-identity:
+  mongo-identity:
+  api-identity:
+  spark-auth:
+  postgres-data:
+  postgres-data-v2:
+  mongo-data:
+  mongo-data-v2:
+  ollama-state:
+  ollama-model-cache: {external: true, name: rncp-bc1_ollama-models}

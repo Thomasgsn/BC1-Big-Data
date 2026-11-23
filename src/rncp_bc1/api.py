@@ -5,13 +5,15 @@ from functools import lru_cache
 import hashlib
 import json
 import os
+from pathlib import Path as FilePath
 import time
 from typing import Annotated, Literal
 from uuid import UUID, uuid4
 
 from bson import Decimal128, ObjectId
 from fastapi import Depends, FastAPI, Header, HTTPException, Path, Query, Request, Response
-from fastapi.responses import JSONResponse
+from fastapi.responses import JSONResponse, FileResponse
+from fastapi.staticfiles import StaticFiles
 from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
 from pydantic import BaseModel, ConfigDict, Field, field_validator
 import psycopg
@@ -21,24 +23,34 @@ from pymongo.errors import PyMongoError
 from starlette.middleware.trustedhost import TrustedHostMiddleware
 
 from rncp_bc1.genai import generate, GenerationError
+from rncp_bc1.security import sql_tls_options, mongo_tls_options
 
 app = FastAPI(title="BC1 — Investigation de transactions synthétiques", version="0.1.0",
               description="Lecteur : consultation. Analyste : dossiers, décisions et brouillons. Quota général : 60 requêtes/minute/identité ; génération : 5/minute. Les scores ne prouvent pas une fraude.")
 app.add_middleware(TrustedHostMiddleware, allowed_hosts=["127.0.0.1", "localhost", "api", "testserver"])
 bearer = HTTPBearer(auto_error=False)
+web_directory = FilePath(__file__).parent / "web"
+app.mount("/assets", StaticFiles(directory=web_directory), name="assets")
 TransactionId = Annotated[str, Path(pattern=r"^[0-9a-f]{64}$")]
+
+
+@app.get("/", include_in_schema=False)
+def consultation():
+    return FileResponse(web_directory / "index.html", headers={
+        "Content-Security-Policy": "default-src 'self'; script-src 'self'; style-src 'self'; connect-src 'self'; frame-ancestors 'none'; base-uri 'none'; form-action 'self'",
+        "Cache-Control": "no-store", "X-Content-Type-Options": "nosniff", "Referrer-Policy": "no-referrer"})
 
 
 def connect_sql():
     return psycopg.connect(host="postgres", dbname="bc1", user="bc1app", password=os.environ["POSTGRES_APP_PASSWORD"],
-                           connect_timeout=3, options="-c statement_timeout=5000", row_factory=dict_row)
+                           connect_timeout=3, options="-c statement_timeout=5000", row_factory=dict_row, **sql_tls_options())
 
 
 @lru_cache
 def mongo():
     return MongoClient(host="mongo", port=27017, username="bc1app", password=os.environ["MONGO_APP_PASSWORD"],
                        authSource="fraud", serverSelectionTimeoutMS=3000, connectTimeoutMS=3000,
-                       maxPoolSize=10, tz_aware=True)["fraud"]
+                       maxPoolSize=10, tz_aware=True, **mongo_tls_options())["fraud"]
 
 
 def serializable(value):
@@ -126,7 +138,7 @@ def ready():
 
 @app.get("/v1/alerts", summary="Lister les alertes modèle paginées")
 def alerts(limit: int = Query(20, ge=1, le=100), offset: int = Query(0, ge=0, le=10000), principal: dict = Depends(user)):
-    cursor = mongo().fraud_scores.find({"is_alert": True}).sort("scored_at", DESCENDING).skip(offset).limit(limit)
+    cursor = mongo().fraud_scores.find({"is_alert": True}).sort([("scored_at", DESCENDING), ("_id", 1)]).skip(offset).limit(limit)
     return {"items": serializable(list(cursor)), "limit": limit, "offset": offset, "synthetic_data": True}
 
 

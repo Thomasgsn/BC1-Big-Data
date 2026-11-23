@@ -3,12 +3,15 @@
 import json
 from concurrent.futures import ThreadPoolExecutor
 import os
+import ssl
+import time
 import unittest
 import urllib.error
 import urllib.request
 from uuid import uuid4
 
-BASE = "http://api:8000"
+BASE = os.environ.get("BC1_API_BASE_URL", "http://api:8000")
+TLS = ssl.create_default_context(cafile=os.environ["BC1_API_TLS_CA"]) if os.environ.get("BC1_API_TLS_CA") else None
 
 
 class ApiIntegrationTest(unittest.TestCase):
@@ -26,7 +29,7 @@ class ApiIntegrationTest(unittest.TestCase):
             headers["Content-Type"] = "application/json"
         request = urllib.request.Request(BASE+path, data=payload, headers=headers, method=method)
         try:
-            with urllib.request.urlopen(request, timeout=130) as response:
+            with urllib.request.urlopen(request, timeout=130, context=TLS) as response:
                 status, raw, response_headers = response.status, response.read(2_000_000), response.headers
         except urllib.error.HTTPError as error:
             status, raw, response_headers = error.code, error.read(2_000_000), error.headers
@@ -89,14 +92,24 @@ class ApiIntegrationTest(unittest.TestCase):
         self.assertEqual(len({x[1]["decision_id"] for x in replies}), 1)
 
     def test_z_quota_is_enforced(self):
-        statuses = []
-        for _ in range(65):
-            status, body, headers = self.request("/v1/alerts?limit=1", self.reader)
-            statuses.append(status)
-            if status == 429:
-                self.assertTrue(1 <= int(headers["Retry-After"]) <= 60)
-                break
-        self.assertIn(429, statuses)
+        # Une boucle lente traversant plusieurs minutes ne dépasse pas forcément
+        # 60/minute. Aligner l'essai sur la vraie fenêtre, sans modifier l'horloge
+        # de l'API ni remettre les compteurs à zéro artificiellement.
+        for attempt in range(2):
+            remaining = 60 - time.time() % 60
+            if remaining < 40:
+                time.sleep(remaining + .1)
+            window = int(time.time() // 60)
+            with ThreadPoolExecutor(max_workers=12) as executor:
+                responses = list(executor.map(lambda _: self.request("/v1/alerts?limit=1", self.reader), range(65)))
+            self.assertTrue(all(status in (200, 429) for status, _, _ in responses))
+            limited = [headers for status, _, headers in responses if status == 429]
+            if limited:
+                self.assertTrue(all(1 <= int(headers["Retry-After"]) <= 60 for headers in limited))
+                return
+            if int(time.time() // 60) == window:
+                self.fail("Plus de 60 requêtes dans une fenêtre sans refus 429")
+        self.fail("Essai trop lent : deux lots ont chevauché les fenêtres de quota")
 
 
 if __name__ == "__main__":

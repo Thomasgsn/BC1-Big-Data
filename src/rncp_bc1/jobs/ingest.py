@@ -3,6 +3,7 @@
 import argparse
 import json
 import time
+import math
 
 from rncp_bc1.dataset import DECIMAL_FIELDS, TYPES
 from rncp_bc1.transactions import ID_PATTERN
@@ -75,11 +76,15 @@ def main():
                         help="Seulement au premier démarrage ; un checkpoint existant fait autorité")
     parser.add_argument("--duration-seconds", type=int, default=0,
                         help="Arrêter proprement un flux permanent après cette durée (0 : sans limite)")
+    parser.add_argument("--observe-visible", action="store_true",
+                        help="Mesurer la première lecture Parquet validée ; flux borné, 10 000 identités maximum")
     args = parser.parse_args()
     if not ID_PATTERN.fullmatch(args.run_id):
         parser.error("run-id invalide")
     if args.duration_seconds < 0 or (args.once and args.duration_seconds):
         parser.error("Durée positive réservée au mode permanent")
+    if args.observe_visible and not args.duration_seconds:
+        parser.error("L'observation nécessite un flux permanent borné par --duration-seconds")
     from pyspark.sql import SparkSession, functions as F
     spark = (SparkSession.builder.appName("bc1-ingestion").config("spark.sql.session.timeZone", "UTC")
              .config("spark.sql.shuffle.partitions", "2")
@@ -91,8 +96,10 @@ def main():
     queries = []
     try:
         from rncp_bc1.streaming_state import guard_streaming_state
+        from rncp_bc1.security import kafka_stream_options
         guard_streaming_state(spark, root)
         source = (spark.readStream.format("kafka").option("kafka.bootstrap.servers", args.bootstrap_servers)
+                  .options(**kafka_stream_options())
                   .option("subscribe", args.topic).option("startingOffsets", args.starting_offsets)
                   .option("failOnDataLoss", "true").option("maxOffsetsPerTrigger", "10000").load())
         parsed, valid = classified(source, args.run_id)
@@ -142,7 +149,35 @@ def main():
             print(json.dumps({"event": "stream_ready", "run_id": args.run_id,
                               "starting_offsets": args.starting_offsets}), flush=True)
             if args.duration_seconds:
-                spark.streams.awaitAnyTermination(args.duration_seconds)
+                if args.observe_visible:
+                    deadline = time.monotonic() + args.duration_seconds
+                    seen = {}
+                    polls = 0
+                    while time.monotonic() < deadline:
+                        if any(q.exception() is not None for q in queries):
+                            raise RuntimeError("Échec streaming pendant l'observation de visibilité")
+                        rows = (spark.read.schema(unique.schema).parquet(root + "/curated")
+                                .select("transaction_id", F.col("emitted_at").cast("double").alias("emitted"))
+                                .limit(10001).collect())
+                        observed_at = time.time()
+                        polls += 1
+                        if len(rows) > 10000:
+                            raise RuntimeError("Observation limitée à 10 000 identités")
+                        for row in rows:
+                            if row.emitted is None or observed_at < row.emitted:
+                                raise ValueError("Horodatage non comparable à l'horloge d'observation")
+                            seen.setdefault(row.transaction_id, observed_at - row.emitted)
+                        time.sleep(min(5, max(0, deadline - time.monotonic())))
+                    values = sorted(seen.values())
+                    print(json.dumps({"event": "committed_visibility_observed", "run_id": args.run_id,
+                                      "rows": len(values), "polls": polls,
+                                      "seconds": {"min": values[0] if values else None,
+                                                  "p95": values[math.ceil(.95 * len(values)) - 1] if values else None,
+                                                  "max": values[-1] if values else None},
+                                      "definition": "emitted_at to completed first successful Parquet reader collect; upper bound includes polling, reader and observer overhead",
+                                      "poll_interval_seconds": 5, "scope": "Bounded 10000-row same-host observation; no production latency guarantee"}), flush=True)
+                else:
+                    spark.streams.awaitAnyTermination(args.duration_seconds)
             else:
                 spark.streams.awaitAnyTermination()
         print(json.dumps({"event": "ingestion_completed", "run_id": args.run_id, "root": root,

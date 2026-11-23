@@ -1,4 +1,8 @@
-"""Comparaison chronologique de deux pipelines Spark MLlib ; pas de solde prédictif."""
+"""Comparaison chronologique de deux pipelines Spark MLlib ; pas de solde prédictif.
+
+Le jeu destination_history ajoute l'historique antérieur du compte destinataire
+(voir account_features) ; le compte lui-même n'est jamais une variable du modèle.
+"""
 
 import argparse
 from datetime import datetime, timezone
@@ -6,7 +10,25 @@ import json
 import time
 
 from rncp_bc1.model_metrics import confusion_metrics, select_threshold
+from rncp_bc1.jobs.account_features import FEATURE_SETS, add_destination_history, features_for
 from rncp_bc1.transactions import ID_PATTERN
+
+
+def step_quantiles(step_counts, fractions):
+    """Plus petit step dont l'effectif cumulé atteint chaque fraction des lignes."""
+    ordered = sorted(step_counts)
+    total = sum(count for _, count in ordered)
+    if total <= 0:
+        raise ValueError("Aucune ligne à découper.")
+    result = []
+    for fraction in fractions:
+        target, cumulative = fraction * total, 0
+        for step, count in ordered:
+            cumulative += count
+            if cumulative >= target:
+                result.append(step)
+                break
+    return result
 
 
 def evaluate(predictions, threshold):
@@ -29,7 +51,7 @@ def aucs(predictions):
             for key, metric in [("auc_roc", "areaUnderROC"), ("auc_pr", "areaUnderPR")]}
 
 
-def build_pipeline(kind, seed):
+def build_pipeline(kind, seed, feature_set="baseline"):
     from pyspark.ml import Pipeline
     from pyspark.ml.classification import LogisticRegression, RandomForestClassifier
     from pyspark.ml.feature import SQLTransformer, StringIndexer, OneHotEncoder, VectorAssembler, StandardScaler
@@ -38,7 +60,7 @@ def build_pipeline(kind, seed):
       COS((step - 1) % 24 * 6.283185307179586 / 24) AS hour_cos FROM __THIS__""")
     indexer = StringIndexer(inputCol="type", outputCol="type_index", handleInvalid="keep")
     encoder = OneHotEncoder(inputCol="type_index", outputCol="type_vector", handleInvalid="keep")
-    assembler = VectorAssembler(inputCols=["log_amount", "hour_sin", "hour_cos", "type_vector"], outputCol="unscaled_features")
+    assembler = VectorAssembler(inputCols=features_for(feature_set), outputCol="unscaled_features")
     scaler = StandardScaler(inputCol="unscaled_features", outputCol="features", withStd=True, withMean=False)
     if kind == "logistic_regression":
         classifier = LogisticRegression(featuresCol="features", labelCol="isFraud", weightCol="class_weight", maxIter=50, regParam=0.1)
@@ -56,6 +78,7 @@ def main():
     parser.add_argument("--model-version", required=True)
     parser.add_argument("--base", default="hdfs://namenode:8020/bc1")
     parser.add_argument("--seed", type=int, default=42)
+    parser.add_argument("--feature-set", choices=FEATURE_SETS, default="baseline")
     args = parser.parse_args()
     if not all(ID_PATTERN.fullmatch(x) for x in [args.run_id, args.model_version]):
         parser.error("run-id ou version invalide")
@@ -67,10 +90,18 @@ def main():
     try:
         root = args.base.rstrip("/") + "/" + args.run_id
         # La liste positive supprime physiquement les soldes, comptes et drapeau historique avant le ML.
-        data = spark.read.parquet(root+"/curated").select("transaction_id", "step", "type", "amount", "isFraud").dropDuplicates(["transaction_id"])
+        columns = ["transaction_id", "step", "type", "amount", "isFraud"]
+        if args.feature_set == "destination_history":
+            columns.append("target")
+        data = spark.read.parquet(root+"/curated").select(*columns).dropDuplicates(["transaction_id"])
+        if args.feature_set == "destination_history":
+            # Calcul sur toute la chronologie avant découpage : chaque ligne ne voit que des steps antérieurs.
+            data = add_destination_history(data).drop("target")
         if data.select("step").distinct().count() < 5:
             raise ValueError("Au moins cinq steps distincts requis pour un découpage temporel défendable ; ingérer une période plus longue.")
-        train_end, validation_end = [int(x) for x in data.approxQuantile("step", [0.6, 0.8], 0.0)]
+        # Quantiles exacts par effectifs de step : quelques centaines de lignes rapatriées, pas toutes les valeurs.
+        train_end, validation_end = step_quantiles([(int(r["step"]), int(r["count"])) for r in
+                                                    data.groupBy("step").count().collect()], [0.6, 0.8])
         train = data.filter(F.col("step") <= train_end).cache()
         validation = data.filter((F.col("step") > train_end) & (F.col("step") <= validation_end)).cache()
         test = data.filter(F.col("step") > validation_end).cache()
@@ -88,7 +119,7 @@ def main():
         fitted = {}
         for name in ["logistic_regression", "random_forest"]:
             started = time.monotonic()
-            model = build_pipeline(name, args.seed).fit(train)
+            model = build_pipeline(name, args.seed, args.feature_set).fit(train)
             fit_seconds = time.monotonic()-started
             predictions = model.transform(validation).cache()
             try:
@@ -115,7 +146,7 @@ def main():
         report = {"created_at_utc": datetime.now(timezone.utc).isoformat(), "run_id": args.run_id,
                   "model_version": args.model_version, "seed": args.seed,
                   "split": {"train_end_step": train_end, "validation_end_step": validation_end, "classes": distribution},
-                  "features": ["log_amount", "hour_sin", "hour_cos", "type_vector"],
+                  "feature_set": args.feature_set, "features": features_for(args.feature_set),
                   "excluded": ["oldbalanceOrg", "newbalanceOrig", "oldbalanceDest", "newbalanceDest", "isFlaggedFraud", "account_ids"],
                   "baseline_always_negative": confusion_metrics(0, 0, distribution["test"]["negative"], distribution["test"]["positive"]),
                   "candidates": candidates, "test": tests, "selected": selected["name"],

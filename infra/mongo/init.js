@@ -8,5 +8,6 @@ for (const name of ["transaction_metrics", "graph_nodes", "graph_edges", "fraud_
 }
 fraud.fraud_scores.createIndex({transaction_id: 1, model_version: 1}, {unique: true});
 fraud.fraud_scores.createIndex({is_alert: 1, scored_at: -1});
+fraud.fraud_scores.createIndex({is_alert: 1, scored_at: -1, _id: 1}, {name: "alert_order"});
 fraud.graph_edges.createIndex({source: 1, target: 1});
 fraud.generated_explanations.createIndex({transaction_id: 1, created_at: -1});

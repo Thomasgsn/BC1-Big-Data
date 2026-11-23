@@ -1,0 +1,174 @@
+{
+  "scope": "Spark 3.5.9 runtime: Netty 4.1.141, Hadoop client 3.4.3, ZooKeeper 3.8.6; remove unused embedded Hive/Derby/Jackson1; JVM 17, Linux x86_64 native transport, generic NIO fallback",
+  "artifacts": [
+    {
+      "group": "io.netty",
+      "artifact": "netty-transport-classes-kqueue",
+      "version": "4.1.141.Final",
+      "classifier": "",
+      "url": "https://repo.maven.apache.org/maven2/io/netty/netty-transport-classes-kqueue/4.1.141.Final/netty-transport-classes-kqueue-4.1.141.Final.jar",
+      "sha512": "755225f25117c038919c777a248c6bbaee867fcbeee1ac9f86acdcec720c241f8f02ee8c4bea8a1677568719915396910e5b89553505bc2c5692554accf6b7a0"
+    },
+    {
+      "group": "io.netty",
+      "artifact": "netty-common",
+      "version": "4.1.141.Final",
+      "classifier": "",
+      "url": "https://repo.maven.apache.org/maven2/io/netty/netty-common/4.1.141.Final/netty-common-4.1.141.Final.jar",
+      "sha512": "19e875ed8ceb4bfdd0682882a08d7e3fb3894d597e05136228ebde6261680f1ae0605c631a8dbb3bd4c931a14f4d8879298a56310436c7a2a3bbf8891b2d2747"
+    },
+    {
+      "group": "io.netty",
+      "artifact": "netty-codec-socks",
+      "version": "4.1.141.Final",
+      "classifier": "",
+      "url": "https://repo.maven.apache.org/maven2/io/netty/netty-codec-socks/4.1.141.Final/netty-codec-socks-4.1.141.Final.jar",
+      "sha512": "264e901a47c8c7ded1af753cdb11145e5f2eead15d836672ace063a6abca453ed395687c2afda651bcb527de5fdfa69e428b1178ea01a4388786cd8261ddaf09"
+    },
+    {
+      "group": "io.netty",
+      "artifact": "netty-transport",
+      "version": "4.1.141.Final",
+      "classifier": "",
+      "url": "https://repo.maven.apache.org/maven2/io/netty/netty-transport/4.1.141.Final/netty-transport-4.1.141.Final.jar",
+      "sha512": "c07b0697d6120b7e3fb128c64155fd9ec0d734fe17f54eea1bc243e491c4d9aeeea816ed5a0da345226603663a79be0490b4a7b03e2ebb163a12a6b6cf24ebdd"
+    },
+    {
+      "group": "io.netty",
+      "artifact": "netty-handler",
+      "version": "4.1.141.Final",
+      "classifier": "",
+      "url": "https://repo.maven.apache.org/maven2/io/netty/netty-handler/4.1.141.Final/netty-handler-4.1.141.Final.jar",
+      "sha512": "fba540e87639998bf7d267e992bfe6d59dda099885eb6bec22f60756eb16c6a8a6e967f7fb251868493fb3c5c550751bea2342f2e2d13dc51e9f52959bec761c"
+    },
+    {
+      "group": "io.netty",
+      "artifact": "netty-all",
+      "version": "4.1.141.Final",
+      "classifier": "",
+      "url": "https://repo.maven.apache.org/maven2/io/netty/netty-all/4.1.141.Final/netty-all-4.1.141.Final.jar",
+      "sha512": "8f9052f367fa98b817ffd39f31a74bb4977012e3fe1fc701ac67fa9781bafa2621d9d6b18ae4861d78248025d9e74a4b5e2d3fe3ca7e060723367db93627002a"
+    },
+    {
+      "group": "io.netty",
+      "artifact": "netty-transport-classes-epoll",
+      "version": "4.1.141.Final",
+      "classifier": "",
+      "url": "https://repo.maven.apache.org/maven2/io/netty/netty-transport-classes-epoll/4.1.141.Final/netty-transport-classes-epoll-4.1.141.Final.jar",
+      "sha512": "b03ef9b43008e4b29ba762e91afb1fbff2a83e9d5e5d15953c742ecb4094ea6f705dd8e14a13bc5263be523d8f92e52798cf0cea8cfc843deb5ec28ecc7b5977"
+    },
+    {
+      "group": "io.netty",
+      "artifact": "netty-handler-proxy",
+      "version": "4.1.141.Final",
+      "classifier": "",
+      "url": "https://repo.maven.apache.org/maven2/io/netty/netty-handler-proxy/4.1.141.Final/netty-handler-proxy-4.1.141.Final.jar",
+      "sha512": "a90db3609a3a2da25da1f8627997769159933f43c67260af74c650a91d8c062f08fb548845fc8d74fedf080fd892e010329d8ea5338fd944cb5688b806abc88c"
+    },
+    {
+      "group": "io.netty",
+      "artifact": "netty-codec-http",
+      "version": "4.1.141.Final",
+      "classifier": "",
+      "url": "https://repo.maven.apache.org/maven2/io/netty/netty-codec-http/4.1.141.Final/netty-codec-http-4.1.141.Final.jar",
+      "sha512": "ef23e508367b5bd6583b70803653805805f2f647718ebe295bddf3fe284d57df1e02f25e02710ce57b9c421099b8c2c23207674804d689b6afafd78f1486e013"
+    },
+    {
+      "group": "io.netty",
+      "artifact": "netty-transport-native-unix-common",
+      "version": "4.1.141.Final",
+      "classifier": "",
+      "url": "https://repo.maven.apache.org/maven2/io/netty/netty-transport-native-unix-common/4.1.141.Final/netty-transport-native-unix-common-4.1.141.Final.jar",
+      "sha512": "d5b21ed14d657e7f278bfb14cffeedc01bd466b852dddd4353f97cf348834b7d958ef5af7984fd0a24808243732d7f4914d3c8ff2fae36384a4dc233b2935945"
+    },
+    {
+      "group": "io.netty",
+      "artifact": "netty-codec",
+      "version": "4.1.141.Final",
+      "classifier": "",
+      "url": "https://repo.maven.apache.org/maven2/io/netty/netty-codec/4.1.141.Final/netty-codec-4.1.141.Final.jar",
+      "sha512": "191e3827b5d988acacf46b5f55bbac11e1cd9fdad6ef1a87dea3d61276e239a4cde041e54eaed47325e4439fa2c0c78d3f7428f5e27606890e6f5730fbc62f57"
+    },
+    {
+      "group": "io.netty",
+      "artifact": "netty-codec-http2",
+      "version": "4.1.141.Final",
+      "classifier": "",
+      "url": "https://repo.maven.apache.org/maven2/io/netty/netty-codec-http2/4.1.141.Final/netty-codec-http2-4.1.141.Final.jar",
+      "sha512": "c7dd34ca06001386273c3662ce299afe8727980435619f4be5326ea93f243c59f0cacae5f2be8d21661f58af3b0ed10688fb3a1e2a2d6ec40cd1dee9f18e8a30"
+    },
+    {
+      "group": "io.netty",
+      "artifact": "netty-transport-native-epoll",
+      "version": "4.1.141.Final",
+      "classifier": "linux-x86_64",
+      "url": "https://repo.maven.apache.org/maven2/io/netty/netty-transport-native-epoll/4.1.141.Final/netty-transport-native-epoll-4.1.141.Final-linux-x86_64.jar",
+      "sha512": "d204b112618bfda3d289acfd7d619f707473fd20e2f6f15f39ccb316c419103e37c828394d51b5b0f3e228905f1d68b77c1ae0b2be72213b8c7279290a5f2f34"
+    },
+    {
+      "group": "io.netty",
+      "artifact": "netty-transport-native-epoll",
+      "version": "4.1.141.Final",
+      "classifier": "",
+      "url": "https://repo.maven.apache.org/maven2/io/netty/netty-transport-native-epoll/4.1.141.Final/netty-transport-native-epoll-4.1.141.Final.jar",
+      "sha512": "a412dd9ad3a8958fc249bc5799d1ce01274948d550d4554d135e5aa4c84ddde38f43d5a09c966b5ae20b43458c083da4d0c4e6604e79185a62fb9073d22911a9"
+    },
+    {
+      "group": "io.netty",
+      "artifact": "netty-buffer",
+      "version": "4.1.141.Final",
+      "classifier": "",
+      "url": "https://repo.maven.apache.org/maven2/io/netty/netty-buffer/4.1.141.Final/netty-buffer-4.1.141.Final.jar",
+      "sha512": "2774edbc1ba8e22d4db11119af71140ae78ca31704e083d2b2b2ab8e1c00f3f0c571ad2afd9fd2a53cc0721186904c15ab898a3afe1517ddb8eafe7dda9c41cd"
+    },
+    {
+      "group": "io.netty",
+      "artifact": "netty-resolver",
+      "version": "4.1.141.Final",
+      "classifier": "",
+      "url": "https://repo.maven.apache.org/maven2/io/netty/netty-resolver/4.1.141.Final/netty-resolver-4.1.141.Final.jar",
+      "sha512": "2e7697812e7a46bc339c2be16e65fd0b3d5a637733c5e1fb697f185bd13003c317d74c2a2b0b6847f7fbf5dd41e350abd231239335f0990aa6fa3243220f0a7b"
+    },
+    {
+      "group": "org.apache.hadoop",
+      "artifact": "hadoop-client-api",
+      "version": "3.4.3",
+      "classifier": "",
+      "url": "https://repo.maven.apache.org/maven2/org/apache/hadoop/hadoop-client-api/3.4.3/hadoop-client-api-3.4.3.jar",
+      "sha256": "6443332781f26a7199009d9517cd1eb013fbf54ca1c9759a2a9e487542b1d52a",
+      "published_checksum_algorithm": "sha1",
+      "published_checksum": "d58e69f03804f4b0e48d80b911baea3fc4edf71d"
+    },
+    {
+      "group": "org.apache.hadoop",
+      "artifact": "hadoop-client-runtime",
+      "version": "3.4.3",
+      "classifier": "",
+      "url": "https://repo.maven.apache.org/maven2/org/apache/hadoop/hadoop-client-runtime/3.4.3/hadoop-client-runtime-3.4.3.jar",
+      "sha256": "bd20267b0555766ae84697dd888f074ca326d8e2ec3c0008928a6ac2966c67de",
+      "published_checksum_algorithm": "sha1",
+      "published_checksum": "f966e408cfc1f42e6b888a753713cfdabd3ae794"
+    },
+    {
+      "group": "org.apache.zookeeper",
+      "artifact": "zookeeper",
+      "version": "3.8.6",
+      "classifier": "",
+      "url": "https://repo.maven.apache.org/maven2/org/apache/zookeeper/zookeeper/3.8.6/zookeeper-3.8.6.jar",
+      "sha256": "a00943a87b9c83379267ebda487be1ddb83e9997a03e59f9199338a033b71ed7",
+      "published_checksum_algorithm": "sha1",
+      "published_checksum": "763093ac53585129a66f6794b3f56874fc62a149"
+    },
+    {
+      "group": "org.apache.zookeeper",
+      "artifact": "zookeeper-jute",
+      "version": "3.8.6",
+      "classifier": "",
+      "url": "https://repo.maven.apache.org/maven2/org/apache/zookeeper/zookeeper-jute/3.8.6/zookeeper-jute-3.8.6.jar",
+      "sha256": "640777a745364b617d05a0309cd2edc5d725d76f9d93e2b29f07561da9575efb",
+      "published_checksum_algorithm": "sha1",
+      "published_checksum": "ffa3fc7581f3b79a711bebfd3489b88b581e48c0"
+    }
+  ],
+  "provenance": "HTTPS Maven Central, SHA512 where published; other initial acquisitions checked with published SHA1 and pinned by SHA256; no PGP verification claimed"
+}

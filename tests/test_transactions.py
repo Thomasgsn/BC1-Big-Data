@@ -6,7 +6,7 @@ import tempfile
 import unittest
 
 from rncp_bc1.dataset import HEADERS
-from rncp_bc1.producer import events, selected_source_row
+from rncp_bc1.producer import events, selected_destination, selected_source_row
 from rncp_bc1.transactions import ReplayContext, envelope, money, predictive_values
 
 
@@ -69,6 +69,25 @@ class TransactionTest(unittest.TestCase):
         self.assertTrue(all(selected_source_row("a"*64, n) for n in range(1, 100)))
         with self.assertRaises(ValueError):
             selected_source_row("a"*64, 1, 0)
+
+    def test_destination_sampling_keeps_whole_account_history(self):
+        accounts = [f"C{n}" for n in range(1000)]
+        kept = [a for a in accounts if selected_destination("a"*64, a, 8, 42)]
+        self.assertEqual(kept, [a for a in accounts if selected_destination("a"*64, a, 8, 42)])
+        self.assertNotEqual(kept, [a for a in accounts if selected_destination("a"*64, a, 8, 43)])
+        self.assertTrue(0 < len(kept) < 1000)
+        with tempfile.TemporaryDirectory() as directory:
+            path = Path(directory) / "sample.csv"
+            rows = [{**self.row, "nameDest": kept[0]}, {**self.row, "nameDest": kept[0]},
+                    {**self.row, "nameDest": next(a for a in accounts if a not in kept)}]
+            with path.open("w", newline="", encoding="utf-8") as stream:
+                writer = csv.DictWriter(stream, fieldnames=HEADERS)
+                writer.writeheader()
+                writer.writerows(rows)
+            selected = list(events(path, self.context, sample_modulus=8, sample_key="destination"))
+            self.assertEqual([x["source_row"] for x in selected], [1, 2])
+            with self.assertRaises(ValueError):
+                list(events(path, self.context, sample_key="inconnu"))
 
 
 if __name__ == "__main__":

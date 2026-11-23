@@ -1,0 +1,14 @@
+name: rncp-bc1-certification-connectors-audit
+services:
+  connectors:
+    image: rncp-bc1-api-secure:0.2.0
+    user: root
+    cap_drop: [ALL]
+    network_mode: none
+    volumes: ['../../tmp/security-tools/trivy:/tools/trivy:ro','cache:/cache','work:/tmp','../../tmp/spark-maintenance/connectors:/connectors:ro','../../docs/evidence/p10:/report']
+    entrypoint: [/tools/trivy]
+    command: [rootfs,--scanners,vuln,--offline-scan,--skip-db-update,--skip-java-db-update,--parallel,'1',--no-progress,--cache-dir,/cache,--format,json,--output,/report/connectors-rootfs-scan.json,/connectors]
+    mem_limit: 1024m
+volumes:
+  cache: {external: true, name: rncp-bc1-secure-hdfs-v1_scan-cache}
+  work: {}
