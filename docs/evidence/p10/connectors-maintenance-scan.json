@@ -1,0 +1,10 @@
+{
+  "SchemaVersion": 2,
+  "Trivy": {
+    "Version": "0.76.2"
+  },
+  "ReportID": "01a1ef7c-202a-78c7-8fa4-f03b3f4edf5b",
+  "CreatedAt": "2026-11-18T16:27:31.75458094Z",
+  "ArtifactName": "/connectors",
+  "ArtifactType": "filesystem"
+}

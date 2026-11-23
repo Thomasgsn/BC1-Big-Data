@@ -1,0 +1,50 @@
+{
+  "purpose": "Preserve pre-existing user formatting changes and explain why historical byte hashes can differ; original bytes remain in existing local Git history, no new commit",
+  "records": [
+    {
+      "path": "docs/evidence/p5/largest-five-components.svg",
+      "historical_git_revision": "28f92cb57ad7d8fd53b47bfa669df9e850d9a3c6",
+      "before_sha256": "cec8713c95af9151b667a798552d91b99c02566e2b6d02abe72cf455df1e94a9",
+      "current_sha256": "6fced8d6b5cb97b4e8a2acbefcfed022b8354a4772423615705e63b1809568a0",
+      "semantic_comparison": "XML canonicalization strip_text",
+      "same_semantic_content": true,
+      "new_experiment": false
+    },
+    {
+      "path": "docs/evidence/p5/report.json",
+      "historical_git_revision": "28f92cb57ad7d8fd53b47bfa669df9e850d9a3c6",
+      "before_sha256": "1ce88fd21aac5094be6c5557e10ade0837a8cbfd1cbfca13cf226b00a0fc5b24",
+      "current_sha256": "9d323785b786ccab62766db8efc7c65f8f03b74e22c2e8bf49a0534365432a55",
+      "semantic_comparison": "JSON value equality",
+      "same_semantic_content": true,
+      "new_experiment": false
+    },
+    {
+      "path": "docs/evidence/p8/python-api-audit.json",
+      "historical_git_revision": "28f92cb57ad7d8fd53b47bfa669df9e850d9a3c6",
+      "before_sha256": "ca22e57ee4c872a5a43accd91b9d06d4c4fe78b6bbd2cd91cb711348a931537a",
+      "current_sha256": "ef878c45b3c0a5f79ac1b392d5e914b26e4fb8237b0bf4c5a9328b4cba7bef95",
+      "semantic_comparison": "JSON value equality",
+      "same_semantic_content": true,
+      "new_experiment": false
+    },
+    {
+      "path": "docs/evidence/p8/python-runtime-audit-patched.json",
+      "historical_git_revision": "28f92cb57ad7d8fd53b47bfa669df9e850d9a3c6",
+      "before_sha256": "6fe9421754dc172e7dd76a5500fb9f1a048561acae1466c3642e7005cf511839",
+      "current_sha256": "862c4215621ebbedf39c1156a842553fda3751e29d342883cc4ecd928b04692a",
+      "semantic_comparison": "JSON value equality",
+      "same_semantic_content": true,
+      "new_experiment": false
+    },
+    {
+      "path": "docs/evidence/p8/python-runtime-audit.json",
+      "historical_git_revision": "28f92cb57ad7d8fd53b47bfa669df9e850d9a3c6",
+      "before_sha256": "38fac6e5e85da0956f2e98093e2aab3d9ca323ed647ab331b76917923cfb2388",
+      "current_sha256": "ab698a71de35f7396cdeb3bc3310721001e1fc0aef245c1e1002da70fa7011e7",
+      "semantic_comparison": "JSON value equality",
+      "same_semantic_content": true,
+      "new_experiment": false
+    }
+  ]
+}

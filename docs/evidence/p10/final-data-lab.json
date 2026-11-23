@@ -1,0 +1,13 @@
+{
+  "event": "data_lab_published",
+  "_id": "certification-final-v1-steps-1-1",
+  "snapshot_id": "certification-final-v1-steps-1-1",
+  "run_id": "certification-final-v1",
+  "step_from": 1,
+  "step_to": 1,
+  "transactions": 1000,
+  "nodes": 1597,
+  "edges": 1000,
+  "status": "complete",
+  "exit_code": 0
+}

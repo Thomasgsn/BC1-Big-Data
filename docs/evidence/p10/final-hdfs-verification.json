@@ -1,0 +1,61 @@
+{
+  "event": "hdfs_verified",
+  "run_id": "certification-final-v1",
+  "rows": 1000,
+  "raw_rows": 1000,
+  "quarantine_rows": 0,
+  "rejection_reasons": {},
+  "dataset_sha256": "16910f90577b0d981bf8ff289714510bb89bc71bff7d3f220f024e287e4eea6b",
+  "observed": {
+    "PAYMENT": {
+      "count": 437,
+      "amount": "2625877.47"
+    },
+    "DEBIT": {
+      "count": 51,
+      "amount": "254447.49"
+    },
+    "CASH_OUT": {
+      "count": 230,
+      "amount": "36179257.94"
+    },
+    "TRANSFER": {
+      "count": 99,
+      "amount": "50582404.38"
+    },
+    "CASH_IN": {
+      "count": 183,
+      "amount": "28557538.04"
+    }
+  },
+  "expected": {
+    "CASH_IN": {
+      "count": 183,
+      "amount": "28557538.04"
+    },
+    "CASH_OUT": {
+      "count": 230,
+      "amount": "36179257.94"
+    },
+    "DEBIT": {
+      "count": 51,
+      "amount": "254447.49"
+    },
+    "PAYMENT": {
+      "count": 437,
+      "amount": "2625877.47"
+    },
+    "TRANSFER": {
+      "count": 99,
+      "amount": "50582404.38"
+    }
+  },
+  "latency_seconds": {
+    "min": 0.009096860885620117,
+    "max": 8.06205701828003,
+    "p95": 7.062036037445068
+  },
+  "latency_definition": "emitted_at to Spark batch ingested_at; excludes sink commit/read visibility",
+  "scope": "rejeu borné ; pas benchmark de production",
+  "exit_code": 0
+}

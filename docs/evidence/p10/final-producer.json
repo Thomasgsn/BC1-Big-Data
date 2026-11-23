@@ -1,0 +1,11 @@
+{
+  "event": "replay_completed",
+  "run_id": "certification-final-v1",
+  "acknowledged_rows": 1000,
+  "last_source_row": 1000,
+  "positive_labels": 9,
+  "rate_requested": 50,
+  "elapsed_seconds": 20.00229117300023,
+  "observed_rows_per_second": 49.994272723608475,
+  "exit_code": 0
+}

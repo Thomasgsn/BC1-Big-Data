@@ -1,0 +1,38 @@
+{
+  "event": "hdfs_verified",
+  "run_id": "runtime-v1",
+  "command_exit_code": 0,
+  "rows": 1000,
+  "raw_rows": 1000,
+  "quarantine_rows": 0,
+  "dataset_sha256": "16910f90577b0d981bf8ff289714510bb89bc71bff7d3f220f024e287e4eea6b",
+  "observed": {
+    "CASH_IN": {
+      "count": 183,
+      "amount": "28557538.04"
+    },
+    "CASH_OUT": {
+      "count": 230,
+      "amount": "36179257.94"
+    },
+    "DEBIT": {
+      "count": 51,
+      "amount": "254447.49"
+    },
+    "PAYMENT": {
+      "count": 437,
+      "amount": "2625877.47"
+    },
+    "TRANSFER": {
+      "count": 99,
+      "amount": "50582404.38"
+    }
+  },
+  "reference_equal": true,
+  "latency_seconds": {
+    "min": 40.74055814743042,
+    "max": 50.72372603416443,
+    "p95": 50.23036313056946
+  },
+  "scope": "Secured certification project; earlier executor failure and resumed checkpoint; bounded replay, not permanent throughput; latency excludes sink commit/read visibility"
+}

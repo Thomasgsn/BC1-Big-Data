@@ -1,0 +1,16 @@
+{
+  "event": "replay_completed",
+  "mode": "kafka",
+  "run_id": "runtime-v1",
+  "acknowledged_rows": 1000,
+  "last_source_row": 1000,
+  "positive_labels": 9,
+  "selection": {
+    "sample_modulus": 1,
+    "sample_seed": 42,
+    "start_row": 1,
+    "maximum_events": 1000
+  },
+  "elapsed_seconds": 10.00126337100005,
+  "observed_rows_per_second": 99.98736788590416
+}

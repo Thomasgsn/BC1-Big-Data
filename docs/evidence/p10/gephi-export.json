@@ -1,0 +1,21 @@
+{
+  "snapshot_id": "certification-final-v1-steps-1-1",
+  "nodes": 1597,
+  "edges": 1000,
+  "origin": "MongoDB Data Lab",
+  "directed": true,
+  "weight": "transaction_count",
+  "limitations": "Fen\u00eatre filtr\u00e9e ; hubs et communaut\u00e9s ne prouvent pas une fraude ou un blanchiment.",
+  "files": {
+    "nodes.csv": {
+      "sha256": "e08bf9437ecdef238617ebc6fc14a89f63b2126477f44a8171017bc666729d78"
+    },
+    "edges.csv": {
+      "sha256": "358fabea2ec923635acb822170d7e872c3535dd8544ad41a0b092262b9a1c4d9"
+    }
+  },
+  "mongo_export_exit_code": 0,
+  "csv_export_exit_code": 0,
+  "transport": "Mongo authenticated TLS with CA/hostname verification",
+  "toolkit_analysis": "Historical p5 uses same 1000 source transactions; current export identifiers differ by snapshot. No new analysis claimed."
+}

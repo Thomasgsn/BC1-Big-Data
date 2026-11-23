@@ -1,0 +1,10 @@
+{
+  "archive_sha256": "d7a436a5eed7d9f7248972ee16f769ae4f839a3ee1fd7e8d3404ba29e19ac377",
+  "extracted_under": "tmp/delivery-check-ib7iaa28",
+  "archive_crc_and_paths_verified": true,
+  "exit_code": 0,
+  "tests": 42,
+  "seconds": 1.345,
+  "scope": "Extracted candidate archive tested with reused host Python venv; no virgin-machine or container-stack rebuild claim. Application and test sources unchanged for final packaging. Document renderer spacing refined afterwards, separately executed and visually verified.",
+  "unchanged_application_and_test_files_verified": 56
+}

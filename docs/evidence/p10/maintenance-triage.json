@@ -1,0 +1,16 @@
+{
+  "remaining_critical_match": {
+    "cve": "CVE-2026-6653",
+    "package": "libxml2",
+    "installed": "2.12.7+dfsg+really2.9.14-2.1+deb13u3",
+    "vendor_status": "vulnerable, trixie no-dsa (Minor issue); fixed in unstable 2.14.5+dfsg-0.1",
+    "source": "https://security-tracker.debian.org/tracker/CVE-2026-6653",
+    "status": "open; not risk acceptance",
+    "mitigations": [
+      "PostgreSQL internal network only, TLS and application role",
+      "No XML parsing endpoint or arbitrary SQL endpoint; parameterized application SQL",
+      "No unstable distribution package injected into stable database runtime"
+    ],
+    "limits": "No exploitability test or guarantee of unreachability; monitor vendor update and rescan. Remaining high/medium findings retained in full reports."
+  }
+}

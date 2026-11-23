@@ -1,0 +1,300 @@
+{
+  "captured_at_utc": "2026-11-18T15:19:13.362Z",
+  "scope": "Live local certification project during first microbatches; snapshot, not sustained resource capacity",
+  "images": [
+    {
+      "ID": "sha256:c91e56c11306b001f284868d858ba8463e5bcc9283124eaef4c57ed2bfce760e",
+      "ContainerName": "rncp-bc1-certification-v1-init-kafka-1",
+      "Repository": "rncp-bc1-hadoop-secure",
+      "Tag": "3.4.3",
+      "Platform": "linux/amd64",
+      "Size": 2324100606,
+      "Created": "2026-11-18T09:17:03.783646394Z",
+      "LastTagTime": "2026-11-18T13:38:58.857056431Z"
+    },
+    {
+      "ID": "sha256:c91e56c11306b001f284868d858ba8463e5bcc9283124eaef4c57ed2bfce760e",
+      "ContainerName": "rncp-bc1-certification-v1-init-1",
+      "Repository": "rncp-bc1-hadoop-secure",
+      "Tag": "3.4.3",
+      "Platform": "linux/amd64",
+      "Size": 2324100606,
+      "Created": "2026-11-18T09:17:03.783646394Z",
+      "LastTagTime": "2026-11-18T13:38:58.857056431Z"
+    },
+    {
+      "ID": "sha256:7faf06d2846a8b117755c9687206f0aa0df0fe16ca6e7aaa4ad357ec1aa9cbae",
+      "ContainerName": "rncp-bc1-certification-v1-driver-run-27abaedf4981",
+      "Repository": "rncp-bc1-spark-secure",
+      "Tag": "3.5.9",
+      "Platform": "linux/amd64",
+      "Size": 2105324950,
+      "Created": "2026-11-18T14:53:51.943107914Z",
+      "LastTagTime": "2026-11-18T14:53:55.487845724Z"
+    },
+    {
+      "ID": "sha256:7faf06d2846a8b117755c9687206f0aa0df0fe16ca6e7aaa4ad357ec1aa9cbae",
+      "ContainerName": "rncp-bc1-certification-v1-worker-1",
+      "Repository": "rncp-bc1-spark-secure",
+      "Tag": "3.5.9",
+      "Platform": "linux/amd64",
+      "Size": 2105324950,
+      "Created": "2026-11-18T14:53:51.943107914Z",
+      "LastTagTime": "2026-11-18T14:53:55.487845724Z"
+    },
+    {
+      "ID": "sha256:7faf06d2846a8b117755c9687206f0aa0df0fe16ca6e7aaa4ad357ec1aa9cbae",
+      "ContainerName": "rncp-bc1-certification-v1-master-1",
+      "Repository": "rncp-bc1-spark-secure",
+      "Tag": "3.5.9",
+      "Platform": "linux/amd64",
+      "Size": 2105324950,
+      "Created": "2026-11-18T14:53:51.943107914Z",
+      "LastTagTime": "2026-11-18T14:53:55.487845724Z"
+    },
+    {
+      "ID": "sha256:c91e56c11306b001f284868d858ba8463e5bcc9283124eaef4c57ed2bfce760e",
+      "ContainerName": "rncp-bc1-certification-v1-datanode-1",
+      "Repository": "rncp-bc1-hadoop-secure",
+      "Tag": "3.4.3",
+      "Platform": "linux/amd64",
+      "Size": 2324100606,
+      "Created": "2026-11-18T09:17:03.783646394Z",
+      "LastTagTime": "2026-11-18T13:38:58.857056431Z"
+    },
+    {
+      "ID": "sha256:c91e56c11306b001f284868d858ba8463e5bcc9283124eaef4c57ed2bfce760e",
+      "ContainerName": "rncp-bc1-certification-v1-init-hdfs-1",
+      "Repository": "rncp-bc1-hadoop-secure",
+      "Tag": "3.4.3",
+      "Platform": "linux/amd64",
+      "Size": 2324100606,
+      "Created": "2026-11-18T09:17:03.783646394Z",
+      "LastTagTime": "2026-11-18T13:38:58.857056431Z"
+    },
+    {
+      "ID": "sha256:c91e56c11306b001f284868d858ba8463e5bcc9283124eaef4c57ed2bfce760e",
+      "ContainerName": "rncp-bc1-certification-v1-namenode-1",
+      "Repository": "rncp-bc1-hadoop-secure",
+      "Tag": "3.4.3",
+      "Platform": "linux/amd64",
+      "Size": 2324100606,
+      "Created": "2026-11-18T09:17:03.783646394Z",
+      "LastTagTime": "2026-11-18T13:38:58.857056431Z"
+    },
+    {
+      "ID": "sha256:c91e56c11306b001f284868d858ba8463e5bcc9283124eaef4c57ed2bfce760e",
+      "ContainerName": "rncp-bc1-certification-v1-lake-admin-1",
+      "Repository": "rncp-bc1-hadoop-secure",
+      "Tag": "3.4.3",
+      "Platform": "linux/amd64",
+      "Size": 2324100606,
+      "Created": "2026-11-18T09:17:03.783646394Z",
+      "LastTagTime": "2026-11-18T13:38:58.857056431Z"
+    },
+    {
+      "ID": "sha256:05b4616e0702ef2729327705d54ad6b50ea70b271c4b730fabd2320789fb7b02",
+      "ContainerName": "rncp-bc1-certification-v1-kafka-admin-1",
+      "Repository": "apache/kafka",
+      "Tag": "",
+      "Platform": "linux/amd64",
+      "Size": 626651670,
+      "Created": "2026-02-07T05:01:09.86522263Z",
+      "LastTagTime": "2026-11-17T18:05:50.114697058Z"
+    },
+    {
+      "ID": "sha256:fcb93966ee77637184b89d4102decfa7f411bae0f1fc9eae48c34aacb5874d5f",
+      "ContainerName": "rncp-bc1-certification-v1-mongo-1",
+      "Repository": "rncp-bc1-mongo-secure",
+      "Tag": "8.0",
+      "Platform": "linux/amd64",
+      "Size": 1285115890,
+      "Created": "2026-11-18T15:05:19.919317069Z",
+      "LastTagTime": "2026-11-18T15:05:20.403337936Z"
+    },
+    {
+      "ID": "sha256:c407cbb85d4fdd3eb3634092996bedc1780caaa387babcd7810107e44ec0ed13",
+      "ContainerName": "rncp-bc1-certification-v1-broker-1",
+      "Repository": "rncp-bc1-kafka-secure",
+      "Tag": "3.9.2",
+      "Platform": "linux/amd64",
+      "Size": 720339414,
+      "Created": "2026-11-18T15:05:29.196929147Z",
+      "LastTagTime": "2026-11-18T15:05:37.792328173Z"
+    },
+    {
+      "ID": "sha256:c407cbb85d4fdd3eb3634092996bedc1780caaa387babcd7810107e44ec0ed13",
+      "ContainerName": "rncp-bc1-certification-v1-zk-1",
+      "Repository": "rncp-bc1-kafka-secure",
+      "Tag": "3.9.2",
+      "Platform": "linux/amd64",
+      "Size": 720339414,
+      "Created": "2026-11-18T15:05:29.196929147Z",
+      "LastTagTime": "2026-11-18T15:05:37.792328173Z"
+    },
+    {
+      "ID": "sha256:2a322352614a385980e0e1ca66a895c72f8d7dc11337a6d6aca82cfa2f6536ee",
+      "ContainerName": "rncp-bc1-certification-v1-api-1",
+      "Repository": "rncp-bc1-api-secure",
+      "Tag": "0.2.0",
+      "Platform": "linux/amd64",
+      "Size": 233320786,
+      "Created": "2026-11-18T14:36:30.432926635Z",
+      "LastTagTime": "2026-11-18T14:36:32.811602324Z"
+    },
+    {
+      "ID": "sha256:c91e56c11306b001f284868d858ba8463e5bcc9283124eaef4c57ed2bfce760e",
+      "ContainerName": "rncp-bc1-certification-v1-kdc-1",
+      "Repository": "rncp-bc1-hadoop-secure",
+      "Tag": "3.4.3",
+      "Platform": "linux/amd64",
+      "Size": 2324100606,
+      "Created": "2026-11-18T09:17:03.783646394Z",
+      "LastTagTime": "2026-11-18T13:38:58.857056431Z"
+    },
+    {
+      "ID": "sha256:4314d53eff00ab38495b5f6c5dc68a14688499f86a6dca39c08491481de02f14",
+      "ContainerName": "rncp-bc1-certification-v1-postgres-1",
+      "Repository": "rncp-bc1-postgres-secure",
+      "Tag": "17",
+      "Platform": "linux/amd64",
+      "Size": 665179359,
+      "Created": "2026-11-18T15:05:16.208265109Z",
+      "LastTagTime": "2026-11-18T15:05:19.716566189Z"
+    }
+  ],
+  "stats": [
+    {
+      "BlockIO": "0B / 0B",
+      "CPUPerc": "74.01%",
+      "Container": "8e3d935ec76e8e3f3a9f91dfca7daf9ffa8bc07261b26ff36999db078f9afb3c",
+      "ID": "8e3d935ec76e",
+      "MemPerc": "4.74%",
+      "MemUsage": "12.13MiB / 256MiB",
+      "Name": "rncp-bc1-certification-v1-producer-run-617d2e243cf7",
+      "NetIO": "872B / 126B",
+      "PIDs": "1"
+    },
+    {
+      "BlockIO": "582kB / 1.25MB",
+      "CPUPerc": "3.62%",
+      "Container": "a619e7d655c2d7e8bd5093cbd99d34114e9145d369417cfa0df3acdf467a9781",
+      "ID": "a619e7d655c2",
+      "MemPerc": "30.06%",
+      "MemUsage": "692.6MiB / 2.25GiB",
+      "Name": "rncp-bc1-certification-v1-driver-run-27abaedf4981",
+      "NetIO": "407kB / 15.2MB",
+      "PIDs": "203"
+    },
+    {
+      "BlockIO": "541kB / 741kB",
+      "CPUPerc": "55.92%",
+      "Container": "871632fd0381a46ff6dcccbd48993d1ed2c783954096ed767679f8e24e91f8f7",
+      "ID": "871632fd0381",
+      "MemPerc": "48.12%",
+      "MemUsage": "369.6MiB / 768MiB",
+      "Name": "rncp-bc1-certification-v1-broker-1",
+      "NetIO": "91.5kB / 112kB",
+      "PIDs": "90"
+    },
+    {
+      "BlockIO": "65.3MB / 1.65MB",
+      "CPUPerc": "120.76%",
+      "Container": "dfd2737c725fe59eaf059ac0c851ca6602237b8b963902b698a32e95a1a23746",
+      "ID": "dfd2737c725f",
+      "MemPerc": "60.44%",
+      "MemUsage": "309.4MiB / 512MiB",
+      "Name": "rncp-bc1-certification-v1-mongo-1",
+      "NetIO": "120kB / 265kB",
+      "PIDs": "71"
+    },
+    {
+      "BlockIO": "15.5MB / 56.5MB",
+      "CPUPerc": "0.02%",
+      "Container": "7a53750f3343d622244491a99db3c2ab7fe5d06013b34bf1e99a34723bfff306",
+      "ID": "7a53750f3343",
+      "MemPerc": "10.88%",
+      "MemUsage": "41.78MiB / 384MiB",
+      "Name": "rncp-bc1-certification-v1-postgres-1",
+      "NetIO": "874kB / 835kB",
+      "PIDs": "6"
+    },
+    {
+      "BlockIO": "24.6kB / 692kB",
+      "CPUPerc": "9.67%",
+      "Container": "111a9fe160381d39d046a5453685ecb7ee59f323175ab4b50b3663c01b77d309",
+      "ID": "111a9fe16038",
+      "MemPerc": "36.21%",
+      "MemUsage": "92.7MiB / 256MiB",
+      "Name": "rncp-bc1-certification-v1-zk-1",
+      "NetIO": "40.1kB / 30.5kB",
+      "PIDs": "64"
+    },
+    {
+      "BlockIO": "77.8kB / 72.1MB",
+      "CPUPerc": "0.64%",
+      "Container": "c5d4bec0bf746d454a56bb230dcebc4a63d0d8db61de472a110c7507d3d9abc7",
+      "ID": "c5d4bec0bf74",
+      "MemPerc": "31.12%",
+      "MemUsage": "717.1MiB / 2.25GiB",
+      "Name": "rncp-bc1-certification-v1-worker-1",
+      "NetIO": "33.6MB / 1.55MB",
+      "PIDs": "177"
+    },
+    {
+      "BlockIO": "1.7MB / 1.23MB",
+      "CPUPerc": "0.17%",
+      "Container": "83bbb70e1c5e941d85d32416d4333c046aa681fbfb8a658215e8b64641af2621",
+      "ID": "83bbb70e1c5e",
+      "MemPerc": "36.34%",
+      "MemUsage": "186.1MiB / 512MiB",
+      "Name": "rncp-bc1-certification-v1-master-1",
+      "NetIO": "245kB / 175kB",
+      "PIDs": "51"
+    },
+    {
+      "BlockIO": "16.6MB / 0B",
+      "CPUPerc": "0.37%",
+      "Container": "d021a2c078b236b053eae520bb370e9f5dd336df90254c23ccff94f477915fb2",
+      "ID": "d021a2c078b2",
+      "MemPerc": "24.17%",
+      "MemUsage": "61.88MiB / 256MiB",
+      "Name": "rncp-bc1-certification-v1-api-1",
+      "NetIO": "1.23MB / 1.4MB",
+      "PIDs": "5"
+    },
+    {
+      "BlockIO": "2.39MB / 27.5MB",
+      "CPUPerc": "4.94%",
+      "Container": "d0ee709798936c74730fa5adb26adfdb8a903b73ed7efe8c94b48e69d4efe28c",
+      "ID": "d0ee70979893",
+      "MemPerc": "19.47%",
+      "MemUsage": "199.4MiB / 1GiB",
+      "Name": "rncp-bc1-certification-v1-datanode-1",
+      "NetIO": "27.7MB / 9.2MB",
+      "PIDs": "52"
+    },
+    {
+      "BlockIO": "62.8MB / 5.73MB",
+      "CPUPerc": "1.38%",
+      "Container": "bbca3434147dd0017039994b3a528e05eb45a549ea7a86192bda39dc659cc12c",
+      "ID": "bbca3434147d",
+      "MemPerc": "20.47%",
+      "MemUsage": "209.6MiB / 1GiB",
+      "Name": "rncp-bc1-certification-v1-namenode-1",
+      "NetIO": "3.66MB / 2.48MB",
+      "PIDs": "65"
+    },
+    {
+      "BlockIO": "4.6MB / 0B",
+      "CPUPerc": "0.26%",
+      "Container": "7d26a6978da22f6e73789a1c8f3c9a0983bca4f58817b2185081f651c804e736",
+      "ID": "7d26a6978da2",
+      "MemPerc": "1.15%",
+      "MemUsage": "2.941MiB / 256MiB",
+      "Name": "rncp-bc1-certification-v1-kdc-1",
+      "NetIO": "763kB / 1.03MB",
+      "PIDs": "1"
+    }
+  ]
+}

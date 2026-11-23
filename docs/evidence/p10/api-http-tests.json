@@ -1,0 +1,18 @@
+{
+  "runtime": "certification maintained images; HTTPS verified CA",
+  "tests": 6,
+  "failures": 0,
+  "errors": 0,
+  "skipped": 0,
+  "seconds": 2.145,
+  "exit_code": 0,
+  "quota_test": "65 concurrent requests in one quota window; real SQL counter and HTTP 429/Retry-After",
+  "final_post_consultation_network_retest": {
+    "tests": 6,
+    "skipped": 0,
+    "failures": 0,
+    "errors": 0,
+    "seconds": 5.257,
+    "exit_code": 0
+  }
+}

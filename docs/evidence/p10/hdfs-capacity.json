@@ -1,0 +1,13 @@
+{
+  "command": "hdfs dfsadmin -report, authenticated hadoop@BC1.TEST",
+  "exit_code": 0,
+  "configured_capacity_bytes": 983386046464,
+  "remaining_bytes": 794824642560,
+  "dfs_used_bytes": 27997133,
+  "live_datanodes": 1,
+  "missing_blocks": 0,
+  "corrupt_blocks": 0,
+  "under_replicated_blocks": 0,
+  "scope": "Docker VM filesystem shared capacity, thin provisioned; not exclusive allocation, same-host snapshot during streaming. No host-loss guarantee.",
+  "initial_operator_error": "admin/admin principal absent; corrected to configured hadoop principal, no key permissions changed."
+}

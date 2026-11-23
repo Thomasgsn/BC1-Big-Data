@@ -1,0 +1,22 @@
+{
+  "source": "Certification PostgreSQL17 bookworm volume retained",
+  "source_counts": {
+    "cases": 1,
+    "decisions": 2,
+    "audit_events": 3
+  },
+  "origin": "automated_test, no human investigation claimed",
+  "backup_sha256": "5601b4bac4f9955cb2fe005df6fbca0e5d3e87c76e4dbd260d7c9e5385f88076",
+  "backup_bytes": 3113,
+  "backup_format": "pg_dump data-only column inserts, api_principal/api_quota data excluded; identities recreated from same private environment",
+  "pg_dump_exit_code": 0,
+  "target": "New PostgreSQL17 trixie data volume",
+  "restore_status": "completed",
+  "restore_exit_code": 0,
+  "restored_counts": {
+    "cases": 1,
+    "decisions": 2,
+    "audit_events": 3
+  },
+  "previous_volume_deleted": false
+}

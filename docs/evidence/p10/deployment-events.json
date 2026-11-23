@@ -1,0 +1,83 @@
+{
+  "scope": "New certification project, previous data untouched",
+  "events": [
+    {
+      "step": "initial_up",
+      "exit_code": 1,
+      "master_error": "UnixPrincipal invalid null input name: UID1000 lacked passwd entry",
+      "mongo_error": "Entire infra/mongo directory executed export.js during initialization before init.js",
+      "corrections": [
+        "Create real UID1000 OS account in Spark runtime",
+        "Mount only Mongo initialization script; retain partially initialized Mongo volume and use new mongo-data-v2 volume"
+      ]
+    },
+    {
+      "step": "second_up",
+      "exit_code": 1,
+      "reason": "Compose --wait treated an exited unprofiled Kafka admin job as failed despite exit0; made this initializer jobs-profile only",
+      "subsequent_up_exit_code": 0
+    },
+    {
+      "step": "first_distributed_ingestion",
+      "exit_code": 1,
+      "reason": "Driver Kerberos authentication succeeded but executor HDFS credentials absent in standalone mode",
+      "correction": "Private HDFS delegation token file generated before driver and worker start; no simple-auth fallback; awaiting replay"
+    },
+    {
+      "step": "initial_model_restoration",
+      "export_and_import_exit_code": 0,
+      "model_check_exit_code": 1,
+      "scoring_exit_code": 1,
+      "reason": "Copied Spark FileSink _spark_metadata retained absolute old HDFS paths; restored Parquet schema could not be inferred from those logs",
+      "correction": "Preserve attempt; import only Parquet data files plus untouched models in new training-sample64-seed42-restored-v2 namespace; no checkpoint relocation or overwrite"
+    },
+    {
+      "step": "credential_refresh",
+      "reason": "Renewal helper inherited existing HDFS token file; HDFS correctly refused to issue a new token through TOKEN-authenticated RPC",
+      "correction": "Fetch credentials in helper with HADOOP_TOKEN_FILE_LOCATION unset, using fresh Kerberos ticket; keep token file available to worker and executors; worker fails closed when refresh fails",
+      "previous_model_verifications": "Failed; not counted as passed"
+    },
+    {
+      "step": "post-maintenance-live-flow",
+      "status": "completed",
+      "rows": 1000,
+      "spark": "3.5.9",
+      "visibility_p95_seconds": 16.833229780197144
+    },
+    {
+      "step": "maintenance_quota_test",
+      "first_attempt": "65 sequential requests over 160.704s crossed quota windows; no 429, test failed",
+      "correction": "Real-clock window alignment and 12 concurrent clients; no API quota weakened",
+      "subsequent_result": "6 tests passed, no skip, 2.145s"
+    },
+    {
+      "step": "later_host_time_gap",
+      "observation": "Spark logs jumped 15:23 to 16:22 UTC, 3470673ms without executor heartbeat; Ollama load timed out",
+      "cause": "Host interruption or clock/scheduling gap suspected, not independently proven",
+      "recovery": "Restarted worker; re-registration and replacement executor observed; scoring completed exit0, 1000/305",
+      "performance_scope": "Do not use wall time of this interrupted campaign as model latency benchmark or oral duration"
+    },
+    {
+      "step": "current_llm_attempt",
+      "result": "503, no fallback or email",
+      "reason": "Cold load exceeded 90s while Spark active; preserve rejection and retry after Spark finishes"
+    },
+    {
+      "step": "https_loopback",
+      "first_observation": "Internal-only API networks exposed no usable host binding, compose port reported :0",
+      "correction": "Dedicated consultation network permits loopback-only published HTTPS; api outbound capability explicitly documented",
+      "result": "Verified CA curl HTTPS ready, 127.0.0.1:8443; TLS negative checks pass"
+    },
+    {
+      "step": "resume-20261120",
+      "previous_accepted_drafts": 0,
+      "last_old_failure_created_at_utc": "2026-11-18T22:36:46.199000+00:00",
+      "old_terminal_session": "Unavailable at resume; not treated as success",
+      "unit_tests": 42,
+      "http_tests": 6,
+      "tls_expected_refusals": 8,
+      "new_generation": "Two real calls completed; Mongo document and SQL audit verified; no email sent",
+      "proof": "resume-20261120.json"
+    }
+  ]
+}

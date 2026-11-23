@@ -1,0 +1,20 @@
+{
+  "checked_at_utc": "2026-11-20T07:00:41.373824+00:00",
+  "outputs": [
+    {
+      "path": "output/pdf/rapport-technique-bc1.pdf",
+      "sha256": "352a771f262934e6721f6505bb287216f89d4ee012d740bd711a8c8ace4e6186",
+      "pages": 5,
+      "rendered_contact_sheet_inspected": true
+    },
+    {
+      "path": "output/pdf/soutenance-bc1.pdf",
+      "sha256": "9808b250bec4cad79905ba18ae5dddd51f70d9d7dd0ba5af09701e7edf8ebbb7",
+      "pages": 12,
+      "rendered_contact_sheet_inspected": true
+    }
+  ],
+  "additional_detail_inspected": "Final report page 5 at full rendering size",
+  "findings": "No clipping, overlap or nearly-empty trailing page observed. ML table has repeated headers across its page break.",
+  "oral_rehearsal_performed": false
+}

@@ -1,0 +1,9 @@
+{
+  "event": "fraud_scores_published",
+  "model_version": "training-sample64-seed42-restored-v2:baseline-v1",
+  "run_id": "runtime-v1",
+  "linear_decomposition_verified": true,
+  "transactions": 1000,
+  "alerts": 305,
+  "scope": "Démonstration de scoring ; seule la partition test du rapport mesure la performance."
+}

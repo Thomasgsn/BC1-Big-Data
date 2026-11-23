@@ -1,0 +1,9 @@
+{
+  "event": "data_lab_index_verified",
+  "index": "alert_order",
+  "winning_plan_indexes": [
+    "alert_order"
+  ],
+  "exit_code": 0,
+  "scope": "Actual current Mongo explain winning plan for alert filter/sort/20-row limit; no global performance claim"
+}

@@ -1,0 +1,284 @@
+{
+  "event": "ingestion_completed",
+  "run_id": "certification-final-v1",
+  "root": "hdfs://namenode.bc1.test:8020/bc1/private/certification-final-v1",
+  "queries": [
+    {
+      "name": "bc1_raw",
+      "active": true,
+      "last_progress": {
+        "id": "158fbbe3-32e5-4308-94a0-5e1e07e48cc6",
+        "runId": "1505883b-e601-43df-b801-f5cc7a3b5249",
+        "name": "bc1_raw",
+        "timestamp": "2026-11-18T15:19:40.000Z",
+        "batchId": 6,
+        "numInputRows": 0,
+        "inputRowsPerSecond": 0,
+        "processedRowsPerSecond": 0,
+        "durationMs": {
+          "latestOffset": 16,
+          "triggerExecution": 17
+        },
+        "stateOperators": [],
+        "sources": [
+          {
+            "description": "KafkaV2[Subscribe[secure.transactions]]",
+            "startOffset": {
+              "secure.transactions": {
+                "0": 2000
+              }
+            },
+            "endOffset": {
+              "secure.transactions": {
+                "0": 2000
+              }
+            },
+            "latestOffset": {
+              "secure.transactions": {
+                "0": 2000
+              }
+            },
+            "numInputRows": 0,
+            "inputRowsPerSecond": 0,
+            "processedRowsPerSecond": 0,
+            "metrics": {
+              "avgOffsetsBehindLatest": "0.0",
+              "maxOffsetsBehindLatest": "0",
+              "minOffsetsBehindLatest": "0"
+            }
+          }
+        ],
+        "sink": {
+          "description": "FileSink[hdfs://namenode.bc1.test:8020/bc1/private/certification-final-v1/raw]",
+          "numOutputRows": -1
+        }
+      }
+    },
+    {
+      "name": "bc1_curated",
+      "active": true,
+      "last_progress": {
+        "id": "24c27ba6-9f30-4c36-ba8d-faa20a39d47b",
+        "runId": "47c729d3-b390-441b-bd90-619d13efe36d",
+        "name": "bc1_curated",
+        "timestamp": "2026-11-18T15:19:35.000Z",
+        "batchId": 6,
+        "numInputRows": 0,
+        "inputRowsPerSecond": 0,
+        "processedRowsPerSecond": 0,
+        "durationMs": {
+          "latestOffset": 18,
+          "triggerExecution": 18
+        },
+        "stateOperators": [
+          {
+            "operatorName": "dedupe",
+            "numRowsTotal": 1000,
+            "numRowsUpdated": 0,
+            "allUpdatesTimeMs": 30,
+            "numRowsRemoved": 0,
+            "allRemovalsTimeMs": 0,
+            "commitTimeMs": 1047,
+            "memoryUsedBytes": 614424,
+            "numRowsDroppedByWatermark": 0,
+            "numShufflePartitions": 2,
+            "numStateStoreInstances": 2,
+            "customMetrics": {
+              "numDroppedDuplicateRows": 0,
+              "rocksdbBytesCopied": 78263,
+              "rocksdbCommitCheckpointLatency": 35,
+              "rocksdbCommitCompactLatency": 0,
+              "rocksdbCommitFileSyncLatencyMs": 984,
+              "rocksdbCommitFlushLatency": 22,
+              "rocksdbCommitPauseLatency": 0,
+              "rocksdbCommitWriteBatchLatency": 0,
+              "rocksdbFilesCopied": 4,
+              "rocksdbFilesReused": 0,
+              "rocksdbGetCount": 114,
+              "rocksdbGetLatency": 0,
+              "rocksdbPinnedBlocksMemoryUsage": 532064,
+              "rocksdbPutCount": 57,
+              "rocksdbPutLatency": 0,
+              "rocksdbReadBlockCacheHitCount": 117,
+              "rocksdbReadBlockCacheMissCount": 5,
+              "rocksdbSstFileSize": 78263,
+              "rocksdbTotalBytesRead": 0,
+              "rocksdbTotalBytesReadByCompaction": 0,
+              "rocksdbTotalBytesReadThroughIterator": 0,
+              "rocksdbTotalBytesWritten": 6441,
+              "rocksdbTotalBytesWrittenByCompaction": 0,
+              "rocksdbTotalBytesWrittenByFlush": 7312,
+              "rocksdbTotalCompactionLatencyMs": 0,
+              "rocksdbWriterStallLatencyMs": 0,
+              "rocksdbZipFileBytesUncompressed": 18109
+            }
+          }
+        ],
+        "sources": [
+          {
+            "description": "KafkaV2[Subscribe[secure.transactions]]",
+            "startOffset": {
+              "secure.transactions": {
+                "0": 2000
+              }
+            },
+            "endOffset": {
+              "secure.transactions": {
+                "0": 2000
+              }
+            },
+            "latestOffset": {
+              "secure.transactions": {
+                "0": 2000
+              }
+            },
+            "numInputRows": 0,
+            "inputRowsPerSecond": 0,
+            "processedRowsPerSecond": 0,
+            "metrics": {
+              "avgOffsetsBehindLatest": "0.0",
+              "maxOffsetsBehindLatest": "0",
+              "minOffsetsBehindLatest": "0"
+            }
+          }
+        ],
+        "sink": {
+          "description": "FileSink[hdfs://namenode.bc1.test:8020/bc1/private/certification-final-v1/curated]",
+          "numOutputRows": -1
+        }
+      }
+    },
+    {
+      "name": "bc1_quarantine",
+      "active": true,
+      "last_progress": {
+        "id": "3d1355ea-0507-4f36-9e71-642a97b0ac01",
+        "runId": "0a98ce88-992e-4fde-b645-89a63a2b7cca",
+        "name": "bc1_quarantine",
+        "timestamp": "2026-11-18T15:19:35.001Z",
+        "batchId": 6,
+        "numInputRows": 0,
+        "inputRowsPerSecond": 0,
+        "processedRowsPerSecond": 0,
+        "durationMs": {
+          "latestOffset": 16,
+          "triggerExecution": 16
+        },
+        "stateOperators": [],
+        "sources": [
+          {
+            "description": "KafkaV2[Subscribe[secure.transactions]]",
+            "startOffset": {
+              "secure.transactions": {
+                "0": 2000
+              }
+            },
+            "endOffset": {
+              "secure.transactions": {
+                "0": 2000
+              }
+            },
+            "latestOffset": {
+              "secure.transactions": {
+                "0": 2000
+              }
+            },
+            "numInputRows": 0,
+            "inputRowsPerSecond": 0,
+            "processedRowsPerSecond": 0,
+            "metrics": {
+              "avgOffsetsBehindLatest": "0.0",
+              "maxOffsetsBehindLatest": "0",
+              "minOffsetsBehindLatest": "0"
+            }
+          }
+        ],
+        "sink": {
+          "description": "FileSink[hdfs://namenode.bc1.test:8020/bc1/private/certification-final-v1/quarantine]",
+          "numOutputRows": -1
+        }
+      }
+    },
+    {
+      "name": "bc1_metrics",
+      "active": true,
+      "last_progress": {
+        "id": "76ccb644-6e69-40c3-a525-d30b8c6e89eb",
+        "runId": "de272f89-f885-4c38-b671-318e3caf3b26",
+        "name": "bc1_metrics",
+        "timestamp": "2026-11-18T15:19:30.001Z",
+        "batchId": 5,
+        "numInputRows": 0,
+        "inputRowsPerSecond": 0,
+        "processedRowsPerSecond": 0,
+        "durationMs": {
+          "latestOffset": 152,
+          "triggerExecution": 154
+        },
+        "stateOperators": [
+          {
+            "operatorName": "stateStoreSave",
+            "numRowsTotal": 5,
+            "numRowsUpdated": 0,
+            "allUpdatesTimeMs": 15,
+            "numRowsRemoved": 0,
+            "allRemovalsTimeMs": 0,
+            "commitTimeMs": 604,
+            "memoryUsedBytes": 615188,
+            "numRowsDroppedByWatermark": 0,
+            "numShufflePartitions": 2,
+            "numStateStoreInstances": 2,
+            "customMetrics": {
+              "rocksdbBytesCopied": 2656,
+              "rocksdbCommitCheckpointLatency": 38,
+              "rocksdbCommitCompactLatency": 0,
+              "rocksdbCommitFileSyncLatencyMs": 525,
+              "rocksdbCommitFlushLatency": 34,
+              "rocksdbCommitPauseLatency": 0,
+              "rocksdbCommitWriteBatchLatency": 0,
+              "rocksdbFilesCopied": 2,
+              "rocksdbFilesReused": 3,
+              "rocksdbGetCount": 10,
+              "rocksdbGetLatency": 0,
+              "rocksdbPinnedBlocksMemoryUsage": 526592,
+              "rocksdbPutCount": 5,
+              "rocksdbPutLatency": 0,
+              "rocksdbReadBlockCacheHitCount": 18,
+              "rocksdbReadBlockCacheMissCount": 10,
+              "rocksdbSstFileSize": 2636,
+              "rocksdbTotalBytesRead": 490,
+              "rocksdbTotalBytesReadByCompaction": 2655,
+              "rocksdbTotalBytesReadThroughIterator": 0,
+              "rocksdbTotalBytesWritten": 605,
+              "rocksdbTotalBytesWrittenByCompaction": 2636,
+              "rocksdbTotalBytesWrittenByFlush": 3106,
+              "rocksdbTotalCompactionLatencyMs": 6,
+              "rocksdbWriterStallLatencyMs": 0,
+              "rocksdbZipFileBytesUncompressed": 16804
+            }
+          }
+        ],
+        "sources": [
+          {
+            "description": "FileStreamSource[hdfs://namenode.bc1.test:8020/bc1/private/certification-final-v1/curated]",
+            "startOffset": {
+              "logOffset": 4
+            },
+            "endOffset": {
+              "logOffset": 4
+            },
+            "latestOffset": null,
+            "numInputRows": 0,
+            "inputRowsPerSecond": 0,
+            "processedRowsPerSecond": 0
+          }
+        ],
+        "sink": {
+          "description": "ForeachBatchSink",
+          "numOutputRows": -1
+        }
+      }
+    }
+  ],
+  "exit_code": 0
+}

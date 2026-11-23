@@ -19,21 +19,21 @@ ROOT=Path('/project');OUT=ROOT/'output/pdf';TMP=ROOT/'tmp/pdfs';OUT.mkdir(parent
 for name,file in [('DejaVu','DejaVuSans.ttf'),('DejaVu-Bold','DejaVuSans-Bold.ttf')]:pdfmetrics.registerFont(TTFont(name,'/usr/share/fonts/truetype/dejavu/'+file))
 styles=getSampleStyleSheet()
 for name in styles.byName:styles[name].fontName='DejaVu'
-styles['Normal'].fontSize=9;styles['Normal'].leading=14;styles['Normal'].spaceAfter=7
-for name,size in [('Title',23),('Heading1',18),('Heading2',14),('Heading3',11)]:styles[name].fontName='DejaVu-Bold';styles[name].fontSize=size;styles[name].leading=size*1.3;styles[name].spaceBefore=12;styles[name].spaceAfter=9
+styles['Normal'].fontSize=9;styles['Normal'].leading=13.5;styles['Normal'].spaceAfter=6
+for name,size in [('Title',23),('Heading1',18),('Heading2',14),('Heading3',11)]:styles[name].fontName='DejaVu-Bold';styles[name].fontSize=size;styles[name].leading=size*1.3;styles[name].spaceBefore=12;styles[name].keepWithNext=1;styles[name].spaceAfter=9
 styles.add(ParagraphStyle(name='Cell',fontName='DejaVu',fontSize=7.5,leading=11))
 styles.add(ParagraphStyle(name='CaptionBC1',fontName='DejaVu',fontSize=8,leading=11,textColor=colors.HexColor('#475569')))
 
 def inline(s):
     s=html.escape(s).replace('—','-').replace('–','-').replace('→',' vers ')
-    s=re.sub(r'\[([^\]]+)\]\(([^)]+)\)',lambda m:m[1]+' ['+m[2]+']',s)
+    s=re.sub(r'\[([^\]]+)\]\(([^)]+)\)',lambda m:m[1] if re.match(r'[^)]*\.md(#|$)',m[2]) else m[1]+' ['+m[2]+']',s)
     s=re.sub(r'\*\*(.*?)\*\*',r'<b>\1</b>',s)
     return s.replace('`','')
 
 def footer(c,doc):
-    c.saveState();c.setFont('DejaVu',8);c.setFillColor(colors.HexColor('#475569'));c.drawString(42,25,'Thomas Gassmann - RNCP40875 BC1 - 18 novembre 2026');c.drawRightString(A4[0]-42,25,str(doc.page));c.restoreState()
+    c.saveState();c.setFont('DejaVu',8);c.setFillColor(colors.HexColor('#475569'));c.drawString(42,25,'Thomas Gassmann - RNCP40875 BC1 - 23 novembre 2026');c.drawRightString(A4[0]-42,25,str(doc.page));c.restoreState()
 
-source=ROOT/'docs/technical-report.md';lines=source.read_text().splitlines();story=[];i=0
+source=ROOT/'docs/rapport.md';lines=source.read_text().splitlines();story=[];i=0
 while i<len(lines):
     line=lines[i];i+=1
     if not line.strip():continue
@@ -41,7 +41,7 @@ while i<len(lines):
         block=[]
         while i<len(lines) and not lines[i].startswith('```'):block.append(lines[i]);i+=1
         i+=1
-        story.append(Paragraph('Flux métier : PaySim, Kafka, Spark, HDFS, MongoDB, MLlib, Gephi et API. PostgreSQL conserve les décisions. Ollama produit les brouillons soumis à relecture. Diagramme Mermaid modifiable dans docs/architecture.md.',styles['Normal']))
+        story.append(Paragraph('Flux métier : PaySim, Kafka, Spark, HDFS, MongoDB, MLlib, Gephi et API. PostgreSQL conserve les décisions. Ollama produit les brouillons soumis à relecture. Diagramme Mermaid modifiable dans docs/rapport.md.',styles['Normal']))
     elif line.startswith('!['):
         m=re.match(r'!\[(.*?)\]\((.*?)\)',line)
         if m:

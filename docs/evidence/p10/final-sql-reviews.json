@@ -1,0 +1,12 @@
+{
+  "event": "sql_reviews_integrated",
+  "snapshot_id": "certification-final-v1",
+  "rows": 4,
+  "origins": {
+    "automated_test": 4
+  },
+  "references_validated_against": "certification-final-v1",
+  "strategy": "complete_immutable_snapshot_not_cdc",
+  "root": "hdfs://namenode.bc1.test:8020/bc1/private/reviews/certification-final-v1",
+  "exit_code": 0
+}

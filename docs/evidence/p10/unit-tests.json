@@ -1,0 +1,9 @@
+{
+  "command": "PYTHONPATH=src .venv/bin/python -m unittest discover -s tests -v",
+  "tests": 42,
+  "failures": 0,
+  "errors": 0,
+  "seconds": 1.555,
+  "exit_code": 0,
+  "initial_invocation_failure": "Without PYTHONPATH, 8 imports failed; corrected invocation is the documented Makefile command."
+}

@@ -1,0 +1,15 @@
+{
+  "event": "committed_visibility_observed",
+  "run_id": "certification-final-v1",
+  "rows": 1000,
+  "polls": 21,
+  "seconds": {
+    "min": 7.053237676620483,
+    "p95": 16.833229780197144,
+    "max": 17.833250761032104
+  },
+  "definition": "emitted_at to completed first successful Parquet reader collect; upper bound includes polling, reader and observer overhead",
+  "poll_interval_seconds": 5,
+  "scope": "Bounded 10000-row same-host observation; no production latency guarantee",
+  "exit_code": 0
+}

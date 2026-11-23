@@ -1,0 +1,683 @@
+{
+  "created_for": "Ajout de l'historique des comptes destinataires (sujet partie 3, feature engineering)",
+  "paysim_account_reuse": {
+    "rows": 6362620,
+    "unique_origin_accounts": 6353307,
+    "origin_rows_with_repeat_share": 0.002925052887018241,
+    "unique_destination_accounts": 2722362,
+    "destination_rows_with_repeat_share": 0.644375430247288,
+    "frauds": 8213,
+    "frauds_with_prior_destination_history": 3039,
+    "method": "lecture complète du CSV vérifié, script de comptage hors Spark"
+  },
+  "sampling": "1/16 des comptes destinataires (SHA, seed 42), historique complet de chaque compte retenu, sans lecture des labels",
+  "replay": {
+    "event": "replay_completed",
+    "mode": "kafka",
+    "run_id": "training-dest16-seed42",
+    "acknowledged_rows": 400088,
+    "last_source_row": 6362598,
+    "positive_labels": 513,
+    "selection": {
+      "sample_modulus": 16,
+      "sample_seed": 42,
+      "sample_key": "destination",
+      "start_row": 1,
+      "maximum_events": null
+    },
+    "elapsed_seconds": 754.2059447920001,
+    "observed_rows_per_second": 530.4757974432817
+  },
+  "spark_leakage_check": {
+    "event": "account_features_checked",
+    "rows": 5,
+    "failures": []
+  },
+  "split_method": "quantiles exacts 60/80 % calculés sur les effectifs par step (approxQuantile exact abandonné : résultat trop volumineux pour le retour direct dans ce profil réseau)",
+  "reports": {
+    "baseline": {
+      "created_at_utc": "2026-11-23T17:27:30.711420+00:00",
+      "run_id": "training-dest16-seed42",
+      "model_version": "baseline-v2",
+      "seed": 42,
+      "split": {
+        "train_end_step": 281,
+        "validation_end_step": 355,
+        "classes": {
+          "train": {
+            "negative": 241108,
+            "positive": 203
+          },
+          "validation": {
+            "negative": 80815,
+            "positive": 45
+          },
+          "test": {
+            "negative": 77652,
+            "positive": 265
+          }
+        }
+      },
+      "feature_set": "baseline",
+      "features": [
+        "log_amount",
+        "hour_sin",
+        "hour_cos",
+        "type_vector"
+      ],
+      "excluded": [
+        "oldbalanceOrg",
+        "newbalanceOrig",
+        "oldbalanceDest",
+        "newbalanceDest",
+        "isFlaggedFraud",
+        "account_ids"
+      ],
+      "baseline_always_negative": {
+        "tp": 0,
+        "fp": 0,
+        "tn": 77652,
+        "fn": 265,
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0,
+        "f2": 0.0,
+        "false_positive_rate": 0.0,
+        "accuracy": 0.9965989450312512
+      },
+      "candidates": [
+        {
+          "name": "logistic_regression",
+          "fit_seconds": 13.862251371000184,
+          "validation": {
+            "threshold": 0.9,
+            "tp": 3,
+            "fp": 51,
+            "tn": 80764,
+            "fn": 42,
+            "precision": 0.05555555555555555,
+            "recall": 0.06666666666666667,
+            "f1": 0.06060606060606061,
+            "f2": 0.0641025641025641,
+            "false_positive_rate": 0.0006310709645486605,
+            "accuracy": 0.9988498639624042,
+            "auc_roc": 0.9125148659146066,
+            "auc_pr": 0.010350603136982267
+          },
+          "threshold_candidates": [
+            {
+              "threshold": 0.05,
+              "tp": 45,
+              "fp": 80199,
+              "tn": 616,
+              "fn": 0,
+              "precision": 0.0005607895917451772,
+              "recall": 1.0,
+              "f1": 0.0011209505660800358,
+              "f2": 0.0027976723366159354,
+              "false_positive_rate": 0.9923776526634907,
+              "accuracy": 0.008174622804847886
+            },
+            {
+              "threshold": 0.1,
+              "tp": 45,
+              "fp": 64989,
+              "tn": 15826,
+              "fn": 0,
+              "precision": 0.0006919457514530861,
+              "recall": 1.0,
+              "f1": 0.0013829345871940258,
+              "f2": 0.003450179409329285,
+              "false_positive_rate": 0.8041700179422137,
+              "accuracy": 0.19627751669552312
+            },
+            {
+              "threshold": 0.2,
+              "tp": 45,
+              "fp": 37370,
+              "tn": 43445,
+              "fn": 0,
+              "precision": 0.001202726179339837,
+              "recall": 1.0,
+              "f1": 0.002402562733582488,
+              "f2": 0.005984838409362947,
+              "false_positive_rate": 0.4624141557879107,
+              "accuracy": 0.5378431857531536
+            },
+            {
+              "threshold": 0.3,
+              "tp": 45,
+              "fp": 35070,
+              "tn": 45745,
+              "fn": 0,
+              "precision": 0.0012815036309269544,
+              "recall": 1.0,
+              "f1": 0.002559726962457338,
+              "f2": 0.006374840628984276,
+              "false_positive_rate": 0.4339540926808142,
+              "accuracy": 0.5662874103388573
+            },
+            {
+              "threshold": 0.5,
+              "tp": 40,
+              "fp": 17304,
+              "tn": 63511,
+              "fn": 5,
+              "precision": 0.0023062730627306273,
+              "recall": 0.8888888888888888,
+              "f1": 0.004600609580769452,
+              "f2": 0.011412919424788861,
+              "false_positive_rate": 0.21411866608921612,
+              "accuracy": 0.7859386594113282
+            },
+            {
+              "threshold": 0.7,
+              "tp": 27,
+              "fp": 5537,
+              "tn": 75278,
+              "fn": 18,
+              "precision": 0.004852624011502516,
+              "recall": 0.6,
+              "f1": 0.009627384560527722,
+              "f2": 0.023502785515320333,
+              "false_positive_rate": 0.06851450844521438,
+              "accuracy": 0.9313010140984418
+            },
+            {
+              "threshold": 0.9,
+              "tp": 3,
+              "fp": 51,
+              "tn": 80764,
+              "fn": 42,
+              "precision": 0.05555555555555555,
+              "recall": 0.06666666666666667,
+              "f1": 0.06060606060606061,
+              "f2": 0.0641025641025641,
+              "false_positive_rate": 0.0006310709645486605,
+              "accuracy": 0.9988498639624042
+            }
+          ]
+        },
+        {
+          "name": "random_forest",
+          "fit_seconds": 9.420677878000106,
+          "validation": {
+            "threshold": 0.9,
+            "tp": 11,
+            "fp": 257,
+            "tn": 80558,
+            "fn": 34,
+            "precision": 0.041044776119402986,
+            "recall": 0.24444444444444444,
+            "f1": 0.07028753993610223,
+            "f2": 0.12276785714285714,
+            "false_positive_rate": 0.003180102703705995,
+            "accuracy": 0.9964011872372001,
+            "auc_roc": 0.9450768902912687,
+            "auc_pr": 0.057318221893726075
+          },
+          "threshold_candidates": [
+            {
+              "threshold": 0.05,
+              "tp": 45,
+              "fp": 37573,
+              "tn": 43242,
+              "fn": 0,
+              "precision": 0.0011962358445425062,
+              "recall": 1.0,
+              "f1": 0.0023896131481825665,
+              "f2": 0.0059526959098365,
+              "false_positive_rate": 0.46492606570562395,
+              "accuracy": 0.535332673757111
+            },
+            {
+              "threshold": 0.1,
+              "tp": 45,
+              "fp": 36444,
+              "tn": 44371,
+              "fn": 0,
+              "precision": 0.0012332483762229713,
+              "recall": 1.0,
+              "f1": 0.002463458696009197,
+              "f2": 0.0061359731653440235,
+              "false_positive_rate": 0.450955886902184,
+              "accuracy": 0.5492950779124413
+            },
+            {
+              "threshold": 0.2,
+              "tp": 45,
+              "fp": 35520,
+              "tn": 45295,
+              "fn": 0,
+              "precision": 0.0012652889076339097,
+              "recall": 1.0,
+              "f1": 0.002527379949452401,
+              "f2": 0.00629458665547629,
+              "false_positive_rate": 0.43952236589742005,
+              "accuracy": 0.5607222359633935
+            },
+            {
+              "threshold": 0.3,
+              "tp": 44,
+              "fp": 25323,
+              "tn": 55492,
+              "fn": 1,
+              "precision": 0.0017345369968857177,
+              "recall": 0.9777777777777777,
+              "f1": 0.003462930898787974,
+              "f2": 0.008611578658942342,
+              "false_positive_rate": 0.313345294809132,
+              "accuracy": 0.6868167202572347
+            },
+            {
+              "threshold": 0.5,
+              "tp": 40,
+              "fp": 9218,
+              "tn": 71597,
+              "fn": 5,
+              "precision": 0.004320587599913588,
+              "recall": 0.8888888888888888,
+              "f1": 0.008599376545200472,
+              "f2": 0.02119093028183937,
+              "false_positive_rate": 0.11406298335705005,
+              "accuracy": 0.8859386594113282
+            },
+            {
+              "threshold": 0.7,
+              "tp": 32,
+              "fp": 6452,
+              "tn": 74363,
+              "fn": 13,
+              "precision": 0.004935225169648365,
+              "recall": 0.7111111111111111,
+              "f1": 0.009802419972430693,
+              "f2": 0.024009603841536616,
+              "false_positive_rate": 0.07983666398564623,
+              "accuracy": 0.9200469948058373
+            },
+            {
+              "threshold": 0.9,
+              "tp": 11,
+              "fp": 257,
+              "tn": 80558,
+              "fn": 34,
+              "precision": 0.041044776119402986,
+              "recall": 0.24444444444444444,
+              "f1": 0.07028753993610223,
+              "f2": 0.12276785714285714,
+              "false_positive_rate": 0.003180102703705995,
+              "accuracy": 0.9964011872372001
+            }
+          ]
+        }
+      ],
+      "test": {
+        "logistic_regression": {
+          "threshold": 0.9,
+          "tp": 14,
+          "fp": 35,
+          "tn": 77617,
+          "fn": 251,
+          "precision": 0.2857142857142857,
+          "recall": 0.052830188679245285,
+          "f1": 0.08917197452229299,
+          "f2": 0.06311992786293959,
+          "false_positive_rate": 0.0004507288930098388,
+          "accuracy": 0.9963294274676899,
+          "auc_roc": 0.9197253299432626,
+          "auc_pr": 0.058129260431115486
+        },
+        "random_forest": {
+          "threshold": 0.9,
+          "tp": 64,
+          "fp": 309,
+          "tn": 77343,
+          "fn": 201,
+          "precision": 0.17158176943699732,
+          "recall": 0.24150943396226415,
+          "f1": 0.2006269592476489,
+          "f2": 0.22330774598743894,
+          "false_positive_rate": 0.0039792922268582906,
+          "accuracy": 0.9934545734563702,
+          "auc_roc": 0.9387810541273158,
+          "auc_pr": 0.21264250247940059
+        }
+      },
+      "selected": "random_forest",
+      "threshold": 0.9,
+      "artifact_path": "hdfs://namenode.bc1.test:8020/bc1/private/training-dest16-seed42/models/baseline-v2"
+    },
+    "destination_history": {
+      "created_at_utc": "2026-11-23T17:29:36.451641+00:00",
+      "run_id": "training-dest16-seed42",
+      "model_version": "dest-history-v1",
+      "seed": 42,
+      "split": {
+        "train_end_step": 281,
+        "validation_end_step": 355,
+        "classes": {
+          "train": {
+            "negative": 241108,
+            "positive": 203
+          },
+          "validation": {
+            "negative": 80815,
+            "positive": 45
+          },
+          "test": {
+            "negative": 77652,
+            "positive": 265
+          }
+        }
+      },
+      "feature_set": "destination_history",
+      "features": [
+        "log_amount",
+        "hour_sin",
+        "hour_cos",
+        "type_vector",
+        "dest_prior_count_log",
+        "dest_prior_24h_log",
+        "amount_vs_dest_mean",
+        "dest_first_seen"
+      ],
+      "excluded": [
+        "oldbalanceOrg",
+        "newbalanceOrig",
+        "oldbalanceDest",
+        "newbalanceDest",
+        "isFlaggedFraud",
+        "account_ids"
+      ],
+      "baseline_always_negative": {
+        "tp": 0,
+        "fp": 0,
+        "tn": 77652,
+        "fn": 265,
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0,
+        "f2": 0.0,
+        "false_positive_rate": 0.0,
+        "accuracy": 0.9965989450312512
+      },
+      "candidates": [
+        {
+          "name": "logistic_regression",
+          "fit_seconds": 12.222142661000134,
+          "validation": {
+            "threshold": 0.9,
+            "tp": 6,
+            "fp": 25,
+            "tn": 80790,
+            "fn": 39,
+            "precision": 0.1935483870967742,
+            "recall": 0.13333333333333333,
+            "f1": 0.15789473684210525,
+            "f2": 0.14218009478672985,
+            "false_positive_rate": 0.0003093485120336571,
+            "accuracy": 0.9992085085332674,
+            "auc_roc": 0.9343097747255403,
+            "auc_pr": 0.036794359955269654
+          },
+          "threshold_candidates": [
+            {
+              "threshold": 0.05,
+              "tp": 45,
+              "fp": 78964,
+              "tn": 1851,
+              "fn": 0,
+              "precision": 0.0005695553671100761,
+              "recall": 1.0,
+              "f1": 0.0011384623168973107,
+              "f2": 0.002841303716425261,
+              "false_positive_rate": 0.9770958361690281,
+              "accuracy": 0.023447934701953995
+            },
+            {
+              "threshold": 0.1,
+              "tp": 45,
+              "fp": 67631,
+              "tn": 13184,
+              "fn": 0,
+              "precision": 0.0006649329156569537,
+              "recall": 1.0,
+              "f1": 0.0013289821473398207,
+              "f2": 0.0033158453195001178,
+              "false_positive_rate": 0.8368619686939306,
+              "accuracy": 0.163603759584467
+            },
+            {
+              "threshold": 0.2,
+              "tp": 45,
+              "fp": 39071,
+              "tn": 41744,
+              "fn": 0,
+              "precision": 0.0011504243787708354,
+              "recall": 1.0,
+              "f1": 0.0022982048466586654,
+              "f2": 0.005725773615635179,
+              "false_positive_rate": 0.4834622285466807,
+              "accuracy": 0.5168068266139005
+            },
+            {
+              "threshold": 0.3,
+              "tp": 43,
+              "fp": 31742,
+              "tn": 49073,
+              "fn": 2,
+              "precision": 0.0013528393896492057,
+              "recall": 0.9555555555555556,
+              "f1": 0.0027018535972353126,
+              "f2": 0.006726106679180353,
+              "false_positive_rate": 0.39277361875889377,
+              "accuracy": 0.6074202325006184
+            },
+            {
+              "threshold": 0.5,
+              "tp": 40,
+              "fp": 15110,
+              "tn": 65705,
+              "fn": 5,
+              "precision": 0.0026402640264026403,
+              "recall": 0.8888888888888888,
+              "f1": 0.0052648897663705166,
+              "f2": 0.01304631441617743,
+              "false_positive_rate": 0.18697024067314236,
+              "accuracy": 0.813071976255256
+            },
+            {
+              "threshold": 0.7,
+              "tp": 33,
+              "fp": 3891,
+              "tn": 76924,
+              "fn": 12,
+              "precision": 0.008409785932721712,
+              "recall": 0.7333333333333333,
+              "f1": 0.016628873771730914,
+              "f2": 0.0402046783625731,
+              "false_positive_rate": 0.048147002412918395,
+              "accuracy": 0.9517313875834776
+            },
+            {
+              "threshold": 0.9,
+              "tp": 6,
+              "fp": 25,
+              "tn": 80790,
+              "fn": 39,
+              "precision": 0.1935483870967742,
+              "recall": 0.13333333333333333,
+              "f1": 0.15789473684210525,
+              "f2": 0.14218009478672985,
+              "false_positive_rate": 0.0003093485120336571,
+              "accuracy": 0.9992085085332674
+            }
+          ]
+        },
+        {
+          "name": "random_forest",
+          "fit_seconds": 14.147937749999983,
+          "validation": {
+            "threshold": 0.9,
+            "tp": 20,
+            "fp": 529,
+            "tn": 80286,
+            "fn": 25,
+            "precision": 0.03642987249544627,
+            "recall": 0.4444444444444444,
+            "f1": 0.06734006734006734,
+            "f2": 0.13717421124828533,
+            "false_positive_rate": 0.006545814514632185,
+            "accuracy": 0.9931486519910957,
+            "auc_roc": 0.9669443928863591,
+            "auc_pr": 0.050407017888119375
+          },
+          "threshold_candidates": [
+            {
+              "threshold": 0.05,
+              "tp": 45,
+              "fp": 39636,
+              "tn": 41179,
+              "fn": 0,
+              "precision": 0.0011340440009072353,
+              "recall": 1.0,
+              "f1": 0.0022655188038060714,
+              "f2": 0.0056446150372544595,
+              "false_positive_rate": 0.4904535049186413,
+              "accuracy": 0.5098194410091517
+            },
+            {
+              "threshold": 0.1,
+              "tp": 45,
+              "fp": 35839,
+              "tn": 44976,
+              "fn": 0,
+              "precision": 0.0012540407981272992,
+              "recall": 1.0,
+              "f1": 0.002504940298922876,
+              "f2": 0.0062389086069210295,
+              "false_positive_rate": 0.4434696529109695,
+              "accuracy": 0.5567771456838981
+            },
+            {
+              "threshold": 0.2,
+              "tp": 45,
+              "fp": 30125,
+              "tn": 50690,
+              "fn": 0,
+              "precision": 0.0014915478952601923,
+              "recall": 1.0,
+              "f1": 0.002978652986927023,
+              "f2": 0.007413509060955519,
+              "false_positive_rate": 0.37276495700055684,
+              "accuracy": 0.6274424931981202
+            },
+            {
+              "threshold": 0.3,
+              "tp": 43,
+              "fp": 17668,
+              "tn": 63147,
+              "fn": 2,
+              "precision": 0.0024278696855061827,
+              "recall": 0.9555555555555556,
+              "f1": 0.004843433205676954,
+              "f2": 0.01201721535967805,
+              "false_positive_rate": 0.21862278042442615,
+              "accuracy": 0.7814741528567896
+            },
+            {
+              "threshold": 0.5,
+              "tp": 36,
+              "fp": 3600,
+              "tn": 77215,
+              "fn": 9,
+              "precision": 0.009900990099009901,
+              "recall": 0.8,
+              "f1": 0.019559902200488997,
+              "f2": 0.04716981132075472,
+              "false_positive_rate": 0.044546185732846626,
+              "accuracy": 0.9553673015087806
+            },
+            {
+              "threshold": 0.7,
+              "tp": 33,
+              "fp": 1046,
+              "tn": 79769,
+              "fn": 12,
+              "precision": 0.030583873957367932,
+              "recall": 0.7333333333333333,
+              "f1": 0.05871886120996441,
+              "f2": 0.13105639396346305,
+              "false_positive_rate": 0.012943141743488214,
+              "accuracy": 0.9869156566905763
+            },
+            {
+              "threshold": 0.9,
+              "tp": 20,
+              "fp": 529,
+              "tn": 80286,
+              "fn": 25,
+              "precision": 0.03642987249544627,
+              "recall": 0.4444444444444444,
+              "f1": 0.06734006734006734,
+              "f2": 0.13717421124828533,
+              "false_positive_rate": 0.006545814514632185,
+              "accuracy": 0.9931486519910957
+            }
+          ]
+        }
+      ],
+      "test": {
+        "logistic_regression": {
+          "threshold": 0.9,
+          "tp": 34,
+          "fp": 14,
+          "tn": 77638,
+          "fn": 231,
+          "precision": 0.7083333333333334,
+          "recall": 0.12830188679245283,
+          "f1": 0.21725239616613418,
+          "f2": 0.15342960288808663,
+          "false_positive_rate": 0.0001802915572039355,
+          "accuracy": 0.996855628425119,
+          "auc_roc": 0.9417159917153332,
+          "auc_pr": 0.22266800756888336
+        },
+        "random_forest": {
+          "threshold": 0.9,
+          "tp": 141,
+          "fp": 466,
+          "tn": 77186,
+          "fn": 124,
+          "precision": 0.23228995057660626,
+          "recall": 0.5320754716981132,
+          "f1": 0.32339449541284404,
+          "f2": 0.42291541691661666,
+          "false_positive_rate": 0.00600113326121671,
+          "accuracy": 0.9924278398808989,
+          "auc_roc": 0.9694033078398157,
+          "auc_pr": 0.24903427075233078
+        }
+      },
+      "selected": "random_forest",
+      "threshold": 0.9,
+      "artifact_path": "hdfs://namenode.bc1.test:8020/bc1/private/training-dest16-seed42/models/dest-history-v1"
+    }
+  },
+  "previous_reference_p6": "docs/evidence/p6/model-comparison.json (échantillon 1/64 par ligne, variables de base)",
+  "scoring": "Le scoring en flux reste sur le modèle p6 ; score.py refuse explicitement un modèle à historique destinataire.",
+  "split_parity_with_p6": {
+    "event": "split_parity_checked",
+    "root": "hdfs://namenode.bc1.test:8020/bc1/private/training-sample64-seed42-restored-v2",
+    "recorded_split": [
+      281,
+      355
+    ],
+    "step_counts": [
+      281,
+      355
+    ],
+    "identical": true
+  },
+  "split_failure_observed": "Premier essai : approxQuantile exact a échoué (TaskResultLost, connexion refusée au block manager du worker) sur 400 088 lignes et aussi sur l'ancien run de 98 813 lignes dans le profil certification ; journaux tmp/dest16-train-*.log antérieurs remplacés par le second essai, cause et correction consignées ici."
+}

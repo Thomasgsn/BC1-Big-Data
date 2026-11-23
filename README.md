@@ -1,49 +1,152 @@
 # BC1 — Architecture Big Data et détection de fraude
 
-Projet de certification RNCP40875 : collecte de transactions synthétiques, stockage distribué, analyse de réseaux, détection de fraude et explications génératives.
+Thomas Gassmann · RNCP40875, bloc 1 · travail individuel (le sujet prévoit un binôme).
 
-**Développement BC1 en cours : plateforme opérationnelle, 38 tests unitaires et 6 tests API réussis.** Ingestion HDFS, publication Mongo, deux modèles MLlib et scoring réellement exécutés. Client Gephi et génération locale réellement vérifiés ; reproduction de la chaîne sur volumes métier neufs vérifiée, avec caches acquis réutilisés. Sécurité forte, HA globale et livraison finale restent ouvertes. BC2/BC3 non commencés.
+La plateforme rejoue des transactions bancaires **synthétiques** (PaySim), les stocke dans un lac de données, analyse le réseau des comptes dans Gephi, entraîne deux modèles de détection de fraude et fait rédiger par un LLM local une explication pour le conseiller et un brouillon d’email pour le client.
 
-## Documentation
+## Documents du rendu
 
-- [Audit et exigences](docs/audit.md)[AGENTS.md](AGENTS.md)
-- [Sources et limites de vérification](docs/sources.md)
-- [Architecture proposée et arbitrages](docs/architecture.md)
-- [Matrice C1.1 à C2.4 et exigences pédagogiques](docs/rncp-matrix.md)
-- [Plan et critères d'acceptation](docs/implementation-plan.md)
-- [Rapport technique](docs/technical-report.md)
-- [Reproduction isolée et portée des preuves](docs/reproduction.md)
-- [Progression réelle](docs/progress.md)
-- [Vérifications et stratégie de tests](docs/testing.md)
-- [Préparation au jury](docs/jury-preparation.md)
-- [PaySim : acquisition, licence et statistiques](docs/dataset.md)
-- [Environnement et versions candidates](docs/compatibility.md)
-- [Runtime HDFS candidat et migration proposée](docs/hadoop-runtime.md)
-- [Installation, commandes et limites réelles](docs/installation.md)
-- [Procédure Gephi et preuves à produire](docs/gephi.md)
+| Document | Contenu |
+|---|---|
+| [docs/rapport.md](docs/rapport.md) | Besoin, architecture, choix, résultats, limites, correspondance RNCP |
+| [Rapport PDF](output/pdf/rapport-technique-bc1.pdf) | Version PDF du rapport, générée depuis `docs/rapport.md` |
+| [Support de soutenance PDF](output/pdf/soutenance-bc1.pdf) | Présentation du flux complet, de Kafka à la réponse de l’IA |
+| [docs/checklist.md](docs/checklist.md) | Actions qui restent à faire |
+| [docs/dictionnaire.md](docs/dictionnaire.md) | Termes techniques expliqués |
+| `docs/evidence/` | Preuves brutes des essais (JSON, journaux, captures) |
 
-## Démarrage
+## Composants
 
-Runtime HDFS actif : Hadoop 3.4.3 / Temurin 11 / Ubuntu 24.04, sélection persistante via `COMPOSE_FILE`. La configuration de base conserve l’ancien digest uniquement pour secours et historique.
+| Rôle | Composant |
+|---|---|
+| Ingestion | Producteur Python → [Kafka](docs/dictionnaire.md#kafka) avec [ZooKeeper](docs/dictionnaire.md#zookeeper) |
+| Traitement | Spark 3.5.9 (master + worker), [Structured Streaming](docs/dictionnaire.md#micro-batch), Spark SQL, [MLlib](docs/dictionnaire.md#mllib) |
+| Lac de données | [HDFS](docs/dictionnaire.md#hdfs) 3.4.3, fichiers [Parquet](docs/dictionnaire.md#parquet) |
+| Data Lab | MongoDB 8 (agrégats, graphe, scores, textes générés) |
+| Décisions et audit | PostgreSQL 17, API FastAPI HTTPS |
+| Réseau | Export CSV/GEXF puis [Gephi](docs/dictionnaire.md#gephi) 0.11.4 |
+| IA générative | [Ollama](docs/dictionnaire.md#ollama) avec Qwen 2.5 3B, en local |
 
-Depuis `bc1/`, utiliser Python 3.10–3.13 et Docker Desktop. `.venv` existe ici sous Python 3.13.18 ; le Python global 3.15 n'est pas supporté.
+Le profil livré est sécurisé : [Kerberos](docs/dictionnaire.md#kerberos) pour HDFS, [mTLS](docs/dictionnaire.md#mtls) pour Kafka, RPC Spark chiffré, bases en TLS, API en HTTPS.
+
+## Installation
+
+Prérequis : Docker Desktop (testé avec 16 CPU et 12 Gio de RAM alloués), Compose récent, Python 3.10–3.13, accès Internet pour les images, JAR et données. Les commandes se lancent depuis `bc1/`.
+
+1. Environnement et secrets locaux (créés hors Git, jamais affichés) :
+
+```bash
+python3.13 -m venv .venv
+.venv/bin/python scripts/bootstrap.py
+```
+
+2. Données PaySim (licence CC BY-SA 4.0, ~470 Mo), puis contrôle de l’empreinte :
+
+```bash
+mkdir -p data/raw
+curl -L --fail --retry 2 --max-time 600 'https://www.kaggle.com/api/v1/datasets/download/ealaxi/paysim1?datasetVersionNumber=2' -o data/raw/paysim-v2.zip
+PYTHONPATH=src python3 -m rncp_bc1.dataset extract --archive data/raw/paysim-v2.zip --destination data/raw
+make profile
+```
+
+SHA-256 attendu du CSV : `16910f90577b0d981bf8ff289714510bb89bc71bff7d3f220f024e287e4eea6b`.
+
+3. Archive Hadoop (le build vérifie son SHA-512) :
+
+```bash
+mkdir -p tmp/hadoop-modern
+test -f tmp/hadoop-modern/hadoop-3.4.3.tar.gz || curl --fail --location https://downloads.apache.org/hadoop/common/hadoop-3.4.3/hadoop-3.4.3.tar.gz -o tmp/hadoop-modern/hadoop-3.4.3.tar.gz
+```
+
+4. Construction et démarrage du profil sécurisé :
+
+```bash
+docker compose -f infra/hadoop-modern/compose.yml build namenode
+docker compose -f infra/secure-hdfs/compose.yml build namenode
+docker compose -f infra/certification/maintenance.yml build
+bash scripts/certification.sh connectors
+bash scripts/certification.sh config
+bash scripts/certification.sh up
+bash scripts/certification.sh ca
+```
+
+L’API répond sur https://127.0.0.1:8443 avec la CA locale exportée dans `exports/certification-ca.crt` :
+
+```bash
+curl --cacert exports/certification-ca.crt https://127.0.0.1:8443/health/ready
+```
+
+## Faire tourner le flux complet
+
+Choisir un identifiant de run neuf (`MON_RUN`). Dans un premier terminal, démarrer le streaming et attendre l’événement `stream_ready` :
+
+```bash
+bash scripts/certification.sh driver /project/src/rncp_bc1/jobs/ingest.py --run-id MON_RUN --base hdfs://namenode.bc1.test:8020/bc1/private --bootstrap-servers broker:9093 --topic secure.transactions --starting-offsets latest --duration-seconds 120 --observe-visible
+```
+
+Dans un second terminal, envoyer 1 000 transactions :
+
+```bash
+bash scripts/certification.sh producer --csv /project/data/raw/PS_20174392719_1491204439457_log.csv --sha256 16910f90577b0d981bf8ff289714510bb89bc71bff7d3f220f024e287e4eea6b --run-id MON_RUN --limit 1000 --rate 50 --bootstrap-servers broker:9093 --topic secure.transactions
+```
+
+Puis rapprocher avec le CSV, publier le graphe dans MongoDB et scorer :
+
+```bash
+bash scripts/certification.sh driver /project/src/rncp_bc1/jobs/verify.py --run-id MON_RUN --base hdfs://namenode.bc1.test:8020/bc1/private --limit 1000 --csv /project/data/raw/PS_20174392719_1491204439457_log.csv
+bash scripts/certification.sh driver /project/src/rncp_bc1/jobs/publish_graph.py --run-id MON_RUN --step-to 1 --base hdfs://namenode.bc1.test:8020/bc1/private
+bash scripts/certification.sh driver /project/src/rncp_bc1/jobs/score.py --run-id MON_RUN --training-run MON_TRAIN --model-version baseline-v1 --base hdfs://namenode.bc1.test:8020/bc1/private
+```
+
+`MON_TRAIN` désigne un run d’entraînement. Sur une installation neuve, en créer un : rejouer sans `--limit` avec `--sample-modulus 64 --sample-seed 42`, ingérer avec `--once --starting-offsets earliest`, puis :
+
+```bash
+bash scripts/certification.sh driver /project/src/rncp_bc1/jobs/train.py --run-id MON_TRAIN --model-version baseline-v1 --base hdfs://namenode.bc1.test:8020/bc1/private
+```
+
+Variante à historique destinataire (voir le rapport) : rejouer avec `--sample-modulus 16 --sample-key destination`, puis entraîner avec `--feature-set destination_history`.
+
+**Gephi** : dans le service mongo, `mongosh --nodb --quiet --file /scripts/export.js` avec `BC1_SNAPSHOT_ID` et `BC1_EXPORT_FILE=/exports/mongo/SNAPSHOT.json`, puis :
+
+```bash
+PYTHONPATH=src .venv/bin/python -m rncp_bc1.graph_export --input exports/mongo/SNAPSHOT.json --destination exports/gephi/NOUVEL_EXPORT
+```
+
+**IA générative** : les poids Qwen 2.5 3B (licence de recherche non commerciale, `infra/licenses/`) doivent être présents dans le volume `rncp-bc1_ollama-models`. Sur une installation neuve : `docker compose up -d ollama` puis `docker compose exec -T ollama ollama pull qwen2.5:3b`. Ensuite :
+
+```bash
+bash scripts/certification.sh genai
+```
+
+## Tests
 
 ```bash
 make test
-# Sur une installation neuve : acquérir l’archive Hadoop selon docs/installation.md.
-python3.13 scripts/bootstrap.py
-docker compose config --quiet
-bash scripts/stack.sh up
+docker compose --env-file .env -f infra/certification/compose.yml build browser-tests
+bash scripts/certification.sh tests
 ```
 
-Un `.env` existant est conservé ; ne jamais afficher ou versionner ses secrets. Les PDF restent dans `../.data/`, PaySim dans `data/raw/` ignoré. Les commandes et limites sont détaillées dans [installation.md](docs/installation.md) et les résultats réels dans [progress.md](docs/progress.md).
+`make test` : 45 tests unitaires. `certification.sh tests` : refus TLS/authentification, tests HTTP de l’API et parcours navigateur ; ils demandent des scores et un graphe déjà produits.
 
-API : `http://127.0.0.1:8000/docs`, Spark : `http://127.0.0.1:8080`, HDFS : `http://127.0.0.1:9870`. Accès métier par bearer token lecteur/analyste généré localement. Les stockages et le LLM n'exposent aucun port hôte.
+## Livrables générés
 
-Le profil actuel est un laboratoire mono-hôte : HDFS simple, réplication 1, sans TLS/Kerberos ni HA globale. Une bascule de leader Kafka a été vérifiée sur un topic isolé RF3/ISR2. Les scores sont non calibrés ; le modèle LR obtient 55,22 % de rappel et 3,80 % de précision sur son test temporel. Ce résultat appelle une discussion critique, pas une promesse de détection bancaire.
+Le rapport PDF et le support sont reconstruits hors réseau :
 
-## Dossier de soutenance et profils complémentaires
+```bash
+docker compose -f infra/documents/compose.yml run --rm render
+```
 
-Thomas Gassmann, candidat seul, échéance non communiquée. [Rapport PDF](output/pdf/rapport-technique-bc1.pdf), [présentation PDF](output/pdf/soutenance-bc1.pdf), [rapport source](docs/technical-report.md), [préparation orale](docs/jury-preparation.md). Les PDF sont reconstruits hors réseau par `docker compose -f infra/documents/compose.yml run --rm render`, après construction de l'image documentaire.
+Le rapport PDF est produit depuis `docs/rapport.md`, le support depuis `docs/presentation.json`.
 
-Les contrôles supplémentaires [Kerberos/HTTPS, Kafka mTLS/ACL et Spark RPC](docs/security-profiles.md) et [HA HDFS](docs/hdfs-ha.md) sont exécutés dans des profils isolés. Ils ne rendent pas le principal automatiquement sécurisé ou disponible. L’audit JAR conserve 34 correspondances élevées sur l’image HDFS sécurisée. Lire les limites avant toute exposition externe.
+Archive de remise : `python3 scripts/check-delivery.py` (contrôle des secrets et des liens), puis `python3 scripts/package-delivery.py`. Elle contient les fichiers suivis ou non ignorés par Git, sans `.env`, données, volumes, `tmp/` ni secrets ; une archive existante n’est jamais écrasée.
+
+## Usage de l’IA
+
+J’ai utilisé des assistants d’IA générative (Codex, puis Claude pour les derniers ajouts et la relecture) pour la réécriture des textes, la recherche et le sourçage des références et l’aide au développement. Les résultats cités viennent des exécutions du projet et renvoient à `docs/evidence/`. Cet usage est distinct du LLM du démonstrateur.
+
+## Limites principales
+
+- Données synthétiques : aucun résultat ne vaut performance bancaire réelle.
+- Un seul hôte : la haute disponibilité de HDFS et de Kafka est testée dans des profils séparés, pas dans le profil sécurisé.
+- Avis de vulnérabilité sans correctif, dont une correspondance critique libxml2 dans l’image PostgreSQL.
+- Les textes générés sont des brouillons à relire ; aucun email n’est envoyé.

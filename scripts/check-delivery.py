@@ -9,7 +9,8 @@ import subprocess
 from urllib.parse import unquote
 
 root=Path(__file__).resolve().parents[1]
-files=[root/x for x in subprocess.check_output(['git','ls-files','--cached','--others','--exclude-standard','-z'],cwd=root).decode().split('\0') if x]
+# Les fichiers supprimés mais encore indexés par Git sont ignorés.
+files=[root/x for x in subprocess.check_output(['git','ls-files','--cached','--others','--exclude-standard','-z'],cwd=root).decode().split('\0') if x and (root/x).is_file()]
 secrets=[]
 for line in (root/'.env').read_text().splitlines():
     if '=' not in line or line.lstrip().startswith('#'):continue

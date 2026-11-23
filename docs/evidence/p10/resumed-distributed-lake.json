@@ -1,0 +1,18 @@
+{
+  "event": "secure_distributed_lake_verified",
+  "driver_principal": "alice@BC1.TEST",
+  "authentication_method": "KERBEROS",
+  "rows": 1000,
+  "unique_transactions": 1000,
+  "executor_hosts": [
+    "worker"
+  ],
+  "spark_rpc_authentication": true,
+  "spark_rpc_crypto_enabled": true,
+  "sasl_fallback": false,
+  "scope": "One trusted standalone worker, per-process Kerberos cache; no YARN token-renewal guarantee",
+  "exit_code": 0,
+  "executed_date": "2026-11-20",
+  "spark_version": "3.5.9",
+  "locked_connectors_verified": 10
+}

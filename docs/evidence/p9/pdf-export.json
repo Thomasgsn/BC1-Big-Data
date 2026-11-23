@@ -1,5 +1,5 @@
 {
-  "created_at": "2026-11-18T10:24:40.321585+00:00",
+  "created_at": "2026-11-23T18:21:19.265228+00:00",
   "candidate": "Thomas Gassmann",
   "solo": true,
   "deadline": "non communiquée",
@@ -7,15 +7,15 @@
   "outputs": [
     {
       "path": "output/pdf/rapport-technique-bc1.pdf",
-      "sha256": "36fb375fc6daf03b0c9646ee6ad575348eb2b86cdc36f56ab9039e6c4c3af2db",
-      "pages": 8,
+      "sha256": "148116ffadcd2461f24b36938e389b8089094074c75d143de686acc414217052",
+      "pages": 6,
       "text_extraction_checked": true,
       "rendered": true
     },
     {
       "path": "output/pdf/soutenance-bc1.pdf",
-      "sha256": "441673c079e10dda23e10b7709e85e634ed25420e9b3bfeb976906ea1c83e66c",
-      "pages": 12,
+      "sha256": "36644976d98384f33e9903fc4a7f027a04fe3ede366b32870550c657513613b2",
+      "pages": 13,
       "text_extraction_checked": true,
       "rendered": true
     }

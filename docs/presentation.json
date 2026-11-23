@@ -2,7 +2,7 @@
   {
     "title": "Détection de fraude et réseaux financiers",
     "paragraphs": [
-      "Thomas Gassmann, réalisation individuelle",
+      "Thomas Gassmann, réalisation individuelle ; rédaction et sourçage assistés par IA (Codex, Claude)",
       "Architecture Big Data, modèles MLlib et brouillons explicatifs par IA générative",
       "Démonstrateur sur transactions synthétiques PaySim"
     ],
@@ -15,25 +15,25 @@
       "PaySim intégral : 6 362 620 transactions, 8 213 fraudes simulées.",
       "Aucune devise ou donnée client réelle ajoutée. Les labels servent à évaluer les modèles."
     ],
-    "source": "docs/dataset.md et evidence/p1/paysim-profile.json"
+    "source": "docs/rapport.md et evidence/p1/paysim-profile.json"
   },
   {
     "title": "Architecture du démonstrateur",
     "paragraphs": [
-      "Kafka avec ZooKeeper alimente Spark Structured Streaming et le lac HDFS Parquet.",
-      "MongoDB expose agrégats, graphe et scores. PostgreSQL conserve dossiers, décisions et audit.",
-      "MLlib lit HDFS. Gephi analyse le réseau. FastAPI appelle Ollama pour produire un brouillon à relire."
+      "Kafka mTLS avec ZooKeeper alimente Spark 3.5.9 authentifié/chiffré et HDFS Kerberos.",
+      "MongoDB TLS sert agrégats, graphe et scores. PostgreSQL TLS conserve décisions et audit.",
+      "API HTTPS et consultation clavier/mobile ; Gephi analyse les exports. Ollama produit des brouillons à relire."
     ],
-    "source": "docs/architecture.md, diagrammes Mermaid modifiables"
+    "source": "README.md, architecture intégrée P10"
   },
   {
     "title": "Intégrité du flux",
     "paragraphs": [
-      "Essai permanent : 2 003 messages bruts, 1 000 transactions uniques et trois rejets contrôlés.",
-      "Les identifiants et sommes décimales correspondent au CSV. Le rejeu supprime 1 000 doublons.",
-      "p95 logique 8,28 s, hors commit et visibilité. Essai court sur un seul hôte."
+      "Flux permanent courant : 1 000 messages acquittés à 49,99/s, 1 000 transactions uniques, zéro rejet.",
+      "Les identifiants et sommes décimales correspondent exactement au CSV.",
+      "p95 logique 7,06 s ; première lecture Parquet observée 16,83 s, sondage inclus. Essai court sur un seul hôte."
     ],
-    "source": "evidence/p3/live-verification.json"
+    "source": "evidence/p10/final-hdfs-verification.json et committed-visibility.json"
   },
   {
     "title": "Analyse du graphe dans Gephi",
@@ -47,16 +47,25 @@
       "Modularité 0,995408, avec 597 composantes faibles. La fragmentation explique cette valeur élevée.",
       "Le plus grand degré entrant vaut 23. Aucun label réseau ne permet de conclure à un blanchiment."
     ],
-    "source": "docs/gephi.md et evidence/p5/desktop-manifest.json"
+    "source": "docs/rapport.md et evidence/p5/desktop-manifest.json"
   },
   {
-    "title": "Comparaison des modèles",
+    "title": "Modèle de référence (scoring en flux)",
     "paragraphs": [
       "Échantillon déterministe : 98 813 lignes. Découpage temporel, prétraitement appris sur train seul.",
       "Régression logistique retenue sur validation face à Random Forest. Seuil 0,7.",
       "Test réservé : rappel 55,22 %, précision 3,80 %, PR-AUC 0,09164. Les nombreuses fausses alertes limitent l'usage."
     ],
     "source": "evidence/p6/model-comparison.json, test 19 385 lignes dont 67 fraudes"
+  },
+  {
+    "title": "Variables par compte destinataire",
+    "paragraphs": [
+      "99,7 % des émetteurs PaySim n'apparaissent qu'une fois : l'historique est calculé sur le destinataire.",
+      "Nouveau rejeu : 400 088 transactions, 513 fraudes, comptes destinataires entiers. Fenêtres strictement antérieures.",
+      "Random Forest test : rappel 24,15 % → 53,21 %, précision 17,16 % → 23,23 %, PR-AUC 0,2126 → 0,2490."
+    ],
+    "source": "evidence/p11/destination-history-comparison.json ; modèle expérimental, non branché au scoring en flux"
   },
   {
     "title": "Explication et brouillon client",
@@ -70,29 +79,29 @@
   {
     "title": "Sécurité et résilience observées",
     "paragraphs": [
-      "API : rôles, quotas, révocation, idempotence et refus de permissions testés.",
-      "Profils isolés : HDFS Kerberos et HTTPS, Kafka mTLS et ACL. Le principal reste un laboratoire distinct.",
-      "HDFS : deux bascules de processus, 80 fichiers exacts par essai. Kafka RF3 : 220 messages sans perte observée."
+      "Profil intégré : HDFS Kerberos, Kafka mTLS/ACL, Spark RPC chiffré, bases TLS et API HTTPS.",
+      "Accès autorisés/refusés testés ; six tests HTTP et 42 tests unitaires passent.",
+      "Profils HA distincts : deux bascules HDFS et Kafka RF3. Leur combinaison avec toute la sécurité reste non testée."
     ],
-    "source": "evidence/p8/secure-hdfs/, secure-kafka/, hdfs-ha/, kafka-leader-failure.json"
+    "source": "evidence/p10/ et evidence/p8/hdfs-ha/, kafka-leader-failure.json"
   },
   {
     "title": "Parcours de démonstration",
     "paragraphs": [
-      "Parcours réellement exécuté : 1 000 transactions nouvelles, HDFS exact, graphe Mongo et scoring avec le modèle sauvegardé.",
-      "L’API a persisté l’explication et le brouillon Qwen après un premier timeout de chargement. Deux appels réussis, 88,03 s côté modèle.",
-      "Le journal conserve les pauses et l’échec. La répétition orale chronométrée reste à faire par le candidat."
+      "Parcours réel : Kafka, Spark, HDFS exact, graphe Mongo puis 1 000 scores et 305 alertes avec le modèle sauvegardé.",
+      "Reprise du 20 novembre : deux appels Qwen réussis, 36,38 s côté modèle, persistés dans Mongo avec audit SQL. Brouillons seulement, aucun email.",
+      "Le journal distingue essais, pauses et interruption de l’hôte. La répétition orale humaine reste à faire."
     ],
-    "source": "evidence/p9/demonstration.json et demonstration-draft.json"
+    "source": "evidence/p10/final-draft.json et resume-20261120.json"
   },
   {
     "title": "Limites et décisions à défendre",
     "paragraphs": [
-      "Un seul hôte, profils de sécurité et HA séparés. Aucune garantie après perte physique du poste.",
-      "Audit des sept images principales terminé. Des correspondances critiques et élevées restent ouvertes, sans exploitation démontrée ni risque déclaré accepté.",
-      "Faible précision ML, données synthétiques, qualité du texte à relire. Publication GitHub et répétition orale restent à réaliser."
+      "Un seul hôte, HA expérimentale séparée. Sauvegardes locales ; aucune garantie de reprise après perte du poste.",
+      "Des avis de vulnérabilité subsistent : libxml2/PostgreSQL sans correctif Debian stable au contrôle, protections documentées.",
+      "Précision ML encore modeste (23 % au mieux), modèle enrichi non branché au flux ; texte généré à relire."
     ],
-    "source": "docs/security-profiles.md et evidence/p8/dependency-scan/platform-summary.json"
+    "source": "docs/rapport.md, maintenance-triage.json et consigne explicite du candidat"
   },
   {
     "title": "Discussion technique avec le jury",
@@ -101,6 +110,6 @@
       "Pourquoi choisir le modèle sur validation et conserver un test temporel réservé ?",
       "Comment distinguer réplication, bascule et sauvegarde ? Que prouve chaque essai et que reste-t-il à vérifier ?"
     ],
-    "source": "docs/rncp-matrix.md, C1.1 à C2.4, validation officielle par le jury"
+    "source": "docs/rapport.md, C1.1 à C2.4, validation officielle par le jury"
   }
 ]

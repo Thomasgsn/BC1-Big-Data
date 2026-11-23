@@ -1,0 +1,64 @@
+{
+  "date": "2026-11-20",
+  "scope": "BC1 only, resumed after explicit pause",
+  "git_commit_push_email": false,
+  "docker_initial_state": "daemon absent, Docker Desktop started; existing data volumes reused without initialization",
+  "unit_tests": {
+    "command": "make test",
+    "tests": 42,
+    "seconds": 1.54,
+    "exit_code": 0
+  },
+  "http_tests": {
+    "tests": 6,
+    "seconds": 4.909,
+    "skipped": 0,
+    "exit_code": 0
+  },
+  "tls_tests": {
+    "positive_connections": 3,
+    "expected_refusals": 8,
+    "exit_code": 0
+  },
+  "last_prior_generation": "No persisted accepted document found for requested transaction; old execution session unavailable. New real generation required.",
+  "warmup": {
+    "model": "qwen2.5:3b",
+    "digest": "357c53fb659c5076de1d65ccb0b397446227b71a42be9d1603d46168015c9e4b",
+    "elapsed_seconds": 25.820246149,
+    "load_duration_ns": 22785567695,
+    "exit_code": 0
+  },
+  "generation": {
+    "status": "draft_requires_human_review",
+    "id": "3b9c85fc-92bb-4bf6-8fe0-5d295615b930",
+    "created_at_utc": "2026-11-20T06:55:56.692987+00:00",
+    "backend_calls": 2,
+    "backend_total_seconds": 36.384704917,
+    "http_status": 200,
+    "exit_code": 0,
+    "persisted_in_mongo": true,
+    "sql_audit_events_for_transaction": 1,
+    "facts_validator_rechecked": true,
+    "email_sent": false
+  },
+  "full_compose_up_exit_code": 0,
+  "healthchecked_core_services": 10,
+  "ollama": "running, no healthcheck configured",
+  "resumed_distributed_check": {
+    "exit_code": 0,
+    "rows": 1000,
+    "unique_transactions": 1000,
+    "principal": "alice@BC1.TEST",
+    "executor_hosts": [
+      "worker"
+    ],
+    "spark": "3.5.9",
+    "locked_connectors": 10
+  },
+  "candidate_archive_unit_tests": {
+    "tests": 42,
+    "seconds": 1.345,
+    "exit_code": 0
+  },
+  "https_loopback_ready": true
+}

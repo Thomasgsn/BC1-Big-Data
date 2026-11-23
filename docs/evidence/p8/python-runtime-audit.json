@@ -1,1 +1,60 @@
-{"dependencies": [{"name": "kafka-python", "version": "2.3.1", "vulns": [{"id": "PYSEC-2026-2190", "fix_versions": ["2.3.2"], "aliases": ["CVE-2026-10142", "GHSA-m3px-q5gj-j9x7"], "description": "kafka-python prior to 2.3.2 contains a denial-of-service vulnerability in the protocol parser that allows a malicious broker or machine-in-the-middle attacker to exhaust memory or hang connections by sending a crafted 4-byte frame length value without bounds validation. Attackers can send a specially crafted frame length through the receive_bytes() function to trigger either a multi-gigabyte memory allocation or an uncaught ValueError that leaves the connection in a broken state, causing requests to hang and consumers to stop heartbeating until restart."}, {"id": "PYSEC-2026-2191", "fix_versions": ["2.3.2"], "aliases": ["GHSA-2jcm-hq8r-84wx", "CVE-2026-10143"], "description": "kafka-python prior to 2.3.2 contains a denial-of-service vulnerability in SCRAM authentication handling that allows a malicious or machine-in-the-middle broker to freeze the client event loop by supplying an excessively large iteration count. In scram.py, ScramClient.process_server_first_message() passes the broker-controlled SCRAM iteration count directly to hashlib.pbkdf2_hmac() without validation, blocking producer sends, consumer polls, admin operations, and heartbeats, which can cause consumer group eviction and repeated reconnect failures."}, {"id": "PYSEC-2026-2190", "fix_versions": ["2.3.2"], "aliases": ["CVE-2026-10142", "GHSA-m3px-q5gj-j9x7"], "description": "kafka-python prior to 2.3.2 contains a denial-of-service vulnerability in the protocol parser that allows a malicious broker or machine-in-the-middle attacker to exhaust memory or hang connections by sending a crafted 4-byte frame length value without bounds validation. Attackers can send a specially crafted frame length through the receive_bytes() function to trigger either a multi-gigabyte memory allocation or an uncaught ValueError that leaves the connection in a broken state, causing requests to hang and consumers to stop heartbeating until restart."}, {"id": "PYSEC-2026-2191", "fix_versions": ["2.3.2"], "aliases": ["GHSA-2jcm-hq8r-84wx", "CVE-2026-10143"], "description": "kafka-python prior to 2.3.2 contains a denial-of-service vulnerability in SCRAM authentication handling that allows a malicious or machine-in-the-middle broker to freeze the client event loop by supplying an excessively large iteration count. In scram.py, ScramClient.process_server_first_message() passes the broker-controlled SCRAM iteration count directly to hashlib.pbkdf2_hmac() without validation, blocking producer sends, consumer polls, admin operations, and heartbeats, which can cause consumer group eviction and repeated reconnect failures."}]}, {"name": "numpy", "version": "2.2.6", "vulns": []}], "fixes": []}
+{
+  "dependencies": [
+    {
+      "name": "kafka-python",
+      "version": "2.3.1",
+      "vulns": [
+        {
+          "id": "PYSEC-2026-2190",
+          "fix_versions": [
+            "2.3.2"
+          ],
+          "aliases": [
+            "CVE-2026-10142",
+            "GHSA-m3px-q5gj-j9x7"
+          ],
+          "description": "kafka-python prior to 2.3.2 contains a denial-of-service vulnerability in the protocol parser that allows a malicious broker or machine-in-the-middle attacker to exhaust memory or hang connections by sending a crafted 4-byte frame length value without bounds validation. Attackers can send a specially crafted frame length through the receive_bytes() function to trigger either a multi-gigabyte memory allocation or an uncaught ValueError that leaves the connection in a broken state, causing requests to hang and consumers to stop heartbeating until restart."
+        },
+        {
+          "id": "PYSEC-2026-2191",
+          "fix_versions": [
+            "2.3.2"
+          ],
+          "aliases": [
+            "GHSA-2jcm-hq8r-84wx",
+            "CVE-2026-10143"
+          ],
+          "description": "kafka-python prior to 2.3.2 contains a denial-of-service vulnerability in SCRAM authentication handling that allows a malicious or machine-in-the-middle broker to freeze the client event loop by supplying an excessively large iteration count. In scram.py, ScramClient.process_server_first_message() passes the broker-controlled SCRAM iteration count directly to hashlib.pbkdf2_hmac() without validation, blocking producer sends, consumer polls, admin operations, and heartbeats, which can cause consumer group eviction and repeated reconnect failures."
+        },
+        {
+          "id": "PYSEC-2026-2190",
+          "fix_versions": [
+            "2.3.2"
+          ],
+          "aliases": [
+            "CVE-2026-10142",
+            "GHSA-m3px-q5gj-j9x7"
+          ],
+          "description": "kafka-python prior to 2.3.2 contains a denial-of-service vulnerability in the protocol parser that allows a malicious broker or machine-in-the-middle attacker to exhaust memory or hang connections by sending a crafted 4-byte frame length value without bounds validation. Attackers can send a specially crafted frame length through the receive_bytes() function to trigger either a multi-gigabyte memory allocation or an uncaught ValueError that leaves the connection in a broken state, causing requests to hang and consumers to stop heartbeating until restart."
+        },
+        {
+          "id": "PYSEC-2026-2191",
+          "fix_versions": [
+            "2.3.2"
+          ],
+          "aliases": [
+            "GHSA-2jcm-hq8r-84wx",
+            "CVE-2026-10143"
+          ],
+          "description": "kafka-python prior to 2.3.2 contains a denial-of-service vulnerability in SCRAM authentication handling that allows a malicious or machine-in-the-middle broker to freeze the client event loop by supplying an excessively large iteration count. In scram.py, ScramClient.process_server_first_message() passes the broker-controlled SCRAM iteration count directly to hashlib.pbkdf2_hmac() without validation, blocking producer sends, consumer polls, admin operations, and heartbeats, which can cause consumer group eviction and repeated reconnect failures."
+        }
+      ]
+    },
+    {
+      "name": "numpy",
+      "version": "2.2.6",
+      "vulns": []
+    }
+  ],
+  "fixes": []
+}

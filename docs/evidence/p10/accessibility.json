@@ -1,0 +1,20 @@
+{
+  "event": "accessible_consultation_verified",
+  "keyboard_skip_link": true,
+  "keyboard_load_and_detail": true,
+  "focus_on_detail_heading": true,
+  "actual_alert_rows": 20,
+  "axe_version": "4.11.0",
+  "axe_violations": [],
+  "axe_incomplete": 0,
+  "invalid_token_error_shown": true,
+  "no_browser_token_storage": true,
+  "no_global_mobile_overflow": true,
+  "console_errors": [],
+  "screenshots": {
+    "consultation-desktop.png": "083a45971a9d2726e0065217338daaa10fa3213ad9dd5559b0946744b8e360c2",
+    "consultation-mobile.png": "62c776dc6dac6838bf03b8c719efbca90b11220f392797484a1fc0a684b95a7f"
+  },
+  "certificate_scope": "Browser ignores private certificate; actual TLS CA/hostname checks are separate and passed",
+  "limits": "Automated checks and keyboard paths only; no claim of complete WCAG certification or human screen-reader audit"
+}

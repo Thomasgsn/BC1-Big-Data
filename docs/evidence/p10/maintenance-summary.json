@@ -1,0 +1,84 @@
+{
+  "scanner": "Trivy 0.76.2, offline cached database",
+  "reports": {
+    "mongo-maintenance-scan.json": {
+      "sha256": "bb679624a15d8105f4c01730099ff72c476cf5196901b3a952e5bf661637eae7",
+      "matches": 93,
+      "severity": {
+        "MEDIUM": 67,
+        "LOW": 7,
+        "HIGH": 11,
+        "UNKNOWN": 8
+      },
+      "results": 10
+    },
+    "api-maintenance-scan.json": {
+      "sha256": "d9eaaf7b1f57784f69aa6c79c3bbb45a5a6c7715245f378516d9a7a25e3ce4ab",
+      "matches": 226,
+      "severity": {
+        "LOW": 66,
+        "HIGH": 48,
+        "MEDIUM": 98,
+        "UNKNOWN": 14
+      },
+      "results": 2
+    },
+    "connectors-maintenance-scan.json": {
+      "sha256": "4d5f762a04d49d59ae820ac8df2ba2bacb50b6ac681e088c00cb0df3b40552d8",
+      "matches": 0,
+      "severity": {},
+      "results": 0,
+      "status": "Initial fs invocation detected no language packages; not a clean audit. Use rootfs result."
+    },
+    "kafka-maintenance-scan.json": {
+      "sha256": "0a5bb390856e61f7c8a0de87985bba7a59f3117df0d04a440bc2937c872c08ae",
+      "matches": 35,
+      "severity": {
+        "HIGH": 16,
+        "MEDIUM": 17,
+        "LOW": 2
+      },
+      "results": 2
+    },
+    "spark-maintenance-scan.json": {
+      "sha256": "d4f643d76d9858c0fd30d106e0d3eed1c7b373f3176b932264501edfa7d778ad",
+      "matches": 462,
+      "severity": {
+        "HIGH": 53,
+        "MEDIUM": 297,
+        "LOW": 112
+      },
+      "results": 3
+    },
+    "hadoop-maintenance-scan.json": {
+      "sha256": "55089a56968ec3eee168dd6d9fedc447d599b1cf5beacbaac21bcde293474426",
+      "matches": 145,
+      "severity": {
+        "MEDIUM": 94,
+        "LOW": 17,
+        "HIGH": 34
+      },
+      "results": 2
+    },
+    "postgres-maintenance-scan.json": {
+      "sha256": "4e628ef9d812240238460524d5127542fac73534839619285aecd2d8886d52f7",
+      "matches": 458,
+      "severity": {
+        "LOW": 153,
+        "HIGH": 123,
+        "MEDIUM": 163,
+        "UNKNOWN": 18,
+        "CRITICAL": 1
+      },
+      "results": 1
+    },
+    "connectors-rootfs-scan.json": {
+      "sha256": "783dd80fb4581029b63134ddeca44cd2966a4592a4e631b32f8deba9a93c903c",
+      "matches": 0,
+      "severity": {},
+      "results": 1
+    }
+  },
+  "interpretation": "Version matches, no exploitation proof and no human risk acceptance. Historical and mounted dependencies have separate scope.",
+  "remaining_critical": "PostgreSQL libxml2 CVE-2026-6653, vendor stable fix not yet available"
+}

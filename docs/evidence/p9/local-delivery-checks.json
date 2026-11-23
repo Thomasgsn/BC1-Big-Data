@@ -1,12 +1,12 @@
 {
-  "created_at_utc": "2026-11-18T10:28:00.295993+00:00",
+  "created_at_utc": "2026-11-23T19:59:27.933398+00:00",
   "checks": {
-    "python": 61,
-    "json": 96,
-    "markdown_links": 193,
-    "files": 249
+    "python": 76,
+    "json": 144,
+    "markdown_links": 31,
+    "files": 315
   },
-  "source_manifest_files": 131,
+  "source_manifest_files": 166,
   "exact_secret_values_checked": 6,
   "secret_scan_scope": "Exact values from local .env and private-key markers in nonignored text; not a general security scanner",
   "errors": [],

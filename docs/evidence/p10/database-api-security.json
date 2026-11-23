@@ -1,0 +1,26 @@
+{
+  "event": "integrated_security_verified",
+  "postgres_tls": {
+    "enabled": true,
+    "version": "TLSv1.3",
+    "cipher": "TLS_AES_256_GCM_SHA384"
+  },
+  "api_tls": {
+    "version": "TLSv1.3",
+    "cipher": "TLS_AES_256_GCM_SHA384"
+  },
+  "mongo_tls_authenticated": true,
+  "refused": {
+    "postgres_plaintext": true,
+    "postgres_wrong_hostname": true,
+    "postgres_wrong_password": true,
+    "mongo_plaintext": true,
+    "mongo_untrusted_ca": true,
+    "mongo_wrong_password": true,
+    "api_missing_token": true,
+    "api_untrusted_ca": true
+  },
+  "scope": "Live certification services; negative passwords are explicit fixtures, no production risk acceptance",
+  "post_maintenance_retested": true,
+  "post_maintenance_exit_code": 0
+}
