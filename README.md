@@ -1,7 +1,5 @@
 # BC1 — Architecture Big Data et détection de fraude
 
-Thomas Gassmann · RNCP40875, bloc 1 · travail individuel (le sujet prévoit un binôme).
-
 La plateforme rejoue des transactions bancaires **synthétiques** (PaySim), les stocke dans un lac de données, analyse le réseau des comptes dans Gephi, entraîne deux modèles de détection de fraude et fait rédiger par un LLM local une explication pour le conseiller et un brouillon d’email pour le client.
 
 ## Documents du rendu
