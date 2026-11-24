@@ -65,7 +65,7 @@
       "Nouveau rejeu : 400 088 transactions, 513 fraudes, comptes destinataires entiers. Fenêtres strictement antérieures.",
       "Random Forest test : rappel 24,15 % → 53,21 %, précision 17,16 % → 23,23 %, PR-AUC 0,2126 → 0,2490."
     ],
-    "source": "evidence/p11/destination-history-comparison.json ; modèle expérimental, non branché au scoring en flux"
+    "source": "evidence/p11/destination-history-comparison.json ; evidence/p12/threshold-grid-and-scoring.json"
   },
   {
     "title": "Explication et brouillon client",
@@ -99,7 +99,7 @@
     "paragraphs": [
       "Un seul hôte, HA expérimentale séparée. Sauvegardes locales ; aucune garantie de reprise après perte du poste.",
       "Des avis de vulnérabilité subsistent : libxml2/PostgreSQL sans correctif Debian stable au contrôle, protections documentées.",
-      "Précision ML encore modeste (23 % au mieux), modèle enrichi non branché au flux ; texte généré à relire."
+      "Précision ML encore modeste (23 % au mieux), 45 fraudes en validation ; texte généré à relire."
     ],
     "source": "docs/rapport.md, maintenance-triage.json et consigne explicite du candidat"
   },

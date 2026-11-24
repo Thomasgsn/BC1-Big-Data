@@ -13,6 +13,9 @@ from rncp_bc1.model_metrics import confusion_metrics, select_threshold
 from rncp_bc1.jobs.account_features import FEATURE_SETS, add_destination_history, features_for
 from rncp_bc1.transactions import ID_PATTERN
 
+# Grille élargie au-delà de 0,9 : le seuil retenu en bord de grille (0,9) ne montrait pas un optimum.
+THRESHOLDS = (0.05, 0.1, 0.2, 0.3, 0.5, 0.7, 0.9, 0.95, 0.97, 0.99)
+
 
 def step_quantiles(step_counts, fractions):
     """Plus petit step dont l'effectif cumulé atteint chaque fraction des lignes."""
@@ -123,7 +126,7 @@ def main():
             fit_seconds = time.monotonic()-started
             predictions = model.transform(validation).cache()
             try:
-                thresholds = [evaluate(predictions, value) for value in [0.05, 0.1, 0.2, 0.3, 0.5, 0.7, 0.9]]
+                thresholds = [evaluate(predictions, value) for value in THRESHOLDS]
                 chosen = select_threshold(thresholds)
                 candidates.append({"name": name, "fit_seconds": fit_seconds, "validation": {**chosen, **aucs(predictions)},
                                    "threshold_candidates": thresholds})

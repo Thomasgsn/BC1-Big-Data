@@ -86,7 +86,7 @@ La [modularité](dictionnaire.md#modularité) vaut 0,995, mais les 597 communaut
 
 Variables exclues pour éviter la [fuite de cible](dictionnaire.md#fuite-de-cible) : soldes PaySim, label, `isFlaggedFraud`, identifiants de comptes. [Découpage temporel](dictionnaire.md#découpage-temporel) : apprentissage jusqu’au step 281, validation 282–355, test après 355. Modèle et seuil sont choisis sur la validation, jamais sur le test.
 
-**Modèle de référence**, branché au scoring en flux (échantillon de 98 813 lignes, une ligne sur 64) :
+**Modèle de référence**, premier modèle branché au scoring (échantillon de 98 813 lignes, une ligne sur 64) :
 
 | Test | Régression logistique (retenue) | Random Forest |
 |---|---|---|
@@ -105,7 +105,7 @@ Variables exclues pour éviter la [fuite de cible](dictionnaire.md#fuite-de-cibl
 | Précision | 17,16 % | 23,23 % |
 | PR-AUC | 0,213 | 0,249 |
 
-Par rapport au modèle de référence, le rappel est proche et la précision environ six fois meilleure : beaucoup moins d’alertes inutiles. Limites : 45 fraudes seulement en validation, seuil retenu au bord de la grille testée (0,9), modèle non branché au flux car il faudrait maintenir l’historique des destinataires dans le Data Lab (`score.py` le refuse explicitement). Preuves : evidence/p6/model-comparison.json et evidence/p11/destination-history-comparison.json.
+Par rapport au modèle de référence, le rappel est proche et la précision environ six fois meilleure : beaucoup moins d’alertes inutiles. La grille de seuils va maintenant de 0,05 à 0,99 : 0,9 reste le meilleur F2 en validation, car 0,95 et au-delà font chuter le rappel. Ce n’est donc plus un effet de bord de grille. Le modèle enrichi est branché au scoring : `score.py` calcule l’historique de chaque destinataire à partir du run d’entraînement et du run scoré, en ne gardant que les steps antérieurs. Sur les 1 000 transactions de la démonstration, il lève 90 alertes, contre 305 pour le modèle de référence. Limite principale : 45 fraudes seulement en validation ; un rejeu deux fois plus large a été interrompu et n’est pas exploité. Preuves : evidence/p6/model-comparison.json, evidence/p11/destination-history-comparison.json et evidence/p12/threshold-grid-and-scoring.json.
 
 Toujours prédire « pas de fraude » donnerait 99,65 % d’exactitude et 0 % de rappel : c’est pourquoi rappel, précision et PR-AUC sont les mesures suivies.
 
@@ -148,7 +148,7 @@ Dernier essai réel (20 novembre) : deux réponses complètes en 36,4 s, enregis
 | C2.2 Temps réel | Micro-batch 5 s, fenêtres d’une minute | evidence/p10/final-ingestion.json | Vérifié (micro-batch, pas traitement continu) |
 | C2.3 Transformation et analyse | Typage, rejets, déduplication ; analyses par type, temps, comptes | evidence/p3/live-verification.json | Vérifié |
 | C2.4 Optimisation | Partitionnement Parquet, index SQL et Mongo | evidence/p8/parquet-layout.json | Vérifié |
-| Sujet : livrables | Scripts, rapport, support | Ce dépôt | Fait ; dépôt GitHub non publié |
+| Sujet : livrables | Scripts, rapport, support | Ce dépôt | Fait ; dépôt GitHub publié |
 | Modalités | Binôme, oral, anglais | — | À réaliser par le candidat |
 
 ## Limites
@@ -157,7 +157,8 @@ Dernier essai réel (20 novembre) : deux réponses complètes en 36,4 s, enregis
 |---|---|
 | Données synthétiques, 45 fraudes en validation | Les mesures donnent un ordre de grandeur, pas une performance garantie |
 | Un seul hôte, sauvegardes locales | Une panne physique arrête toute la plateforme |
-| Modèle enrichi hors du flux | Le scoring en flux utilise encore le modèle de référence |
+| Historique destinataire partiel au scoring | Il ne couvre que les comptes échantillonnés à l’entraînement et le run scoré |
+| Explications de la forêt aléatoire | Pas de contribution chiffrée par variable, contrairement à la régression logistique |
 | Textes générés | Ils doivent être relus par un humain avant tout envoi |
 
 ## Usage de l’IA dans la réalisation

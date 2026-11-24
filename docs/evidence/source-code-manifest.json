@@ -1,5 +1,5 @@
 {
-  "created_at_utc": "2026-11-23T21:12:01.087445+00:00",
+  "created_at_utc": "2026-11-24T18:52:22.718887+00:00",
   "scope": "Local runtime source, tests, tooling and public configuration; excludes secrets, data, builds, rendered artifacts and prose; not a published Git revision",
   "files": {
     ".dockerignore": "3d00ec38d5ae86ad290d83eadd44bdc01e90cf5c926d2512a71494171feabd42",
@@ -124,8 +124,8 @@
     "src/rncp_bc1/jobs/probe_ml.py": "2e1616504f38477551d7a1b3c737aea53b241df9cd0e8eec4e6a2e1dfedbf1ec",
     "src/rncp_bc1/jobs/probe_sql.py": "aab4adbb6cec34702c53050b7efd72b9ce994f4c54c03cc2355ad632368cba44",
     "src/rncp_bc1/jobs/publish_graph.py": "d3661435f80cf25a58b1d657e54f26f2df91fcadea32b55613d9d473db776a09",
-    "src/rncp_bc1/jobs/score.py": "c42fa9c14dc1c7051c44af0b37a98387fd4d56e55996be0051a52e7dc5fd7915",
-    "src/rncp_bc1/jobs/train.py": "8b2b9e79b9daf5dc1bbf76a1e86495bf3eeab372281eaa4c53a9f5bb0e6fb9f6",
+    "src/rncp_bc1/jobs/score.py": "aa268f4415edf10a259e80386e82eaff3d28a7f91cb13ef17d4e3df333ee1b9a",
+    "src/rncp_bc1/jobs/train.py": "4e402219454c35c92b2e6578c7f2b8aad2e5d65c1da58de2b4041d9e0fe43614",
     "src/rncp_bc1/jobs/verify.py": "db34afc671908e0ccd3c6f11484c85df595e46af007a04b4baf3e8e7a53eb047",
     "src/rncp_bc1/model_metrics.py": "a8defa4f6589aa15eee006b495277ac98ebaa28b632821f694810cdca95484c8",
     "src/rncp_bc1/producer.py": "2512810234b01e9adc952a075f83a603c38fad8ca305901a0c4e8ba434a60ff1",
@@ -159,7 +159,7 @@
     "tests/integration/prepare_generation_cases.py": "77c82f59c40204c792f508104289f1a19a0693dd7d4ed0ab381d8cbdcc676cfc",
     "tests/integration/test_api.py": "a49e024411adaf7963ac70f0a3de2c9ab6b1d163cc25f66a60af3b755ef8bb72",
     "tests/integration/warm_llm.py": "1715466e2b64a5078b16a39a0c1afac07eab8bae3ef40ac2f81b53f8b8f50620",
-    "tests/test_account_features.py": "63b42469ebfcd13acb1f680aa96d3b3adfd0e8e61c6875d7bbfbc009c6255dfd",
+    "tests/test_account_features.py": "cddb98316d71a7e41247ec48a5efa54ea744abee173f866ee770786a53fdde87",
     "tests/test_dataset.py": "c49709e59646692e84cb57c10c64471e2e453a69831bfbef8aa3a6ebb831054b",
     "tests/test_genai.py": "95be673167bb0ae4c2de61eed07596ca8c393823318cdcf93c0ee961a057d4ee",
     "tests/test_graph_export.py": "5001be54150ade1ba8c485dafe6d0fdacd69e45aa3baea535f250a10c7f59992",

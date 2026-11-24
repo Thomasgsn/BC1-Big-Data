@@ -103,7 +103,7 @@ bash scripts/certification.sh driver /project/src/rncp_bc1/jobs/score.py --run-i
 bash scripts/certification.sh driver /project/src/rncp_bc1/jobs/train.py --run-id MON_TRAIN --model-version baseline-v1 --base hdfs://namenode.bc1.test:8020/bc1/private
 ```
 
-Variante à historique destinataire (voir le rapport) : rejouer avec `--sample-modulus 16 --sample-key destination`, puis entraîner avec `--feature-set destination_history`.
+Variante à historique destinataire (voir le rapport) : rejouer avec `--sample-modulus 16 --sample-key destination`, puis entraîner avec `--feature-set destination_history`. `score.py` accepte ce modèle : il recalcule l’historique des destinataires à partir du run d’entraînement.
 
 **Gephi** : dans le service mongo, `mongosh --nodb --quiet --file /scripts/export.js` avec `BC1_SNAPSHOT_ID` et `BC1_EXPORT_FILE=/exports/mongo/SNAPSHOT.json`, puis :
 

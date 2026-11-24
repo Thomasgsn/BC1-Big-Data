@@ -6,6 +6,7 @@ import os
 
 from rncp_bc1.transactions import ID_PATTERN
 from rncp_bc1.security import mongo_spark_uri
+from rncp_bc1.jobs.account_features import DESTINATION_FEATURES, add_destination_history
 
 
 def main():
@@ -32,13 +33,22 @@ def main():
         root = args.base.rstrip("/")
         artifact = root+"/"+args.training_run+"/models/"+args.model_version
         report = json.loads(spark.read.text(artifact+"/report").first()["value"])
-        if report.get("feature_set", "baseline") != "baseline":
-            raise ValueError("Modèle à historique destinataire : expérimental, non branché au scoring en flux.")
+        feature_set = report.get("feature_set", "baseline")
+        if feature_set not in ("baseline", "destination_history"):
+            raise ValueError("Jeu de variables du modèle inconnu.")
         model = PipelineModel.load(artifact+"/"+report["selected"])
         # Les cibles et les quatre soldes sont absents avant même l'inférence.
-        data = (spark.read.parquet(root+"/"+args.run_id+"/curated")
-                .select("transaction_id", "source_row", "source", "target", "type", "amount", "step", "event_time")
-                .dropDuplicates(["transaction_id"]))
+        columns = ["transaction_id", "source_row", "source", "target", "type", "amount", "step", "event_time"]
+        data = spark.read.parquet(root+"/"+args.run_id+"/curated").select(*columns).dropDuplicates(["transaction_id"])
+        if feature_set == "destination_history":
+            # Historique du destinataire vu par l'entraînement et par le run courant, steps strictement
+            # antérieurs seulement ; l'union est dédupliquée pour ne pas compter deux fois une transaction rejouée.
+            history = (spark.read.parquet(root+"/"+args.training_run+"/curated")
+                       .select("transaction_id", "target", "amount", "step")
+                       .unionByName(data.select("transaction_id", "target", "amount", "step"))
+                       .dropDuplicates(["transaction_id"]))
+            features = add_destination_history(history).select("transaction_id", *DESTINATION_FEATURES)
+            data = data.join(features, "transaction_id", "left")
         reference = (spark.read.parquet(root+"/"+args.training_run+"/curated")
                      .filter(F.col("step") <= report["split"]["train_end_step"])
                      .groupBy("type").agg(F.expr("percentile_approx(amount, 0.95, 10000)").alias("training_amount_p95")))
@@ -76,7 +86,8 @@ def main():
                   .withColumn("_id", F.sha2(F.concat_ws("|", "model_version", "transaction_id"), 256))
                   .select("_id", "transaction_id", "source_row", "source", "target", "type", "amount", "step", "event_time",
                           "score", "threshold", "is_alert", "model_version", "model_name", "run_id", "scored_at", "score_kind",
-                          "training_amount_p95", "amount_above_training_p95", *explanation_columns).cache())
+                          "training_amount_p95", "amount_above_training_p95", *explanation_columns)
+                  .withColumn("feature_set", F.lit(feature_set)).cache())
         counts = scored.agg(F.count("*").alias("transactions"), F.sum(F.col("is_alert").cast("long")).alias("alerts")).first().asDict()
         if counts["transactions"] == 0:
             raise ValueError("Aucune transaction à scorer.")
@@ -85,7 +96,7 @@ def main():
          .option("collection", "fraud_scores").option("operationType", "replace").option("idFieldList", "_id")
          .option("upsertDocument", "true").save())
         print(json.dumps({"event": "fraud_scores_published", "model_version": global_version, "run_id": args.run_id,
-                          "linear_decomposition_verified": bool(explanation_columns),
+                          "linear_decomposition_verified": bool(explanation_columns), "feature_set": feature_set,
                           **counts, "scope": "Démonstration de scoring ; seule la partition test du rapport mesure la performance."}))
     finally:
         if scored is not None:

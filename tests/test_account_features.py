@@ -3,7 +3,7 @@
 import unittest
 
 from rncp_bc1.jobs.account_features import BASELINE_FEATURES, DESTINATION_FEATURES, features_for
-from rncp_bc1.jobs.train import step_quantiles
+from rncp_bc1.jobs.train import THRESHOLDS, step_quantiles
 
 
 class AccountFeaturesTest(unittest.TestCase):
@@ -23,6 +23,11 @@ class AccountFeaturesTest(unittest.TestCase):
         self.assertEqual(step_quantiles(counts, [0.5, 0.95]), [1, 4])
         with self.assertRaises(ValueError):
             step_quantiles([], [0.5])
+
+    def test_threshold_grid_goes_beyond_previous_edge(self):
+        self.assertEqual(list(THRESHOLDS), sorted(set(THRESHOLDS)))
+        self.assertGreater(max(THRESHOLDS), 0.9)
+        self.assertTrue(all(0 < value < 1 for value in THRESHOLDS))
 
 
 if __name__ == "__main__":
