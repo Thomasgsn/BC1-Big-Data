@@ -1,7 +1,5 @@
 # Architecture Big Data et détection de fraude
 
-Thomas Gassmann — RNCP40875, bloc 1 — travail individuel — 23 novembre 2026
-
 ## Besoin
 
 Un analyste bancaire doit repérer des paiements suspects, comprendre les liens entre comptes et expliquer une alerte au client. La plateforme rejoue des transactions synthétiques, les conserve avec leur provenance, calcule des agrégats, analyse le réseau des comptes, compare deux modèles de détection et fait rédiger un brouillon d’explication par un LLM local. Elle ne décide pas qu’un client est fraudeur et n’envoie aucun email.
@@ -163,4 +161,4 @@ Dernier essai réel (20 novembre) : deux réponses complètes en 36,4 s, enregis
 
 ## Usage de l’IA dans la réalisation
 
-J’ai utilisé des assistants d’IA générative (Codex, puis Claude pour les derniers ajouts et la relecture) pour la réécriture des textes, la recherche et le sourçage des références et l’aide au développement. Les résultats cités proviennent des exécutions du projet et renvoient à des fichiers de preuve ; j’assume le contenu et sa présentation.
+J’ai utilisé des assistants d’IA générative (Codex, puis Claude pour les derniers ajouts et la relecture) pour la réécriture des textes, la recherche et le sourçage des références et l’aide au développement. Les résultats cités proviennent des exécutions du projet et renvoient à des fichiers de preuve.

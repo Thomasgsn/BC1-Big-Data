@@ -1,5 +1,5 @@
 {
-  "created_at_utc": "2026-11-24T18:52:22.718887+00:00",
+  "created_at_utc": "2026-11-24T19:31:17.851749+00:00",
   "scope": "Local runtime source, tests, tooling and public configuration; excludes secrets, data, builds, rendered artifacts and prose; not a published Git revision",
   "files": {
     ".dockerignore": "3d00ec38d5ae86ad290d83eadd44bdc01e90cf5c926d2512a71494171feabd42",
@@ -92,7 +92,7 @@
     "requirements-api.lock": "e296ff7d0cf0a22161ba43d48f1553eae7688059308720c13c87dc31cd9e8fbc",
     "requirements-runtime.txt": "b31a6d7218044d6e11753816ea295702410289e53bfdd7136e46fb4c75d9f05e",
     "scripts/bootstrap.py": "2b0ef92c4f49005a61735dbf3c5f4ee2fb2a11845fe6f9907bb855d266c9b1b8",
-    "scripts/build-deliverables.py": "158574e42875aad28330b3440303117fc7b3e19908947c20fd98f17f4ed2e6bd",
+    "scripts/build-deliverables.py": "9a4998b73ef5be041df1a75e1c7c9a7a2c7dd2abc570eebfdf2bf055aa9a5dee",
     "scripts/certification.sh": "aa0e2d49d51eff33ab26315c476101d7ecd6d13f26dae084e597042e2086ec7c",
     "scripts/check-delivery.py": "e3d518f6db179f387788ed744b70faaf1cdc2f91cdd71d65eb4dbdd033058990",
     "scripts/check_environment.py": "874e194b8063c3f91422b655c08164d72922e463cf297183ed4d0bae67e054c4",

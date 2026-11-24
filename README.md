@@ -139,7 +139,7 @@ Archive de remise : `python3 scripts/check-delivery.py` (contrôle des secrets e
 
 ## Usage de l’IA
 
-J’ai utilisé des assistants d’IA générative (Codex, puis Claude pour les derniers ajouts et la relecture) pour la réécriture des textes, la recherche et le sourçage des références et l’aide au développement. Les résultats cités viennent des exécutions du projet et renvoient à `docs/evidence/`. Cet usage est distinct du LLM du démonstrateur.
+J’ai utilisé des assistants d’IA générative (Codex, puis Claude pour les derniers ajouts et la relecture) pour la réécriture des textes, la recherche et le sourçage des références et l’aide au développement. Les résultats cités viennent des exécutions du projet et renvoient à `docs/evidence/`.
 
 ## Limites principales
 

@@ -80,7 +80,7 @@ c.save()
 manifest={'created_at':datetime.now(timezone.utc).isoformat(),'candidate':'Thomas Gassmann','solo':True,'deadline':'non communiquée','oral_rehearsal_performed':False,'outputs':[]}
 for path in (report,deck):
     reader=PdfReader(path);assert all(p.extract_text().strip() for p in reader.pages)
-    assert 'Thomas Gassmann' in ''.join(p.extract_text() for p in reader.pages)
+    assert 'thomas gassmann' in ''.join(p.extract_text() for p in reader.pages).lower()
     prefix=TMP/path.stem;subprocess.run(['pdftoppm','-r','80','-png',str(path),str(prefix)],check=True,stdout=subprocess.DEVNULL)
     manifest['outputs'].append({'path':str(path.relative_to(ROOT)),'sha256':hashlib.sha256(path.read_bytes()).hexdigest(),'pages':len(reader.pages),'text_extraction_checked':True,'rendered':True})
 (ROOT/'docs/evidence/p9/pdf-export.json').write_text(json.dumps(manifest,ensure_ascii=False,indent=2)+'\n');print(json.dumps(manifest))
